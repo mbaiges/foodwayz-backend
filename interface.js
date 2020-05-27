@@ -7,6 +7,19 @@ module.exports = {
             };
         }
 
+        static notFound(type, id) {
+            return {
+                message: `Unable to find ${type} with id ${id}`
+            }
+        }
+
+        static badRequest(type, id, params) {
+            return {
+                message: `Bad request at ${type} with id ${id}`,
+                params: params.filter(p => !p)
+            }
+        }
+
         static fetch(msg, res) {
             return Message.response('fetched', msg, res);
         }

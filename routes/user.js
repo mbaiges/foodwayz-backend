@@ -7,10 +7,14 @@ module.exports = class UserRoute {
     }
 
     async initialize(app) {
-        app.get('/user', this.getUsers.bind(this));
-        app.get("/user/:id", this.getUser.bind(this));
-        app.put('/user/:id', this.modifyUser.bind(this));
-        app.delete('/user/:id', this.delUser.bind(this));
+        app.route('/user')
+            .get(this.getUsers.bind(this));
+
+        app.route('/user/:id')
+            .get(this.getUser.bind(this))
+            .put(this.modifyUser.bind(this))
+            .delete(this.delUser.bind(this));
+
     }
 
     async getUsers(req, res) {
@@ -30,7 +34,10 @@ module.exports = class UserRoute {
             const user = await this.server.db('t_user').select(["a_name", "a_email"]).where({
                 a_user_id: id
             });
-            res.status(200).json(message.fetch('user', user));
+            if (user.length == 1)
+                res.status(200).json(message.fetch('user', user));
+            else
+                res.status(404).json(message.notFound('user', id));
         } catch (error) {
             console.log(error);
         }
@@ -51,7 +58,10 @@ module.exports = class UserRoute {
                 a_name: name,
                 a_password: await bcrypt.hash(password, 10)
             });
-            res.status(200).json(message.put('user', userData));
+            if (userData != 0)
+                res.status(200).json(message.put('user', userData));
+            else
+                res.status(404).json(message.notFound('user', id));
         } catch (error) {
             console.log(error);
         }
@@ -63,7 +73,10 @@ module.exports = class UserRoute {
                 id
             } = req.params;
             const respose = await this.server.db('t_user').where('a_user_id', '=', id).del();
-            res.status(200).json(message.delete('user', respose));
+            if (respose != 0)
+                res.status(200).json(message.delete('user', respose));
+            else
+                res.status(404).json(message.notFound('user', id));
         } catch (error) {
             console.log(error);
         }
