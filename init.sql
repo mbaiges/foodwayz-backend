@@ -28,11 +28,13 @@ CREATE TABLE t_restaurant (
 );
 
 CREATE TABLE t_type (
-  a_type varchar(255) PRIMARY KEY
+  a_type_id SERIAL PRIMARY KEY,
+  a_type varchar(255) 
 );
 
 CREATE TABLE t_ingredient (
-  a_ingr_name varchar(255) PRIMARY KEY
+  a_ingr_id SERIAL PRIMARY KEY,
+  a_ingr_name varchar(255)
 );
 
 CREATE TABLE t_user (
@@ -44,40 +46,42 @@ CREATE TABLE t_user (
 );
 
 CREATE TABLE t_characteristic (
-    a_char_name varchar(255) PRIMARY KEY
+    a_char_id SERIAL PRIMARY KEY,
+    a_char_name varchar(255) 
 );
 
 CREATE TABLE t_user_has_characteristic (
   a_user_id int,
-  a_char_name varchar(255),
-  PRIMARY KEY(a_user_id, a_char_name),
+  a_char_id int,
+  PRIMARY KEY(a_user_id, a_char_id),
   FOREIGN KEY (a_user_id) REFERENCES t_user(a_user_id),
-  FOREIGN KEY (a_char_name) REFERENCES t_characteristic(a_char_name)
+  FOREIGN KEY (a_char_id) REFERENCES t_characteristic(a_char_id)
 );
 
 CREATE TABLE t_food (
   a_food_id SERIAL PRIMARY KEY,
   a_description varchar(255) NOT NULL,
   a_score int,
-  a_type varchar(255) NOT NULL,
+  a_type_id int NOT NULL,
   a_res_id int NOT NULL,
-  FOREIGN KEY (a_res_id) REFERENCES t_restaurant(a_rest_id)
+  FOREIGN KEY (a_res_id) REFERENCES t_restaurant(a_rest_id),
+  FOREIGN KEY (a_type_id) REFERENCES t_type(a_type_id)
 );
 
 CREATE TABLE t_food_has_characteristic (
   a_food_id int,
-  a_char_name varchar(255),
-  PRIMARY KEY(a_food_id, a_char_name),
+  a_char_id int,
+  PRIMARY KEY(a_food_id, a_char_id),
   FOREIGN KEY (a_food_id) REFERENCES t_food(a_food_id),
-  FOREIGN KEY (a_char_name) REFERENCES t_characteristic(a_char_name)
+  FOREIGN KEY (a_char_id) REFERENCES t_characteristic(a_char_id)
 );
 
 CREATE TABLE t_food_has_ingredient (
   a_food_id int,
-  a_ingr_name varchar(255),
-  PRIMARY KEY(a_food_id, a_ingr_name),
+  a_ingr_id int,
+  PRIMARY KEY(a_food_id, a_ingr_id),
   FOREIGN KEY (a_food_id) REFERENCES t_food(a_food_id),
-  FOREIGN KEY (a_ingr_name) REFERENCES t_ingredient(a_ingr_name)
+  FOREIGN KEY (a_ingr_id) REFERENCES t_ingredient(a_ingr_id)
 );
 
 CREATE TABLE t_review (

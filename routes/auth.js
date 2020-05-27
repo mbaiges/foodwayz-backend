@@ -44,24 +44,38 @@ module.exports = class AuthRoutes {
    *         description: Register failed
    */
   async registerUser(req, res) {
-    const { name, email, password } = req.body;
+    const {
+      name,
+      email,
+      password
+    } = req.body;
 
     if (!name || !email || !password)
       return res
         .status(400)
-        .json({ code: "prop-missing", message: "Properties missing" });
+        .json({
+          code: "prop-missing",
+          message: "Properties missing"
+        });
 
     try {
       const exists = await this.server
         .db("t_user")
-        .where({ a_name: name })
+        .where({
+          a_name: name
+        })
         .first();
       if (exists)
         return res
           .status(400)
-          .json({ code: "user-exists", message: "Username already exists" });
+          .json({
+            code: "user-exists",
+            message: "Username already exists"
+          });
 
       const hash = await bcrypt.hash(password, 10);
+
+      console.log("asdasdasd");
 
       await this.server.db.table("t_user").insert({
         a_name: name,
@@ -70,11 +84,16 @@ module.exports = class AuthRoutes {
         a_reg_date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
       });
 
-      return res.json({ code: "user-reg", message: "Successfully Registered" });
+      return res.json({
+        code: "user-reg",
+        message: "Successfully Registered"
+      });
     } catch (error) {
       console.error("Failed to register user:");
       console.error(error);
-      return res.status(500).json({ message: "Failed to register user" });
+      return res.status(500).json({
+        message: "Failed to register user"
+      });
     }
   }
 
@@ -110,12 +129,17 @@ module.exports = class AuthRoutes {
    *         description: Login failed
    */
   async loginUser(req, res) {
-    const { email, password } = req.body;
+    const {
+      email,
+      password
+    } = req.body;
 
     try {
       const user = await this.server
         .db("t_user")
-        .where({ a_email: email })
+        .where({
+          a_email: email
+        })
         .first();
       if (!user)
         return res.status(400).json({
@@ -127,16 +151,19 @@ module.exports = class AuthRoutes {
       if (!comparePassword)
         return res
           .status(401)
-          .json({ code: "invalid-auth", message: "Invalid authorization." });
+          .json({
+            code: "invalid-auth",
+            message: "Invalid authorization."
+          });
 
-      const jwt = JWT.sign(
-        {
+      const jwt = JWT.sign({
           iss: "dahwdwuadhawuidha",
           sub: user.a_user_id,
           iat: moment.utc().valueOf(),
         },
-        process.env.JWT_SECRET,
-        { expiresIn: "30d" }
+        process.env.JWT_SECRET, {
+          expiresIn: "30d"
+        }
       );
 
       return res.json({
@@ -152,17 +179,24 @@ module.exports = class AuthRoutes {
     } catch (error) {
       console.error("Failed to login user:");
       console.error(error);
-      return res.status(500).json({ message: "Failed to login user" });
+      return res.status(500).json({
+        message: "Failed to login user"
+      });
     }
   }
 
   async removeUser(req, res) {
-    const { email, password } = req.body;
+    const {
+      email,
+      password
+    } = req.body;
 
     try {
       const user = await this.server
         .db("t_user")
-        .where({ a_email: email })
+        .where({
+          a_email: email
+        })
         .first();
       if (!user)
         return res.status(400).json({
@@ -174,11 +208,16 @@ module.exports = class AuthRoutes {
       if (!comparePassword)
         return res
           .status(401)
-          .json({ code: "invalid-auth", message: "Invalid authorization." });
+          .json({
+            code: "invalid-auth",
+            message: "Invalid authorization."
+          });
 
       const del = await this.server
         .db("t_user")
-        .where({ a_email: email })
+        .where({
+          a_email: email
+        })
         .first()
         .del();
 
@@ -189,7 +228,9 @@ module.exports = class AuthRoutes {
     } catch (error) {
       console.error("Failed to login user:");
       console.error(error);
-      return res.status(500).json({ message: "Failed to delete user" });
+      return res.status(500).json({
+        message: "Failed to delete user"
+      });
     }
   }
 };
