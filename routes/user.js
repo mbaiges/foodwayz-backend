@@ -63,7 +63,7 @@ module.exports = class UserRoute {
                 a_password: await bcrypt.hash(password, 10)
             });
             if (userData != 0)
-                res.status(200).json(message.put('user', userData));
+                res.status(200).json(message.put('user', [userData]));
             else
                 res.status(404).json(message.notFound('user', id));
         } catch (error) {
@@ -78,7 +78,7 @@ module.exports = class UserRoute {
             } = req.params;
             const respose = await this.server.db('t_user').where('a_user_id', '=', id).del();
             if (respose != 0)
-                res.status(200).json(message.delete('user', respose));
+                res.status(200).json(message.delete('user', [respose]));
             else
                 res.status(404).json(message.notFound('user', id));
         } catch (error) {

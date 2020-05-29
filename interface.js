@@ -18,7 +18,7 @@ module.exports = {
                 message: `Bad request at ${type} with id ${id}`,
                 result: [
                     {
-                        params: params.filter(p => !p)
+                        params: params
                     }
                 ]
                 

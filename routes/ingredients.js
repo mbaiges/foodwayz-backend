@@ -91,7 +91,7 @@ module.exports = class UserRoute {
             if(ret.length == 0)
                 res.status(404).json(message.notFound('ingredient', id));
             else
-                res.status(200).json(message.fetch('ingredient', ret));
+                res.status(200).json(message.fetch('ingredient', [ret]));
         } catch (error) {
             console.log(error);
         }
@@ -105,7 +105,7 @@ module.exports = class UserRoute {
             if(ret == 0)
                 res.status(404).json(message.notFound('ingredient', id));
             else
-                res.status(200).json(message.delete('ingredient', ret));
+                res.status(200).json(message.delete('ingredient', [ret]));
 
         } catch (error) {
             console.log(error);

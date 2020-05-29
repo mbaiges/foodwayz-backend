@@ -106,7 +106,7 @@ module.exports = class RestaurantRoute {
             } = req.params;
             const response = await this.server.db('t_restaurant').where('a_rest_id', '=', id).del();
             if (response != 0)
-                res.status(200).json(message.delete('restaurant', response));
+                res.status(200).json(message.delete('restaurant', [response]));
             else
                 res.status(404).json(message.notFound('restaurant', id));
         } catch (error) {
@@ -125,7 +125,7 @@ module.exports = class RestaurantRoute {
                 rest_chain_id
             } = req.body;
             if (!name || !score) {
-                res.status(400).json(message.badRequest('restaurant', id, [name, score]));
+                res.status(400).json(message.badRequest('restaurant', id, [name, score].filter(p => !p)));
             }
             const rest = await this.server.db('t_restaurant').where({
                 a_rest_id: id

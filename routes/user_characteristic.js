@@ -42,7 +42,7 @@ module.exports = class UserRoute {
             if(unliked == 0) 
                 res.status(404).json(message.notFound('user has charactersitic', [userId, charId]));
             else
-                res.status(200).json(message.delete('user has charactersitic', unliked));
+                res.status(200).json(message.delete('user has charactersitic', [unliked]));
 
         } catch (error) {
             console.log(error);
