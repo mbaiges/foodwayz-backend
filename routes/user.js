@@ -20,7 +20,10 @@ module.exports = class UserRoute {
     async getUsers(req, res) {
         try {
             const users = await this.server.db('t_user').select(["a_name", "a_email"]);
-            res.status(200).json(message.fetch('users', users));
+            if (users.length != 0)
+                res.status(200).json(message.fetch('users', users));
+            else
+                res.status(404).json(message.notFound('users', null));
         } catch (error) {
             console.log(error);
         }

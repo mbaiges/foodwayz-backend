@@ -16,12 +16,33 @@ module.exports = {
         static badRequest(type, id, params) {
             return {
                 message: `Bad request at ${type} with id ${id}`,
-                params: params.filter(p => !p)
+                result: [
+                    {
+                        params: params.filter(p => !p)
+                    }
+                ]
+                
+            }
+        }
+
+        static conflict(type, reason, conflicting_obj) {
+            return {
+                message: `Conflict with ${type}`,
+                result: [
+                    {
+                        reason: reason,
+                        conflicting_obj: conflicting_obj
+                    }
+                ]
             }
         }
 
         static fetch(msg, res) {
             return Message.response('fetched', msg, res);
+        }
+
+        static post(msg, res) {
+            return Message.response('added', msg, res);
         }
 
         static put(msg, res) {

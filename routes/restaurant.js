@@ -1,3 +1,5 @@
+const message = require('../interface').message;
+
 module.exports = class RestaurantRoute {
     constructor(server) {
         this.server = server;
@@ -32,11 +34,12 @@ module.exports = class RestaurantRoute {
      */
     async getRestaurants(req, res) {
         // Fetch restaurants from db
-        const restaurants = await this.server.db('t_restaurant');
-        res.status(200).json({
-            message: 'Successfully fetched restaurants',
-            restaurants
-        });
+        try {
+            const restaurants = await this.server.db('t_restaurant');
+            res.status(200).json(message.fetch('restaurant', restaurants));
+        } catch (error) {
+            console.log(error);
+        }
     }
 
 
@@ -63,10 +66,7 @@ module.exports = class RestaurantRoute {
             const rest_chain = await this.server.db('t_restaurant_chain').where({
                 a_rest_chain_id: rest_chain_id
             }).first();
-            if (rest_chain) return res.status(400).json({
-                code: 'rest-chain-no-exists',
-                message: 'Restaurant chain does not exists'
-            });
+            if (rest_chain) return res.status(404).json(message.notFound('restaurant chain', rest_chain_id));
         }
 
         const exists = await this.server.db('t_restaurant').where({
@@ -75,10 +75,7 @@ module.exports = class RestaurantRoute {
             a_city: city,
             a_address: address
         }).first();
-        if (exists) return res.status(400).json({
-            code: 'rest-exists',
-            message: 'Restaurant already exists'
-        });
+        if (exists) return res.status(409).json(message.conflict('restaurant', 'already exists', exists));
 
         try {
             const insert = await this.server.db('t_restaurant')
@@ -92,10 +89,7 @@ module.exports = class RestaurantRoute {
                 })
                 .returning('*');
 
-            res.json({
-                message: 'Successfully inserted restaurant',
-                insert
-            });
+            res.status(200).json(message.post('restaurant', insert));
         } catch (error) {
             console.error('Failed to add restaurant:');
             console.error(error);
@@ -139,9 +133,11 @@ module.exports = class RestaurantRoute {
                 a_name: name,
                 a_score: score,
                 a_rest_chain_id: rest_chain_id
-            }) // returning...
-        } catch (error) {
+            });
 
+            res.status(200).json(message.put('restaurant', rest));
+        } catch (error) {
+            console.log(error);
         }
     }
 
