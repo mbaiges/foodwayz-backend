@@ -56,7 +56,7 @@ module.exports = class UserRoute {
                 a_score: score,
                 a_type_id: type_id,
                 a_res_id: res_id
-            });
+            }).returning("*");
 
             res.status(200).json(message.post('food', food));
         } catch (error) {
@@ -113,7 +113,7 @@ module.exports = class UserRoute {
             if(ret.length == 0)
                 res.status(404).json(message.notFound('food', id));
             else
-                res.status(200).json(message.fetch('food', [ret]));
+                res.status(200).json(message.fetch('food', ret));
         } catch (error) {
             console.log(error);
         }
