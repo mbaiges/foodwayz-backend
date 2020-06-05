@@ -1,4 +1,5 @@
 const message = require('../interface').message;
+//const RestaurantChain = require('./restaurant_chain');
 
 module.exports = class RestaurantRoute {
     constructor(server) {
@@ -163,8 +164,22 @@ module.exports = class RestaurantRoute {
             const rest = await this.server.db('t_restaurant').where({
                 a_rest_id: id
             });
-            if (rest.length == 1)
-                res.status(200).json(message.fetch('restaurant', rest));
+            if (rest.length == 1) {
+                let rest_aux = rest.first();
+                let chain;
+                let aux;
+                /*
+                if (rest_aux.rest_chain_id) {
+                    await RestaurantChain.getRestaurantChain({params: {rest_chain_id: rest_aux.rest_chain_id}}, aux);
+                    if (aux.status == 200) {
+                        chain = aux.result.first();
+                        delete rest_aux.rest_chain_id;
+                        rest_aux.rest_chain = chain;
+                    }
+                }
+                */
+                res.status(200).json(message.fetch('restaurant', rest_aux));
+            }
             else
                 res.status(404).json(message.notFound('restaurant', id));
         } catch (error) {
