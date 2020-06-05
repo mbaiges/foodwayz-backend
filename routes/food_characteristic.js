@@ -12,7 +12,7 @@ module.exports = class foodRoute {
             .delete(this.unLinkfoodAndChar.bind(this));
 
         app.get('/food/:foodId/characteristic', this.getCharsByfood.bind(this));
-        app.get('/characteristic/:charId/foods', );
+        app.get('/characteristic/:charId/foods', this.getFoodsByChar.bind(this));
     }
 
     async linkFoodAndChar(req, res) {
