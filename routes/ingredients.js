@@ -1,6 +1,6 @@
 const message = require('../interface').message;
 
-module.exports = class UserRoute {
+module.exports = class IngredientsRoute {
     constructor(server) {
         this.server = server;
     }

@@ -1,6 +1,6 @@
 const message = require('../interface').message;
 
-module.exports = class UserRoute {
+module.exports = class CharacteristicRoute {
     constructor(server) {
         this.server = server;
     }
@@ -19,8 +19,8 @@ module.exports = class UserRoute {
 
     async getAll(req, res) {
         try {
-            const char = await this.server.db('t_characteristic');
-            res.status(200).json(message.fetch('characteristics', char)); 
+            const chars = await this.server.db('t_characteristic');
+            res.status(200).json(message.fetch('characteristics', chars)); 
         } catch (error) {
             console.log(error);
         }
@@ -81,7 +81,7 @@ module.exports = class UserRoute {
                 a_char_name: name
             }).where({ a_char_id: id });
 
-            if(char == 0)
+            if(char.length == 0)
                 res.status(404).json(message.notFound('characteristic', id));
             else
                 res.status(200).json(message.put('characteristic', [char]));
@@ -115,7 +115,7 @@ module.exports = class UserRoute {
                 a_char_id: id
             }).del();
 
-            if(char == 0) 
+            if(char.length == 0) 
                 res.status(404).json(message.notFound('characteristic', id));
             else
                 res.status(200).json(message.delete('characteristic', [char]));

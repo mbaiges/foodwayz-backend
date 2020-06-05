@@ -11,7 +11,7 @@ CREATE TABLE t_restaurant (
   a_score int,
   a_state varchar(255) NOT NULL,
   a_city varchar(255) NOT NULL,
-  a_postal_code int NOT NULL,
+  a_postal_code varchar(255) NOT NULL,
   a_address varchar(255) NOT NULL,
   a_rest_chain_id int,
   a_created_at timestamp NOT NULL DEFAULT NOW(),
@@ -29,7 +29,7 @@ CREATE TABLE t_restaurant_images (
 
 CREATE TABLE t_type (
   a_type_id SERIAL PRIMARY KEY,
-  a_type varchar(255) UNIQUE,
+  a_type_name varchar(255) UNIQUE,
   a_image_url varchar(510)
 );
 
@@ -48,8 +48,8 @@ CREATE TABLE t_user (
 );
 
 CREATE TABLE t_characteristic (
-    a_char_id SERIAL PRIMARY KEY,
-    a_char_name varchar(255) UNIQUE
+  a_char_id SERIAL PRIMARY KEY,
+  a_char_name varchar(255) UNIQUE
 );
 
 CREATE TABLE t_user_has_characteristic (
@@ -66,6 +66,7 @@ CREATE TABLE t_food (
   a_score int,
   a_type_id int NOT NULL,
   a_rest_id int NOT NULL,
+  a_image_url varchar(510),
   FOREIGN KEY (a_rest_id) REFERENCES t_restaurant(a_rest_id),
   FOREIGN KEY (a_type_id) REFERENCES t_type(a_type_id)
 );

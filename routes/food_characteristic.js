@@ -1,6 +1,6 @@
 const message = require('../interface').message;
 
-module.exports = class foodRoute {
+module.exports = class FoodCharacteristicRoute {
     constructor(server) {
         this.server = server;
     }
