@@ -11,7 +11,7 @@ module.exports = class foodRoute {
             .post(this.linkFoodAndChar.bind(this))
             .delete(this.unLinkfoodAndChar.bind(this));
 
-        app.get('/food/:foodId/characteristic', this.getCharsByfood.bind(this));
+        app.get('/food/:foodId/characteristic', this.getCharsByFood.bind(this));
         app.get('/characteristic/:charId/foods', this.getFoodsByChar.bind(this));
     }
 
@@ -39,16 +39,16 @@ module.exports = class foodRoute {
             const unliked = await this.server.db('t_food_has_characteristic').where({a_food_id: foodId, a_char_id: charId}).del();
 
             if(unliked == 0) 
-                res.status(404).json(message.notFound('food has charactersitic', [foodId, charId]));
+                res.status(404).json(message.notFound('food has characteristic', [foodId, charId]));
             else
-                res.status(200).json(message.delete('food has charactersitic', [unliked]));
+                res.status(200).json(message.delete('food has characteristic', [unliked]));
 
         } catch (error) {
             console.log(error);
         }
     }
 
-    async getCharsByfood(req, res) {
+    async getCharsByFood(req, res) {
         const { foodId } = req.params;
 
         try {
