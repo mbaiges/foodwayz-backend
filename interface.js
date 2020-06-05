@@ -16,23 +16,31 @@ module.exports = {
         static badRequest(type, id, params) {
             return {
                 message: `Bad request at ${type} with id ${id}`,
-                result: [
+                description: [
                     {
                         params: params
                     }
                 ]
-                
             }
         }
 
         static conflict(type, reason, conflicting_obj) {
             return {
                 message: `Conflict with ${type}`,
-                result: [
+                description: [
                     {
                         reason: reason,
                         conflicting_obj: conflicting_obj
                     }
+                ]
+            }
+        }
+
+        static unauth(action, description) {
+            return {
+                message: `Unauthorize ${action}`,
+                description: [
+                    description
                 ]
             }
         }

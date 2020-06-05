@@ -27,13 +27,14 @@ module.exports = class UserRoute {
     }
 
     async addFood(req, res) {
-        const {description, score = null, type_id, res_id} = req.body;
+        const {description, score = null, type_id, rest_id, image_url = null} = req.body;
 
         const params = {
             description: [description, typeof(description) === 'string'],
             score: [score, (score == null || Number.isInteger(score))],
             type_id: [type_id, Number.isInteger(type_id)],
-            res_id: [res_id, Number.isInteger(res_id)]
+            rest_id: [rest_id, Number.isInteger(rest_id)],
+            image_url: [image_url, (image_url == null || typeof(image_url) === 'string')]
         }
         let errors = {};
         Object.entries(params).forEach(prop => {
@@ -55,7 +56,8 @@ module.exports = class UserRoute {
                 a_description: description,
                 a_score: score,
                 a_type_id: type_id,
-                a_res_id: res_id
+                a_rest_id: rest_id,
+                a_image_url: image_url
             }).returning("*");
 
             res.status(200).json(message.post('food', food));
@@ -67,11 +69,12 @@ module.exports = class UserRoute {
 
     async editFood(req, res) {
         const { id } = req.params;
-        const { description, type_id = null } = req.body;
+        const { description, type_id = null, image_url = null } = req.body;
         
         const params = {
             description: [description, typeof(description) === 'string'],
-            type_id: [type_id, (type_id == null || Number.isInteger(type_id))]
+            type_id: [type_id, (type_id == null || Number.isInteger(type_id))],
+            image_url: [image_url, (image_url == null || typeof(image_url) === 'string')]
         }
         let errors = {};
         Object.entries(params).forEach(prop => {
@@ -93,7 +96,8 @@ module.exports = class UserRoute {
                 col_type = 'a_type_id';
             }
 
-            const cant = await this.server.db('t_food').update('a_description', description, col_type, type_id).where({a_food_id: id});
+            const cant = await this.server.db('t_food')
+                        .update('a_description', description, col_type, type_id, 'a_image_url', image_url).where({a_food_id: id});
 
             if(cant == 0)
                 res.status(404).json(message.notFound('food', id));

@@ -81,7 +81,6 @@ module.exports = class AuthRoutes {
         a_name: name,
         a_email: email,
         a_password: hash,
-        a_reg_date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
       });
 
       return res.json({

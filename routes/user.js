@@ -8,20 +8,26 @@ module.exports = class UserRoute {
 
     async initialize(app) {
         app.route('/user/')
-            .get(this.getUser.bind(this))
+            .get(this.getCurrentUser.bind(this))
 
         app.route('/user/all')
             .get(this.getUsers.bind(this));
 
         app.route('/user/:id')
+            .get(this.getUser.bind(this))
             .put(this.modifyUser.bind(this))
             .delete(this.delUser.bind(this));
 
     }
 
+    async getCurrentUser(req, res) {
+        req.params = {id: req.user.id};
+        return this.getUser(req, res);
+    }
+
     async getUsers(req, res) {
         try {
-            const users = await this.server.db('t_user').select(["a_name", "a_email"]);
+            const users = await this.server.db('t_user').select("a_name", "a_email", "a_image_url");
             if (users.length != 0)
                 res.status(200).json(message.fetch('users', users));
             else
@@ -32,16 +38,16 @@ module.exports = class UserRoute {
     }
 
     async getUser(req, res) {
+        const { id } = req.params;
         try {
-            const{a_user_id, a_name, a_email} = req.user;
-            const user = [
-                {
-                    id: a_user_id,
-                    name: a_name,
-                    email: a_email
-                }
-            ]
-            res.status(200).json(message.fetch('user', user));
+            const user = await this.server.db('t_user')
+            .select("a_user_id", "a_name", "a_email", "a_image_url")
+            .where({a_user_id: id});
+
+            if(user.length != 0)
+                res.status(200).json(message.fetch('user', user));
+            else
+                res.status(404).json(message.notFound('user', id));
         } catch (error) {
             console.log(error);
         }
@@ -49,18 +55,14 @@ module.exports = class UserRoute {
     }
 
     async modifyUser(req, res) {
+        const { id } = req.params;
+        const { name, password, image_url } = req.body;
+        
         try {
-            const {
-                id
-            } = req.params;
-
-            const {
-                name,
-                password
-            } = req.body;
-            const userData = await this.server.db('t_user').where('a_user_id', '=', id).update({
+            const userData = await this.server.db('t_user').where({a_user_id: id}).update({
                 a_name: name,
-                a_password: await bcrypt.hash(password, 10)
+                a_password: await bcrypt.hash(password, 10),
+                a_image_url: image_url
             });
             if (userData != 0)
                 res.status(200).json(message.put('user', [userData]));
@@ -76,7 +78,7 @@ module.exports = class UserRoute {
             const {
                 id
             } = req.params;
-            const respose = await this.server.db('t_user').where('a_user_id', '=', id).del();
+            const respose = await this.server.db('t_user').where({a_user_id: id}).del();
             if (respose != 0)
                 res.status(200).json(message.delete('user', [respose]));
             else

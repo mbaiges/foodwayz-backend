@@ -1,8 +1,8 @@
 {
-  "name": "books-api",
+  "name": "foodwayz-api",
   "version": "1.0.0",
   "private": true,
-  "description": "Books API",
+  "description": "Foodwayz API",
   "main": "index.js",
   "engines": {
     "node": "12.x"

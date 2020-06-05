@@ -1,3 +1,5 @@
+const message = require('../interface').message;
+
 module.exports = class OwnerRoute {
 	constructor(server) {
 		this.server = server;
@@ -6,21 +8,21 @@ module.exports = class OwnerRoute {
 	async initialize(app) {
         app.route('/owner')
             .post(this.makeOwnership.bind(this))
+            .put(this.updatePremiumStatus.bind(this))
             .delete(this.removeOwnership.bind(this));
     }
 
     async makeOwnership(req, res){
         const owner = await this.server.db('t_owner').where({ a_user_id: req.user.a_user_id }).first();
-        if (owner) return res.status(400).json({ code: 'owner-already', message: 'You are already owner' });
+        if (owner) return res.status(409).json(message.conflict('owner', 'already exists', owner));
 
         try {
             const insert = await this.server.db('t_owner').insert({
                 a_user_id: req.user.a_user_id, 
-                a_is_premium: false
-            });
-            res.status(200).json({ message: `User ${req.user.a_name} is now a proud owner c:`});
+                a_premium_level: 0
+            }).returning("*");
+            res.status(200).json(message.post('owner', insert));
         } catch (error) {
-            console.error('Failed to give ownership:');
             console.error(error);
             return res.status(500).json({ message: 'Failed to give ownership' });
         }
@@ -28,17 +30,40 @@ module.exports = class OwnerRoute {
 
     async removeOwnership(req, res){
         const owner = await this.server.db('t_owner').where({ a_user_id: req.user.a_user_id }).first();
-        if (!owner) return res.status(401).json({ code: 'not-owner', message: 'Invalid authorization' });
+        if (!owner) return res.status(409).json(message.conflict('owner', 'not an owner', null));
 
         const del = await this.server.db('t_owner').where( {a_user_id: req.user.a_user_id}).delete();
 
         try {
             const del = await this.server.db('t_owner').where( {a_user_id: req.user.a_user_id}).delete();
-            res.status(200).json({ message: `User ${req.user.a_name} is no longer a proud owner :c`});
+            res.status(200).json(message.delete('owner', del));
         } catch (error) {
             console.error('Failed to remove ownership:');
             console.error(error);
             return res.status(500).json({ message: 'Failed to remove ownership' });
+        }
+    }
+
+    async updatePremiumStatus(req, res) {
+        const { id } = req.user;
+        const { premium_level } = req.body;
+
+        if(!Number.isInteger(premium_level)) {
+            res.status(400).json(message.badRequest('premium level', id, premium_level));
+            return;
+        }
+
+        try {
+            const user = await this.server.db('t_owner').update({
+                a_premium_level: premium_level
+            }).where({a_user_id: id});
+
+            if(user == 0)
+                res.status(404).json(message.notFound('owner user', id));
+            else
+                res.status(200).json(message.put('premium level', user));
+        } catch (error) {
+            console.log(error);
         }
     }
 };

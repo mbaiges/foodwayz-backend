@@ -16,7 +16,7 @@ module.exports = class foodRoute {
     }
 
     async linkFoodAndIngr(req, res) {
-        const { foodId, ingrId } = req.body;
+        const { foodId, ingrId } = req.params;
 
         try {
             const link = await this.server.db('t_food_has_ingredient').where({a_food_id: foodId, a_ingr_id: ingrId});
