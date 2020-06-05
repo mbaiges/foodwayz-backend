@@ -22,7 +22,7 @@ module.exports = class UserRoute {
         try {
             const link = await this.server.db('t_user_has_characteristic').where({a_user_id: userId, a_char_id: charId});
             if (link) {
-                res.status(409).json(message.conflict('userHasCharacteristic', 'already-exists', link));
+                res.status(409).json(message.conflict('userHasCharacteristic', 'already exists', link));
             }
             else {
                 const added_link = await this.server.db('t_user_has_characteristic').insert({a_user_id: userId, a_char_id: charId});
