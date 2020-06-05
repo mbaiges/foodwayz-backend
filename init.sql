@@ -23,7 +23,7 @@ CREATE TABLE t_restaurant_images (
   a_rest_id int,
   a_image_id SERIAL,
   a_image_url varchar(510),
-  PRIMARY KEY (a_rest_id, a_image_id), 
+  PRIMARY KEY (a_rest_id, a_image_id),
   FOREIGN KEY (a_rest_id) REFERENCES t_restaurant(a_rest_id)
 );
 
