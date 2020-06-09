@@ -15,7 +15,7 @@ module.exports = class FoodRoute {
         app.route('/food/:id')
         .put(this.editFood.bind(this))
         .get(this.getFood.bind(this))
-        .delete();
+        .delete(this.delFood.bind(this));
 
     }
 

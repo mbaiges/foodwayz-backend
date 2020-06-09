@@ -1,0 +1,16 @@
+drop table t_restaurant_images;
+drop table t_user_has_characteristic;
+drop table t_food_has_characteristic;
+drop table t_characteristic;
+drop table t_food_has_ingredient;
+drop table t_ingredient;
+drop table t_review;
+drop table t_food;
+drop table t_type;
+drop table t_owner;
+drop table t_user;
+drop table t_owns;
+drop table t_restaurant;
+drop table t_restaurant_chain;
+drop table t_food_views;
+drop table t_restaurant_views;
