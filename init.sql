@@ -14,7 +14,7 @@ CREATE TABLE t_restaurant (
   a_postal_code varchar(255) NOT NULL,
   a_address varchar(255) NOT NULL,
   a_rest_chain_id int,
-  a_created_at timestamp NOT NULL DEFAULT NOW(),
+  a_created_at timestamp DEFAULT NOW(),
   UNIQUE(a_state, a_city, a_postal_code, a_address),
   FOREIGN KEY (a_rest_chain_id) REFERENCES t_restaurant_chain(a_rest_chain_id)
 );
@@ -43,7 +43,7 @@ CREATE TABLE t_user (
   a_name varchar(255) NOT NULL,
   a_email varchar(255) NOT NULL UNIQUE,
   a_password varchar(255) NOT NULL,
-  a_created_at timestamp NOT NULL DEFAULT NOW(),
+  a_created_at timestamp DEFAULT NOW(),
   a_image_url varchar(510)
 );
 
@@ -92,7 +92,7 @@ CREATE TABLE t_review (
   a_food_id int,
   a_desc varchar(255),
   a_score int NOT NULL,
-  a_created_at timestamp NOT NULL DEFAULT NOW(),
+  a_created_at timestamp DEFAULT NOW(),
   PRIMARY KEY(a_user_id, a_food_id),
   FOREIGN KEY (a_user_id) REFERENCES t_user(a_user_id),
   FOREIGN KEY (a_food_id) REFERENCES t_food(a_food_id)
