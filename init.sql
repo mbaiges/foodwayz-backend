@@ -129,14 +129,5 @@ CREATE TABLE t_restaurant_views (
   UNIQUE(a_user_id, a_food_id, a_finish_ts)
 );
 
--------------------------------------NEW-------------------------------------
-
-INSERT INTO t_user VALUES(DEFAULT, 'user1', 'user1@email.com', '$2b$10$COPBRrctMKsyIF5KCBdzI.1GZAMmC9dVB0Zz1HH/F6PMzplwDOTWO', DEFAULT, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser1%40email_com.jpg?alt=media&token=de6b3327-6e3a-4c04-aa22-9a3d4daaad80');
-INSERT INTO t_user VALUES(DEFAULT, 'user2', 'user2@email.com', '$2b$10$ygrUw.dcGcj/oaU89A.LeePR20krhdz./FYcY56gL5tnxQVTPe6cW', DEFAULT, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser2%40email_com.jpg?alt=media&token=f7ccadfb-b145-4510-bfda-dcbc2fab74fd');
-INSERT INTO t_user VALUES(DEFAULT, 'user3', 'user3@email.com', '$2b$10$OmcdC63iByfkE0ZnGwrhu.Kkk5nWper8XxQDXv6kzN4r3AacDP1Wu', DEFAULT, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser3%40email_com.jpg?alt=media&token=af14ded9-0f59-4825-8b4e-70c28b069167');
-INSERT INTO t_user VALUES(DEFAULT, 'user4', 'user4@email.com', '$2b$10$/elcUPMHXk5B5QT..85ese1V2Vo1znao2uHP014b1.l93NnOitDYG', DEFAULT, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser4%40email_com.jpg?alt=media&token=99d30472-9b10-4b00-bfdc-dbcb1390c30e');
-INSERT INTO t_user VALUES(DEFAULT, 'user5', 'user5@email.com' ,'$2b$10$tu1t7imPJ.afB.BOFP140uVEHUMKMlqOwKYnUgPGmV3BN8GaA7.Xa', DEFAULT, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser5%40email_com.jpg?alt=media&token=9cfe6b05-ff65-448b-b089-8f93109a89ae');
-select * from t_user;
-
 
 
