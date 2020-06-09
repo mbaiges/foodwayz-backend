@@ -161,24 +161,24 @@ module.exports = class RestaurantRoute {
             const {
                 id
             } = req.params;
-            const rest = await this.server.db('t_restaurant').where({
+            let rest = await this.server.db('t_restaurant').where({
                 a_rest_id: id
             });
             if (rest.length == 1) {
-                let rest_aux = rest.first();
+                rest = rest.first();
                 let chain;
-                let aux;
+                let aux = {};
                 /*
                 if (rest_aux.rest_chain_id) {
-                    await RestaurantChain.getRestaurantChain({params: {rest_chain_id: rest_aux.rest_chain_id}}, aux);
-                    if (aux.status == 200) {
+                    await RestaurantChain.getRestaurantChain({params: {rest_chain_id: rest_aux.a_rest_chain_id}}, aux);
+                    if (aux.result) {
                         chain = aux.result.first();
-                        delete rest_aux.rest_chain_id;
-                        rest_aux.rest_chain = chain;
+                        delete rest_aux.a_rest_chain_id;
+                        rest_aux.a_rest_chain = chain;
                     }
                 }
                 */
-                res.status(200).json(message.fetch('restaurant', rest_aux));
+                res.status(200).json(message.fetch('restaurant', rest));
             }
             else
                 res.status(404).json(message.notFound('restaurant', id));

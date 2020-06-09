@@ -1,8 +1,10 @@
 const message = require('../interface').message;
+const FoodRoute = require('./food.js');
 
 module.exports = class FoodCharacteristicRoute {
     constructor(server) {
         this.server = server;
+        this.foodRoute = new FoodRoute(server);
     }
 
     async initialize(app) {
@@ -65,8 +67,17 @@ module.exports = class FoodCharacteristicRoute {
         const { charId } = req.params;
 
         try {
-            const foods = await this.server.db('t_food_has_characteristic').joinRaw('natural full join t_food')
-                                .select("a_food_id", "a_description", "a_score", "a_type_id", "a_res_id").where({a_char_id: charId});
+            let foods = await this.server.db('t_food_has_characteristic').select("a_food_id").where({a_char_id: charId});
+            let food;
+            let aux = {};
+            for (let i = 0; i < foods.length; i < 0) {
+                await this.foodRoute.getFood({params: {id: foods[i].a_food_id}}, aux);
+                if (aux.result) {
+                    food = aux.result.first();
+                    foods[i] = food;
+                }
+                aux = {};
+            }
             res.status(200).json(message.fetch(`food by characteristics id ${charId}`, foods));
 
         } catch (error) {

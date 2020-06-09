@@ -1,8 +1,10 @@
 const message = require('../interface').message;
+const RestaurantRoute = require('./restaurant');
 
 module.exports = class FoodRoute {
     constructor(server) {
         this.server = server;
+        this.restaurantRoute = new RestaurantRoute(server);
     }
 
     async initialize(app) {
@@ -116,8 +118,17 @@ module.exports = class FoodRoute {
 
             if(ret.length == 0)
                 res.status(404).json(message.notFound('food', id));
-            else
+            else {
+                let aux = {};
+                await this.restaurantRoute({params: {id: ret.a_rest_id}}, aux);
+                let rest;
+                if (aux.result) {
+                    rest = aux.result.first();
+                    delete ret.a_rest_id;
+                    ret.a_rest = rest;
+                }
                 res.status(200).json(message.fetch('food', ret));
+            }
         } catch (error) {
             console.log(error);
         }
