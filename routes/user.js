@@ -21,7 +21,9 @@ module.exports = class UserRoute {
     }
 
     async getCurrentUser(req, res) {
-        req.params = {id: req.user.id};
+        if (!req.params)
+            req.params = {};
+        req.params.id = req.user.a_user_id;
         return this.getUser(req, res);
     }
 

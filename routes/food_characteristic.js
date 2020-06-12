@@ -67,17 +67,10 @@ module.exports = class FoodCharacteristicRoute {
         const { charId } = req.params;
 
         try {
-            let foods = await this.server.db('t_food_has_characteristic').select("a_food_id").where({a_char_id: charId});
-            let food;
-            let aux = {};
-            for (let i = 0; i < foods.length; i < 0) {
-                await this.foodRoute.getFood({params: {id: foods[i].a_food_id}}, aux);
-                if (aux.result) {
-                    food = aux.result.first();
-                    foods[i] = food;
-                }
-                aux = {};
-            }
+            let foods_ids = await this.server.db('t_food_has_characteristic').select("a_food_id").where({a_char_id: charId});
+            if (foods_ids && !Array.isArray(foods_ids))
+                foods_ids = [foods_ids];
+            const foods = await this.foodRoute.getFoodsObjects({a_food_id: foods_ids})
             res.status(200).json(message.fetch(`food by characteristics id ${charId}`, foods));
 
         } catch (error) {

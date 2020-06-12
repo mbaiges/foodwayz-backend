@@ -1,5 +1,6 @@
 const message = require('../interface').message;
 const FoodRoute = require('./food.js');
+const { restart } = require('nodemon');
 
 module.exports = class FoodTypeRoute {
     constructor(server) {
@@ -15,19 +16,8 @@ module.exports = class FoodTypeRoute {
         const { typeId } = req.params;
 
         try {
-            let foods = await this.server.db('t_food').select('a_food_id').where({a_type_id: typeId});
-            let food;
-            let aux = {};
-            for (let i = 0; i < foods.length; i < 0) {
-                await this.foodRoute.getFood({params: {id: foods[i].a_food_id}}, aux);
-                if (aux.result) {
-                    food = aux.result.first();
-                    foods[i] = food;
-                }
-                aux = {};
-            }
+            let foods = await this.foodRoute.getFoodsObjects({a_type_id: typeId});
             res.status(200).json(message.fetch(`food by type id ${typeId}`, foods));
-
         } catch (error) {
             console.log(error);
         }
