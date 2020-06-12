@@ -27,11 +27,19 @@ module.exports = class ReviewRoute {
         const { id } = req.params;
 
         try {
-            let rev = await this.server.db('t_review').select('*').where({ 
+            let rev = await this.server.db('t_review').where({ 
                 a_review_id: id 
             });
             if(rev) {
-                rev = rev[0];
+                if (Array.isArray(rev))
+                    rev = rev[0];
+
+                rev.a_user = (await this.userRoute.getUsersObjects({ a_user_id: rev.a_user_id }))[0];
+                delete rev.a_user_id;
+
+                rev.a_food = (await this.userRoute.getUsersObjects({ a_food_id: rev.a_food_id }))[0];
+                delete rev.a_food_id;
+
                 res.status(200).json(message.fetch('review', rev));
             }
             else
@@ -61,13 +69,42 @@ module.exports = class ReviewRoute {
 
     async addRev(req, res) {
         const { foodId } = req.params;
-        const { a_user_id } = req.user;
+        const userId = req.user.a_user_id;
         const { desc, score } = req.body;
 
-        try {
+        console.log(score);
+
+        const params = {
+            desc: [desc, typeof(desc) === 'string'],
+            score: [score, (Number(score) === score && score >= 0 && score <= 5)],
+        }
+
+        let errors = {};
+        Object.entries(params).forEach(prop => {
+            if(!prop[1][1]) {
+                errors[prop[0]] = prop[1][0];
+            }
+        });
+
+        let aux;
+        if((aux = Object.keys(errors)).length != 0) {
             
+            res.status(400).json(message.badRequest('review', aux, errors));
+            return;
+        }
+
+        try {
+            const rev = await this.server.db('t_review').insert({
+                a_user_id: userId,
+                a_food_id: foodId,
+                a_score: score,
+                a_desc: desc
+            }).returning('*');
+
+            res.status(200).json(message.post('review', rev));            
         } catch (error) {
             console.log(error);
+            res.status(409).json(message.conflict('review', error.detail, null));
         }
     }
     
@@ -77,11 +114,9 @@ module.exports = class ReviewRoute {
         try {
             let revs = await this.server.db('t_review').where({a_food_id: foodId});
             if (revs) {
-                let userId;
                 for(r in revs) {
-                    userId = r.a_user_id;
+                    r.a_user = (await this.userRoute.getUsersObjects({ a_user_id: r.a_user_id }))[0];
                     delete r.a_user_id;
-                    r.a_user = (await this.userRoute.getUsersObjects({ a_user_id: userId }))[0];                    
                 }
 
                 res.status(200).json(message.fetch('reviews by food', revs));
@@ -102,14 +137,9 @@ module.exports = class ReviewRoute {
             let revs = await this.server.db('t_review').where({a_user_id: userId});
         
             if (revs) {
-                let food;
                 for (let i = 0; i < revs.length; i++) {
-                    food = await this.foodRoute.getFoodsObjects({a_food_id: revs[i].a_food_id});
-                    if (food) {
-                        food = food[0];
-                        delete revs[i].a_food_id;
-                        revs[i].a_food = food;
-                    }
+                    revs[i].a_food = (await this.foodRoute.getFoodsObjects({ a_food_id: revs[i].a_food_id }))[0];
+                    delete revs[i].a_food_id;
                 }
                 res.status(200).json(message.fetch('reviews by user', revs));
             }

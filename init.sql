@@ -65,7 +65,7 @@ CREATE TABLE t_user_has_characteristic (
 CREATE TABLE t_food (
   a_food_id SERIAL PRIMARY KEY,
   a_title varchar(128) NOT NULL,
-  a_description varchar(256) NOT NULL,
+  a_description varchar(256),
   a_score decimal(10,2),
   a_type_id int NOT NULL,
   a_rest_id int NOT NULL,
@@ -115,7 +115,7 @@ CREATE TABLE t_owns (
   FOREIGN KEY (a_rest_id) REFERENCES t_restaurant(a_rest_id)
 );
 
-CREATE TABLE t_food_views (0
+CREATE TABLE t_food_views (
   a_user_id int,
   a_food_id int,
   a_start_ts timestamp,
