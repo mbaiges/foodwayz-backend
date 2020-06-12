@@ -51,10 +51,12 @@ module.exports = class ReviewRoute {
 
     async delRev(req, res) {
         const { id } = req.params;
+        const { a_user_id: userId } = req.user;
 
         try {
             const rev = await this.server.db('t_review').where({
-                a_review_id: id
+                a_review_id: id,
+                a_user_id: userId
             }).del();
 
             if(rev) 
