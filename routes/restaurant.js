@@ -199,8 +199,6 @@ module.exports = class RestaurantRoute {
                     }
                 }
             }
-            if (rests.length == 1)
-                rests = rests[0];
             return rests;
         }
         return null;
