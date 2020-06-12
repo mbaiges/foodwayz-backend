@@ -40,10 +40,10 @@ module.exports = class FoodIngredientRoute {
         try {
             const unliked = await this.server.db('t_food_has_ingredient').where({a_food_id: foodId, a_ingr_id: ingrId}).del();
 
-            if(unliked == 0) 
-                res.status(404).json(message.notFound('food has ingredient', [foodId, ingrId]));
+            if(unliked) 
+                res.status(200).json(message.delete('food has ingredient', unliked));
             else
-                res.status(200).json(message.delete('food has ingredient', [unliked]));
+                res.status(404).json(message.notFound('food has ingredient', [foodId, ingrId]));
 
         } catch (error) {
             console.log(error);

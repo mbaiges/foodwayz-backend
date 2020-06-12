@@ -23,8 +23,8 @@ module.exports = class FoodRoute {
 
     async getAll(req, res) {
         try {
-            const food = await this.server.db('t_food');
-            res.status(200).json(message.fetch('foods', food));
+            const foods = await this.getFoodsObjects();
+            res.status(200).json(message.fetch('foods', foods));
         } catch (error) {
             console.log(error);
         }
@@ -103,10 +103,10 @@ module.exports = class FoodRoute {
             const cant = await this.server.db('t_food')
                         .update('a_description', description, col_type, type_id, 'a_image_url', image_url).where({a_food_id: id});
 
-            if(cant.length == 0)
-                res.status(404).json(message.notFound('food', id));
+            if(cant)
+                res.status(200).json(message.put('food', cant));
             else
-                res.status(200).json(message.put('food', [cant]));
+                res.status(404).json(message.notFound('food', id));
         } catch (error) {
             console.log(error);
             res.status(409).json(message.conflict('food', error.detail, null));
@@ -114,34 +114,49 @@ module.exports = class FoodRoute {
     }
 
     async getFood(req, res) {
+        const {id} = req.params;
         try {
-            const { food } = req.params;
-            const ret = await this.server.db('t_food').where({a_food_id: id});
-
-            if(food.length == 0)
-                res.status(404).json(message.notFound('food', id));
-            else {
-                let aux = {};
-                await this.restaurantRoute({params: {id: food.a_rest_id}}, aux);
-                let rest;
-                let type;
-                if (aux.result) {
-                    rest = aux.result.first();
-                    delete food.a_rest_id;
-                    food.a_rest = rest;
-                }
-                aux = {};
-                await this.typeRoute({params: {id: food.a_type_id}}, aux);
-                if (aux.result) {
-                    type = aux.result.first();
-                    delete food.a_type_id;
-                    food.a_type = type;
-                }
+            const food = await this.getFoodsObjects({a_food_id: id});
+            if(food)
                 res.status(200).json(message.fetch('food', food));
+            else {
+                res.status(404).json(message.notFound('food', id));
             }
         } catch (error) {
             console.log(error);
         }
+    }
+
+    async getFoodsObjects(filters) {
+        let foods;
+        if (!filters)
+            foods = await this.server.db('t_food');
+        else if (Array.isArray(filters.a_food_id)) {
+            let ids = [...filters.a_food_id];
+            delete filters.a_food_id;
+            foods = await this.server.db('t_food').whereIn('a_food_id', ids).where(filters);
+        }    
+        else
+            foods = await this.server.db('t_food').where(filters);
+        let rest, type;
+        if (foods) {
+            if (!Array.isArray(foods))
+                foods = [foods];
+            for (let i = 0; i < foods.length; i++) {
+                rest = await this.restaurantRoute.getRestaurantsObjects({a_rest_id: foods[i].a_rest_id});
+                if (rest) {
+                    delete foods[i].a_rest_id;
+                    foods[i].a_rest = rest;
+                }
+                type = await this.typeRoute.getTypesObjects({a_type_id: foods[i].a_type_id});
+                if (type) {
+                    delete foods[i].a_type_id;
+                    foods[i].a_type = type;
+                }
+            }
+            return foods;
+        }
+        return null;
     }
 
     async delFood(req, res) {
@@ -149,10 +164,10 @@ module.exports = class FoodRoute {
             const { id } = req.params;
             const ret = await this.server.db('t_food').where({a_food_id: id}).del();
 
-            if(ret.length == 0)
-                res.status(404).json(message.notFound('food', id));
+            if(ret)
+                res.status(200).json(message.delete('food', ret));
             else
-                res.status(200).json(message.delete('food', [ret]));
+                res.status(404).json(message.notFound('food', id));
         } catch (error) {
             console.log(error);
         }

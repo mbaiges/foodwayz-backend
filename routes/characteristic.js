@@ -19,7 +19,7 @@ module.exports = class CharacteristicRoute {
 
     async getAll(req, res) {
         try {
-            const chars = await this.server.db('t_characteristic');
+            const chars = await this.getCharacteristicsObjects();
             res.status(200).json(message.fetch('characteristics', chars)); 
         } catch (error) {
             console.log(error);
@@ -81,10 +81,11 @@ module.exports = class CharacteristicRoute {
                 a_char_name: name
             }).where({ a_char_id: id });
 
-            if(char.length == 0)
-                res.status(404).json(message.notFound('characteristic', id));
+            if(char)
+                res.status(200).json(message.put('characteristic', char));
             else
-                res.status(200).json(message.put('characteristic', [char]));
+                res.status(404).json(message.notFound('characteristic', id));
+
         } catch (error) {
             console.log(error);
         }
@@ -94,17 +95,31 @@ module.exports = class CharacteristicRoute {
         const { id } = req.params;
 
         try {
-            const char = await this.server.db('t_characteristic').select("*").where({
-                a_char_id: id
-            });
-
-            if(char.length == 0) 
-                res.status(404).json(message.notFound('characteristic', id));
+            const char = await this.getCharacteristicsObjects({a_char_id: id});
+            if(char) 
+                res.status(200).json(message.fetch('characteristic', char)); 
             else
-                res.status(200).json(message.fetch('characteristic', char));
+                res.status(404).json(message.notFound('characteristic', id));
         } catch (error) {
             console.log(error);
         }
+    }
+
+    async getCharacteristicsObjects(filters) {
+        let chars;
+        if (!filters)
+            chars = await this.server.db('t_characteristic');
+        else if (Array.isArray(filters.a_char_id)) {
+            let ids = [...filters.a_char_id];
+            delete filters.a_char_id;
+            chars = await this.server.db('t_characteristic').whereIn('a_char_id', ids).where(filters);
+        }    
+        else
+        chars = await this.server.db('t_characteristic').where(filters);
+        if (chars) {
+            return chars;
+        }
+        return null;
     }
     
     async delChar(req, res) {
@@ -115,10 +130,11 @@ module.exports = class CharacteristicRoute {
                 a_char_id: id
             }).del();
 
-            if(char.length == 0) 
-                res.status(404).json(message.notFound('characteristic', id));
+            if(char) 
+                res.status(200).json(message.delete('characteristic', char));
             else
-                res.status(200).json(message.delete('characteristic', [char]));
+                res.status(404).json(message.notFound('characteristic', id));
+
         } catch (error) {
             console.log(error);
         }

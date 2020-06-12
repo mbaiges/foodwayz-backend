@@ -58,11 +58,10 @@ module.exports = class OwnsRoute {
 
             const unliked = await this.server.db('t_owns').where({a_user_id: ownerId, a_rest_id: restId}).del();
 
-            if(unliked == 0) 
-                res.status(404).json(message.notFound('ownership', [ownerId, restId]));
+            if(unliked) 
+                res.status(200).json(message.delete('ownership', unliked));
             else
-                res.status(200).json(message.delete('ownership', [unliked]));
-
+                res.status(404).json(message.notFound('ownership', [ownerId, restId]));
         } catch (error) {
             console.log(error);
         }

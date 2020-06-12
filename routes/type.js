@@ -19,7 +19,7 @@ module.exports = class TypeRoute {
 
     async getAll(req, res) {
         try {
-            const types = await this.server.db('t_type');
+            const types = await this.getTypesObjects({a_type_id: [1,2,4]});
             res.status(200).json(message.fetch('types', types)); 
         } catch (error) {
             console.log(error);
@@ -81,10 +81,11 @@ module.exports = class TypeRoute {
                 a_type_name: name
             }).where({ a_type_id: id });
 
-            if(type.length == 0)
-                res.status(404).json(message.notFound('type', id));
+            if(type)
+                res.status(200).json(message.put('type', type));
             else
-                res.status(200).json(message.put('type', [type]));
+                res.status(404).json(message.notFound('type', id));
+
         } catch (error) {
             console.log(error);
         }
@@ -94,17 +95,31 @@ module.exports = class TypeRoute {
         const { id } = req.params;
 
         try {
-            const type = await this.server.db('t_type').select("*").where({
-                a_type_id: id
-            });
-
-            if(type.length == 0) 
-                res.status(404).json(message.notFound('type', id));
-            else
+            const type = await this.getTypesObjects({a_type_id: id});
+            if(type) 
                 res.status(200).json(message.fetch('type', type));
+            else
+                res.status(404).json(message.notFound('type', id)); 
         } catch (error) {
             console.log(error);
         }
+    }
+
+    async getTypesObjects(filters) {
+        let types;
+        if (!filters)
+            types = await this.server.db('t_type');
+        else if (Array.isArray(filters.a_type_id)) {
+            let ids = [...filters.a_type_id];
+            delete filters.a_type_id;
+            types = await this.server.db('t_type').whereIn('a_type_id', ids).where(filters);
+        }    
+        else
+            types = await this.server.db('t_type').where(filters);
+        if (types) {
+            return types;
+        }
+        return null;
     }
     
     async delType(req, res) {
@@ -115,10 +130,11 @@ module.exports = class TypeRoute {
                 a_type_id: id
             }).del();
 
-            if(type.length == 0) 
-                res.status(404).json(message.notFound('type', id));
+            if(type) 
+                res.status(200).json(message.delete('type', type));
             else
-                res.status(200).json(message.delete('type', [type]));
+                res.status(404).json(message.notFound('type', id));
+
         } catch (error) {
             console.log(error);
         }

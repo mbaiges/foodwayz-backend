@@ -19,7 +19,7 @@ module.exports = class RestaurantChainRoute {
 
     async getAll(req, res) {
         try {
-            const chain = await this.server.db('t_restaurant_chain');
+            const chain = this.getRestaurantChainsObjects();
             res.status(200).json(message.fetch('restaurant chain', chain));
         } catch (error) {
             console.log(error);
@@ -108,16 +108,32 @@ module.exports = class RestaurantChainRoute {
         const { id } = req.params;
 
         try {
-            const ret = await this.server.db('t_restaurant_chain').where({a_rest_chain_id: id});
-
-            if(ret.length == 0)
+            const restChain = this.getRestaurantChainsObjects({a_rest_chain_id: id});
+            if(!restChain)
                 res.status(404).json(message.notFound('t_restaurant_chain', id));
             else 
-                res.status(200).json(message.fetch('t_restaurant_chain', ret));
+                res.status(200).json(message.fetch('t_restaurant_chain', restChain));
             
         } catch (error) {
             console.log(error);
         }
+    }
+
+    async getRestaurantChainsObjects(filters) {
+        let restChains;
+        if (!filters)
+            restChains = await this.server.db('t_restaurant_chain');
+        if (Array.isArray(filters.a_rest_chain_id)) {
+            let ids = [...filters.a_rest_chain_id];
+            delete filters.a_rest_chain_id;
+            restChains = await this.server.db('t_restaurant_chain').whereIn('a_rest_chain_id', ids).where(filters);
+        }    
+        else
+            restChains = await this.server.db('t_restaurant_chain').where(filters);
+        if (restChains) {
+            return restChains;
+        }
+        return null;
     }
 
     async delChain(req, res) {
@@ -125,10 +141,10 @@ module.exports = class RestaurantChainRoute {
         try {
             const ret = await this.server.db('t_restaurant_chain').where({a_rest_chain_id: id}).del();
 
-            if(ret.length == 0)
-                res.status(404).json(message.notFound('restaurant chain', id));
+            if(ret)
+                res.status(200).json(message.delete('restaurant chain', ret));
             else
-                res.status(200).json(message.delete('restaurant chain', [ret]));
+                res.status(404).json(message.notFound('restaurant chain', id));
         } catch (error) {
             console.log(error);
         }

@@ -46,7 +46,7 @@ module.exports = class RestaurantRoute {
     async getRestaurants(req, res) {
         // Fetch restaurants from db
         try {
-            const restaurants = await this.server.db('t_restaurant');
+            const restaurants = await this.getRestaurantsObjects();
             res.status(200).json(message.fetch('restaurant', restaurants));
         } catch (error) {
             console.log(error);
@@ -162,21 +162,8 @@ module.exports = class RestaurantRoute {
             const {
                 id
             } = req.params;
-            let rest = await this.server.db('t_restaurant').where({
-                a_rest_id: id
-            });
-            if (rest.length == 1) {
-                rest = rest.first();
-                let chain;
-                let aux = {};
-                if (rest_aux.rest_chain_id) {
-                    await this.restaurantChainRoute.getRestaurantChain({params: {rest_chain_id: rest_aux.a_rest_chain_id}}, aux);
-                    if (aux.result) {
-                        chain = aux.result.first();
-                        delete rest_aux.a_rest_chain_id;
-                        rest_aux.a_rest_chain = chain;
-                    }
-                }
+            let rest = await this.getRestaurantsObjects({a_rest_id: id});
+            if (rest) {
                 res.status(200).json(message.fetch('restaurant', rest));
             }
             else
@@ -184,6 +171,35 @@ module.exports = class RestaurantRoute {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    async getRestaurantsObjects(filters) {
+        let rests;
+        if (!filters)
+            rests = await this.server.db('t_restaurant');
+        else if (Array.isArray(filters.a_rest_id)) {
+            let ids = [...filters.a_rest_id];
+            delete filters.a_rest_id;
+            rests = await this.server.db('t_restaurant').whereIn('a_rest_id', ids).where(filters);
+        }    
+        else
+            rests = await this.server.db('t_restaurant').where(filters);
+        let chain;
+        if (rests) {
+            if (!Array.isArray(rests))
+                rests = [rests];
+            for (let i = 0; i < rests.length; i++) {
+                if (rests[i].a_rest_chain_id) {
+                    chain = await this.restaurantChainRoute.getRestaurantChainsObjects({a_rest_chain_id: rests[i].a_rest_chain_id});
+                    if (chain) {
+                        delete rests[i].a_rest_chain_id;
+                        rests[i].a_rest_chain = chain;
+                    }
+                }
+            }
+            return rests;
+        }
+        return null;
     }
 
     async getAllImages(req, res) {

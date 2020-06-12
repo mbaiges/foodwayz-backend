@@ -19,7 +19,7 @@ module.exports = class IngredientRoute {
 
     async getAll(req, res) {
         try {
-            const ingr = await this.server.db('t_ingredient');
+            const ingr = await this.getIngredientsObjects();
             res.status(200).json(message.fetch('ingredients', ingr))
         } catch (error) {
             console.log(error);
@@ -86,15 +86,32 @@ module.exports = class IngredientRoute {
     async getIngr(req, res) {
         try {
             const { id } = req.params;
-            const ret = await this.server.db('t_ingredient').where({a_ingr_id: id});
+            const ingr = await this.getIngredientsObjects({a_ingr_id: id});
 
-            if(ret.length == 0)
-                res.status(404).json(message.notFound('ingredient', id));
+            if(ingr)
+                res.status(200).json(message.fetch('ingredient', ingr));
             else
-                res.status(200).json(message.fetch('ingredient', [ret]));
+                res.status(404).json(message.notFound('ingredient', id));
         } catch (error) {
             console.log(error);
         }
+    }
+
+    async getIngredientsObjects(filters) {
+        let ingrs;
+        if (!filters)
+            ingrs = await this.server.db('t_ingredient');
+        else if (Array.isArray(filters.a_ingr_id)) {
+            let ids = [...filters.a_ingr_id];
+            delete filters.a_ingr_id;
+            ingrs = await this.server.db('t_ingredient').whereIn('a_ingr_id', ids).where(filters);
+        }    
+        else
+            ingrs = await this.server.db('t_ingredient').where(filters);
+        if (ingrs) {
+            return ingrs;
+        }
+        return null;
     }
 
     async delIngr(req, res) {
@@ -102,10 +119,10 @@ module.exports = class IngredientRoute {
             const { id } = req.params;
             const ret = await this.server.db('t_ingredient').where({a_ingr_id: id}).del();
 
-            if(ret == 0)
-                res.status(404).json(message.notFound('ingredient', id));
+            if(ret)
+                res.status(200).json(message.delete('ingredient', ret));
             else
-                res.status(200).json(message.delete('ingredient', [ret]));
+                res.status(404).json(message.notFound('ingredient', id));
 
         } catch (error) {
             console.log(error);

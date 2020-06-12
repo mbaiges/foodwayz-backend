@@ -39,10 +39,10 @@ module.exports = class UserCharacteristicRoute {
         try {
             const unliked = await this.server.db('t_user_has_characteristic').where({a_user_id: userId, a_char_id: charId}).del();
 
-            if(unliked == 0) 
-                res.status(404).json(message.notFound('user has charactersitic', [userId, charId]));
+            if(unliked) 
+                res.status(200).json(message.delete('user has charactersitic', unliked));
             else
-                res.status(200).json(message.delete('user has charactersitic', [unliked]));
+                res.status(404).json(message.notFound('user has charactersitic', [userId, charId]));
 
         } catch (error) {
             console.log(error);

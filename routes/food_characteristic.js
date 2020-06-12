@@ -40,10 +40,10 @@ module.exports = class FoodCharacteristicRoute {
         try {
             const unliked = await this.server.db('t_food_has_characteristic').where({a_food_id: foodId, a_char_id: charId}).del();
 
-            if(unliked == 0) 
-                res.status(404).json(message.notFound('food has characteristic', [foodId, charId]));
+            if(unliked) 
+                res.status(200).json(message.delete('food has characteristic', unliked));
             else
-                res.status(200).json(message.delete('food has characteristic', [unliked]));
+                res.status(404).json(message.notFound('food has characteristic', [foodId, charId]));
 
         } catch (error) {
             console.log(error);
