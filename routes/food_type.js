@@ -9,7 +9,7 @@ module.exports = class FoodTypeRoute {
     }
 
     async initialize(app) {
-        app.get('/type/:typeId/foods', this.getFoodsByType.bind(this));
+        app.get('/type/:typeId/food', this.getFoodsByType.bind(this));
     }
 
     async getFoodsByType(req, res) {

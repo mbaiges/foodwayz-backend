@@ -95,9 +95,11 @@ module.exports = class TypeRoute {
         const { id } = req.params;
 
         try {
-            const type = await this.getTypesObjects({a_type_id: id});
-            if(type) 
+            let type = await this.getTypesObjects({a_type_id: id});
+            if(type) {
+                type = type[0];
                 res.status(200).json(message.fetch('type', type));
+            }
             else
                 res.status(404).json(message.notFound('type', id)); 
         } catch (error) {
@@ -117,6 +119,8 @@ module.exports = class TypeRoute {
         else
             types = await this.server.db('t_type').where(filters);
         if (types) {
+            if (!Array.isArray(types))
+                types = [types];
             return types;
         }
         return null;

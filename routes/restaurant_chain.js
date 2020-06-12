@@ -131,6 +131,8 @@ module.exports = class RestaurantChainRoute {
         else
             restChains = await this.server.db('t_restaurant_chain').where(filters);
         if (restChains) {
+            if (!Array.isArray(restChains))
+                restChains = restChains[0];
             return restChains;
         }
         return null;

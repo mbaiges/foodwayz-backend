@@ -86,10 +86,11 @@ module.exports = class IngredientRoute {
     async getIngr(req, res) {
         try {
             const { id } = req.params;
-            const ingr = await this.getIngredientsObjects({a_ingr_id: id});
-
-            if(ingr)
+            let ingr = await this.getIngredientsObjects({a_ingr_id: id});
+            if(ingr) {
+                ingr = ingr[0];
                 res.status(200).json(message.fetch('ingredient', ingr));
+            }
             else
                 res.status(404).json(message.notFound('ingredient', id));
         } catch (error) {
@@ -109,6 +110,8 @@ module.exports = class IngredientRoute {
         else
             ingrs = await this.server.db('t_ingredient').where(filters);
         if (ingrs) {
+            if (!Array.isArray(ingrs))
+                ingrs = [ingrs];
             return ingrs;
         }
         return null;

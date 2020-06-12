@@ -14,7 +14,7 @@ module.exports = class FoodCharacteristicRoute {
             .delete(this.unLinkfoodAndChar.bind(this));
 
         app.get('/food/:foodId/characteristic', this.getCharsByFood.bind(this));
-        app.get('/characteristic/:charId/foods', this.getFoodsByChar.bind(this));
+        app.get('/characteristic/:charId/food', this.getFoodsByChar.bind(this));
     }
 
     async linkFoodAndChar(req, res) {

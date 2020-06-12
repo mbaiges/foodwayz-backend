@@ -116,9 +116,11 @@ module.exports = class FoodRoute {
     async getFood(req, res) {
         const {id} = req.params;
         try {
-            const food = await this.getFoodsObjects({a_food_id: id});
-            if(food)
+            let food = await this.getFoodsObjects({a_food_id: id});
+            if(food) {
+                food = food[0];
                 res.status(200).json(message.fetch('food', food));
+            }
             else {
                 res.status(404).json(message.notFound('food', id));
             }
@@ -145,11 +147,13 @@ module.exports = class FoodRoute {
             for (let i = 0; i < foods.length; i++) {
                 rest = await this.restaurantRoute.getRestaurantsObjects({a_rest_id: foods[i].a_rest_id});
                 if (rest) {
+                    rest = rest[0];
                     delete foods[i].a_rest_id;
                     foods[i].a_rest = rest;
                 }
                 type = await this.typeRoute.getTypesObjects({a_type_id: foods[i].a_type_id});
                 if (type) {
+                    type = type[0];
                     delete foods[i].a_type_id;
                     foods[i].a_type = type;
                 }

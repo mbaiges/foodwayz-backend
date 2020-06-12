@@ -29,8 +29,8 @@ module.exports = class UserRoute {
 
     async getUsers(req, res) {
         try {
-            const users = await this.server.db('t_user').select("a_name", "a_email", "a_image_url");
-            if (users.length != 0)
+            const users = await this.getUsersObjects();
+            if (users)
                 res.status(200).json(message.fetch('users', users));
             else
                 res.status(404).json(message.notFound('users', null));
@@ -42,18 +42,39 @@ module.exports = class UserRoute {
     async getUser(req, res) {
         const { id } = req.params;
         try {
-            const user = await this.server.db('t_user')
-            .select("a_user_id", "a_name", "a_email", "a_image_url")
-            .where({a_user_id: id});
-
-            if(user.length != 0)
+            let user = await this.getUsersObjects({a_user_id: id});
+            if(user) {
+                user = user[0];
                 res.status(200).json(message.fetch('user', user));
+            }
             else
                 res.status(404).json(message.notFound('user', id));
         } catch (error) {
             console.log(error);
         }
+    }
 
+    async getUsersObjects(filters) {
+        let users;
+        if (!filters)
+            users = await this.server.db('t_user');
+        if (Array.isArray(filters.a_user_id)) {
+            let ids = [...filters.a_user_id];
+            delete filters.a_user_id;
+            users = await this.server.db('t_user').whereIn('a_user_id', ids).where(filters);
+        }    
+        else
+            users = await this.server.db('t_user').where(filters);
+        if (users) {
+            if (!Array.isArray(users))
+                users = [users];
+            for (let i = 0; i < users.length; i++) {
+                delete users[i].a_password;
+                delete users[i].a_email;
+            }
+            return users;
+        }
+        return null;
     }
 
     async modifyUser(req, res) {
@@ -67,7 +88,7 @@ module.exports = class UserRoute {
                 a_image_url: image_url
             });
             if (userData != 0)
-                res.status(200).json(message.put('user', [userData]));
+                res.status(200).json(message.put('user', userData));
             else
                 res.status(404).json(message.notFound('user', id));
         } catch (error) {
@@ -82,7 +103,7 @@ module.exports = class UserRoute {
             } = req.params;
             const respose = await this.server.db('t_user').where({a_user_id: id}).del();
             if (respose != 0)
-                res.status(200).json(message.delete('user', [respose]));
+                res.status(200).json(message.delete('user', respose));
             else
                 res.status(404).json(message.notFound('user', id));
         } catch (error) {

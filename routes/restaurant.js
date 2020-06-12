@@ -164,6 +164,7 @@ module.exports = class RestaurantRoute {
             } = req.params;
             let rest = await this.getRestaurantsObjects({a_rest_id: id});
             if (rest) {
+                rest = rest[0];
                 res.status(200).json(message.fetch('restaurant', rest));
             }
             else
@@ -192,11 +193,14 @@ module.exports = class RestaurantRoute {
                 if (rests[i].a_rest_chain_id) {
                     chain = await this.restaurantChainRoute.getRestaurantChainsObjects({a_rest_chain_id: rests[i].a_rest_chain_id});
                     if (chain) {
+                        chain = chain[0];
                         delete rests[i].a_rest_chain_id;
                         rests[i].a_rest_chain = chain;
                     }
                 }
             }
+            if (rests.length == 1)
+                rests = rests[0];
             return rests;
         }
         return null;
