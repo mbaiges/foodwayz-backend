@@ -13,36 +13,6 @@ module.exports = class AuthRoutes {
     app.post("/register", this.registerUser.bind(this));
   }
 
-  /**
-   * @swagger
-   *
-   * /register:
-   *   post:
-   *     description: Register to the application
-   *     tags:
-   *      - User
-   *     parameters:
-   *      - name: data
-   *        in: body
-   *        required: true
-   *        schema:
-   *          type: string
-   *          example:
-   *            name: "Juan"
-   *            email: "juan@gmail.com"
-   *            password: "juanelmejor123"
-   *     consumes:
-   *       - application/json
-   *     produces:
-   *       - application/json
-   *     responses:
-   *       200:
-   *         description: Register success
-   *       400:
-   *         description: User doesn't exist
-   *       500:
-   *         description: Register failed
-   */
   async registerUser(req, res) {
     const {
       name,
@@ -96,37 +66,6 @@ module.exports = class AuthRoutes {
     }
   }
 
-  /**
-   * @swagger
-   *
-   * /login:
-   *   post:
-   *     description: Register to the application
-   *     tags:
-   *      - User
-   *     parameters:
-   *      - name: data
-   *        in: body
-   *        required: true
-   *        schema:
-   *          type: string
-   *          example:
-   *            email: "juan@gmail.com"
-   *            password: "juanelmejor123"
-   *     consumes:
-   *       - application/json
-   *     produces:
-   *       - application/json
-   *     responses:
-   *       200:
-   *         description: Login success
-   *       400:
-   *         description: User doesn't exist
-   *       401:
-   *         description: Incorrect password
-   *       500:
-   *         description: Login failed
-   */
   async loginUser(req, res) {
     const {
       email,

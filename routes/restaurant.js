@@ -27,22 +27,7 @@ module.exports = class RestaurantRoute {
             .delete(this.removeImage.bind(this));
     }
 
-    /**
-     * @swagger
-     *
-     * /restaurant:
-     *   post:
-     *     description: Get all restaurants
-     *     security:
-     *       - accessToken []
-     *     tags:
-     *      - Restaurant
-     *     produces:
-     *       - application/json
-     *     responses:
-     *       200:
-     *         description: Get success
-     */
+    
     async getRestaurants(req, res) {
         // Fetch restaurants from db
         try {
