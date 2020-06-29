@@ -153,3 +153,15 @@ INSERT INTO t_food_has_ingredient VALUES(13, 11);
 INSERT INTO t_food_has_ingredient VALUES(13, 12);
 INSERT INTO t_food_has_ingredient VALUES(13, 13);
 select * from t_food_has_ingredient;
+
+
+-- INSERT INTO t_owner VALUES(2,1);
+-- INSERT INTO t_owner VALUES(2,2);
+-- INSERT INTO t_owner VALUES(3,3);
+-- INSERT INTO t_owner VALUES(3,4);
+-- INSERT INTO t_owner VALUES(2,8);
+-- INSERT INTO t_owner VALUES(4,5);
+-- INSERT INTO t_owner VALUES(4,6);
+-- INSERT INTO t_owner VALUES(4,7);
+-- select * from t_owner;
+
