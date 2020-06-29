@@ -1,6 +1,4 @@
 
-select * from t_user;
-
 insert into t_type values(DEFAULT, 'guiso', 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ftypes%2Fguiso.jpg?alt=media&token=24ac78c8-19cb-4703-a818-d362a7c4f7a7');
 insert into t_type values(DEFAULT, 'hamburguesa', 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ftypes%2Fhamburguesa.jpg?alt=media&token=d5c5f77e-85c9-40d5-a4e1-c8528230cac7');
 insert into t_type values(DEFAULT, 'pasta', 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ftypes%2Fpasta.jpg?alt=media&token=fa5798e0-6372-41b2-b1bf-ad3b3bf85352');
@@ -10,11 +8,13 @@ insert into t_type values(DEFAULT, 'sushi', 'https://firebasestorage.googleapis.
 insert into t_type values(DEFAULT, 'carne', 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ftypes%2Fcarne.jpg?alt=media&token=3ff4c005-7f5b-4d08-a81c-bef9dfa3db84');
 select * from t_type;
 
+
 insert into t_characteristic values(DEFAULT, 'vegano');
 insert into t_characteristic values(DEFAULT, 'vegetariano');
 insert into t_characteristic values(DEFAULT, 'celiaco');
 insert into t_characteristic values(DEFAULT, 'diabetico');
 select * from t_characteristic;
+
 
 insert into t_ingredient values(DEFAULT, 'tomate');
 insert into t_ingredient values(DEFAULT, 'queso');
@@ -34,9 +34,11 @@ insert into t_ingredient values(DEFAULT, 'salmon');
 insert into t_ingredient values(DEFAULT, 'arroz');
 select * from t_ingredient;
 
+
 insert into t_restaurant_chain values(DEFAULT, 'McDonalnds', 3.5, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Frestaurant_chains%2FMcDonalds.jpg?alt=media&token=3585a783-4def-4f26-8523-ec892468fab5');
 insert into t_restaurant_chain values(DEFAULT, 'Kansas', 4.5, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Frestaurant_chains%2FKansas.png?alt=media&token=e7f29ba5-b6c5-4be1-8628-c85678125795');
 select * from t_restaurant_chain;
+
 
 insert into t_restaurant values(DEFAULT, 'McDonalds del obelisco', 1.2, 'BSAS', 'CABA', '1234', 'el obelisco 69', 1);
 insert into t_restaurant values(DEFAULT, 'McDonalds del libertador', 1.2, 'BSAS', 'CABA', '5678', 'libertador 420', 1);
@@ -47,6 +49,7 @@ insert into t_restaurant values(DEFAULT, 'tacos locos', 4, 'BSAS', 'CABA', '1323
 insert into t_restaurant values(DEFAULT, 'morelia', 2, 'BSAS', 'CABA', '5378', 'asdf 1221', null);
 insert into t_restaurant values(DEFAULT, 'Crustacio Cascarudo', 2, 'Fondo De Bikini', '-', '1234', 'psherman calle wallaby 42', null);
 select * from t_restaurant;
+
 
 insert into t_food values(DEFAULT, 'BigMac', 'Tremenda Glucemia', 3, 2, 1, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FBigMac.jpg?alt=media&token=91942492-25c1-47b8-ae13-840a0d51c779');
 insert into t_food values(DEFAULT, 'Burrito de Fideos', 'Mex mex go!', 5, 5, 6, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FBurritoDeFideos.jpg?alt=media&token=e1f1d51c-345c-4ad8-b2d2-a1473da64854');
@@ -63,7 +66,6 @@ insert into t_food values(DEFAULT, 'NYC Phila', null, 4, 6, 5, 'https://firebase
 insert into t_food values(DEFAULT, 'Triple Taco', 'El que se comió la abuela Coco antes de quedarla.', 5, 5, 6, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FTripleTaco.jpg?alt=media&token=aedb2c3e-73c2-49c5-8ec7-1b4e1e2f0e21');
 select * from t_food;
 
--------------------------------------NEW-------------------------------------
 
 INSERT INTO t_user VALUES(DEFAULT, 'user1', null, null, 'user1@email.com', '$2b$10$COPBRrctMKsyIF5KCBdzI.1GZAMmC9dVB0Zz1HH/F6PMzplwDOTWO', DEFAULT, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser1%40email_com.jpg?alt=media&token=de6b3327-6e3a-4c04-aa22-9a3d4daaad80');
 INSERT INTO t_user VALUES(DEFAULT, 'user2', null, null, 'user2@email.com', '$2b$10$ygrUw.dcGcj/oaU89A.LeePR20krhdz./FYcY56gL5tnxQVTPe6cW', DEFAULT, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser2%40email_com.jpg?alt=media&token=f7ccadfb-b145-4510-bfda-dcbc2fab74fd');
@@ -71,3 +73,83 @@ INSERT INTO t_user VALUES(DEFAULT, 'user3', null, null, 'user3@email.com', '$2b$
 INSERT INTO t_user VALUES(DEFAULT, 'user4', null, null, 'user4@email.com', '$2b$10$/elcUPMHXk5B5QT..85ese1V2Vo1znao2uHP014b1.l93NnOitDYG', DEFAULT, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser4%40email_com.jpg?alt=media&token=99d30472-9b10-4b00-bfdc-dbcb1390c30e');
 INSERT INTO t_user VALUES(DEFAULT, 'user5', null, null, 'user5@email.com' ,'$2b$10$tu1t7imPJ.afB.BOFP140uVEHUMKMlqOwKYnUgPGmV3BN8GaA7.Xa', DEFAULT, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser5%40email_com.jpg?alt=media&token=9cfe6b05-ff65-448b-b089-8f93109a89ae');
 select * from t_user;
+
+
+INSERT INTO t_food_has_characteristic VALUES(1, 4);
+INSERT INTO t_food_has_characteristic VALUES(2, 2);
+INSERT INTO t_food_has_characteristic VALUES(2, 4);
+INSERT INTO t_food_has_characteristic VALUES(3, 4);
+INSERT INTO t_food_has_characteristic VALUES(4, 4);
+INSERT INTO t_food_has_characteristic VALUES(5, 1);
+INSERT INTO t_food_has_characteristic VALUES(5, 3);
+INSERT INTO t_food_has_characteristic VALUES(5, 4);
+INSERT INTO t_food_has_characteristic VALUES(6, 1);
+INSERT INTO t_food_has_characteristic VALUES(6, 3);
+INSERT INTO t_food_has_characteristic VALUES(6, 4);
+INSERT INTO t_food_has_characteristic VALUES(7, 3);
+INSERT INTO t_food_has_characteristic VALUES(8, 3);
+INSERT INTO t_food_has_characteristic VALUES(9, 4);
+INSERT INTO t_food_has_characteristic VALUES(10, 4);
+INSERT INTO t_food_has_characteristic VALUES(11, 3);
+INSERT INTO t_food_has_characteristic VALUES(11, 4);
+INSERT INTO t_food_has_characteristic VALUES(12, 4);
+INSERT INTO t_food_has_characteristic VALUES(12, 3);
+INSERT INTO t_food_has_characteristic VALUES(13, 4);
+select * from t_food_has_characteristic;
+
+
+INSERT INTO t_food_has_ingredient VALUES(1, 2);
+INSERT INTO t_food_has_ingredient VALUES(1, 4);
+INSERT INTO t_food_has_ingredient VALUES(1, 6);
+INSERT INTO t_food_has_ingredient VALUES(1, 7);
+INSERT INTO t_food_has_ingredient VALUES(1, 9);
+INSERT INTO t_food_has_ingredient VALUES(1, 10);
+INSERT INTO t_food_has_ingredient VALUES(2, 11);
+INSERT INTO t_food_has_ingredient VALUES(3, 2);
+INSERT INTO t_food_has_ingredient VALUES(3, 4);
+INSERT INTO t_food_has_ingredient VALUES(3, 6);
+INSERT INTO t_food_has_ingredient VALUES(3, 7);
+INSERT INTO t_food_has_ingredient VALUES(3, 9);
+INSERT INTO t_food_has_ingredient VALUES(3, 10);
+INSERT INTO t_food_has_ingredient VALUES(4, 2);
+INSERT INTO t_food_has_ingredient VALUES(4, 4);
+INSERT INTO t_food_has_ingredient VALUES(4, 6);
+INSERT INTO t_food_has_ingredient VALUES(4, 7);
+INSERT INTO t_food_has_ingredient VALUES(4, 9);
+INSERT INTO t_food_has_ingredient VALUES(4, 10);
+INSERT INTO t_food_has_ingredient VALUES(5, 2);
+INSERT INTO t_food_has_ingredient VALUES(5, 6);
+INSERT INTO t_food_has_ingredient VALUES(5, 7);
+INSERT INTO t_food_has_ingredient VALUES(6, 1);
+INSERT INTO t_food_has_ingredient VALUES(6, 2);
+INSERT INTO t_food_has_ingredient VALUES(6, 3);
+INSERT INTO t_food_has_ingredient VALUES(6, 7);
+INSERT INTO t_food_has_ingredient VALUES(6, 8);
+INSERT INTO t_food_has_ingredient VALUES(6, 9);
+INSERT INTO t_food_has_ingredient VALUES(7, 2);
+INSERT INTO t_food_has_ingredient VALUES(7, 3);
+INSERT INTO t_food_has_ingredient VALUES(7, 4);
+INSERT INTO t_food_has_ingredient VALUES(7, 5);
+INSERT INTO t_food_has_ingredient VALUES(7, 9);
+INSERT INTO t_food_has_ingredient VALUES(7, 12);
+INSERT INTO t_food_has_ingredient VALUES(8, 5);
+INSERT INTO t_food_has_ingredient VALUES(8, 4);
+INSERT INTO t_food_has_ingredient VALUES(8, 9);
+INSERT INTO t_food_has_ingredient VALUES(8, 12);
+INSERT INTO t_food_has_ingredient VALUES(9, 4);
+INSERT INTO t_food_has_ingredient VALUES(9, 10);
+INSERT INTO t_food_has_ingredient VALUES(10, 4);
+INSERT INTO t_food_has_ingredient VALUES(11, 13);
+INSERT INTO t_food_has_ingredient VALUES(11, 14);
+INSERT INTO t_food_has_ingredient VALUES(11, 16);
+INSERT INTO t_food_has_ingredient VALUES(12, 13);
+INSERT INTO t_food_has_ingredient VALUES(12, 14);
+INSERT INTO t_food_has_ingredient VALUES(12, 15);
+INSERT INTO t_food_has_ingredient VALUES(12, 16);
+INSERT INTO t_food_has_ingredient VALUES(13, 2);
+INSERT INTO t_food_has_ingredient VALUES(13, 3);
+INSERT INTO t_food_has_ingredient VALUES(13, 9);
+INSERT INTO t_food_has_ingredient VALUES(13, 11);
+INSERT INTO t_food_has_ingredient VALUES(13, 12);
+INSERT INTO t_food_has_ingredient VALUES(13, 13);
+select * from t_food_has_ingredient;
