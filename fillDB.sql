@@ -74,6 +74,15 @@ INSERT INTO t_user VALUES(DEFAULT, 'user4', null, null, 'user4@email.com', '$2b$
 INSERT INTO t_user VALUES(DEFAULT, 'user5', null, null, 'user5@email.com' ,'$2b$10$tu1t7imPJ.afB.BOFP140uVEHUMKMlqOwKYnUgPGmV3BN8GaA7.Xa', DEFAULT, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser5%40email_com.jpg?alt=media&token=9cfe6b05-ff65-448b-b089-8f93109a89ae');
 select * from t_user;
 
+INSERT INTO t_review VALUES(DEFAULT, 1, 1, 'moito ustoso', 4.5, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 1, 1, 'meh', 2.5, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 1, 1, 're piolin', 5, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 1, 2, 'bastante ben', 4.5, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 2, 3, 'no tan rico', 3.5, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 3, 4, 'yay', 5, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 4, 5, 'seeee', 4.5, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 5, 5, 'hmmm', 1.5, DEFAULT);
+select * from t_review;
 
 INSERT INTO t_food_has_characteristic VALUES(1, 4);
 INSERT INTO t_food_has_characteristic VALUES(2, 2);
@@ -155,13 +164,25 @@ INSERT INTO t_food_has_ingredient VALUES(13, 13);
 select * from t_food_has_ingredient;
 
 
--- INSERT INTO t_owner VALUES(2,1);
--- INSERT INTO t_owner VALUES(2,2);
--- INSERT INTO t_owner VALUES(3,3);
--- INSERT INTO t_owner VALUES(3,4);
--- INSERT INTO t_owner VALUES(2,8);
--- INSERT INTO t_owner VALUES(4,5);
--- INSERT INTO t_owner VALUES(4,6);
--- INSERT INTO t_owner VALUES(4,7);
--- select * from t_owner;
+INSERT INTO t_owner VALUES(2,1);
+INSERT INTO t_owner VALUES(3,2);
+INSERT INTO t_owner VALUES(4,0);
+select * from t_owner;
+
+
+INSERT INTO t_owns VALUES(2,1);
+INSERT INTO t_owns VALUES(2,2);
+INSERT INTO t_owns VALUES(3,3);
+INSERT INTO t_owns VALUES(3,4);
+INSERT INTO t_owns VALUES(2,8);
+INSERT INTO t_owns VALUES(4,5);
+INSERT INTO t_owns VALUES(4,6);
+INSERT INTO t_owns VALUES(4,7);
+select * from t_owns;
+
+
+INSERT INTO t_user_has_characteristic VALUES(2, 1);
+INSERT INTO t_user_has_characteristic VALUES(2, 4);
+select * from t_user_has_characteristic;
+
 
