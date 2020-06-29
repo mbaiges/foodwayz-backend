@@ -75,9 +75,9 @@ INSERT INTO t_user VALUES(DEFAULT, 'user5', null, null, 'user5@email.com' ,'$2b$
 select * from t_user;
 
 INSERT INTO t_review VALUES(DEFAULT, 1, 1, 'moito ustoso', 4.5, DEFAULT);
-INSERT INTO t_review VALUES(DEFAULT, 1, 1, 'meh', 2.5, DEFAULT);
-INSERT INTO t_review VALUES(DEFAULT, 1, 1, 're piolin', 5, DEFAULT);
-INSERT INTO t_review VALUES(DEFAULT, 1, 2, 'bastante ben', 4.5, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 1, 2, 'meh', 2.5, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 1, 3, 're piolin', 5, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 1, 4, 'bastante ben', 4.5, DEFAULT);
 INSERT INTO t_review VALUES(DEFAULT, 2, 3, 'no tan rico', 3.5, DEFAULT);
 INSERT INTO t_review VALUES(DEFAULT, 3, 4, 'yay', 5, DEFAULT);
 INSERT INTO t_review VALUES(DEFAULT, 4, 5, 'seeee', 4.5, DEFAULT);
