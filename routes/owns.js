@@ -30,7 +30,7 @@ module.exports = class OwnsRoute {
             if (owner.length === 0) return res.status(401).json(message.unauth('give restaurant ownership', 'Not registered as owner'));
 
             const link = await this.server.db('t_owns').where({a_user_id: ownerId, a_rest_id: restId});
-            if (link) {
+            if (link.length != 0) {
                 res.status(409).json(message.conflict('giving ownership to user', 'already exists', link));
             }
             else {
