@@ -112,7 +112,7 @@ CREATE TABLE t_owns (
   a_user_id int,
   a_rest_id int,
   PRIMARY KEY(a_rest_id, a_user_id),
-  FOREIGN KEY (a_rest_id) REFERENCES t_restaurant(a_rest_id)
+  FOREIGN KEY (a_rest_id) REFERENCES t_restaurant(a_rest_id) ON DELETE CASCADE
 );
 
 CREATE TABLE t_food_views (
