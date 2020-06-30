@@ -23,12 +23,12 @@ module.exports = class FoodCharacteristicRoute {
         const { foodId, charId } = req.params;
 
         try {
-            const link = await this.server.db('t_food_has_characteristic').where({a_food_id: foodId, a_char_id: charId});
-            if (link) {
+            const link = await this.server.db('t_food_has_characteristic').where({a_food_id: foodId, a_char_id: charId}).returning('*');
+            if (link.length != 0) {
                 res.status(409).json(message.conflict('foodHasCharacteristic', 'already exists', link));
             }
             else {
-                const added_link = await this.server.db('t_food_has_characteristic').insert({a_food_id: foodId, a_char_id: charId});
+                const added_link = await this.server.db('t_food_has_characteristic').insert({a_food_id: foodId, a_char_id: charId}).returning('*');
                 res.status(200).json(message.post('food has charactersitic', added_link));
             }
         } catch (error) {
