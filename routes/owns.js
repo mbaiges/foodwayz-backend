@@ -1,8 +1,12 @@
 const message = require('../interface').message;
+const UserRoute = require('./user');
+const RestaurantRoute = require('./restaurant');
 
 module.exports = class OwnsRoute {
     constructor(server) {
         this.server = server;
+        this.userRoute = new UserRoute(server);
+        this.restaurantRoute = new RestaurantRoute(server);
     }
 
     async initialize(app) {
@@ -72,7 +76,10 @@ module.exports = class OwnsRoute {
         const { ownerId } = req.params;
 
         try {
-            const rests = await this.server.db('t_owns').joinRaw('natural full join t_restaurant').select("a_rest_id", "a_name", "a_score", "a_state", "a_city", "a_postal_code", "a_address", "a_rest_chain_id", "a_created_at").where({a_user_id: ownerId});
+            let rests_ids = await this.server.db('t_owns').select("a_rest_id").where({a_user_id: ownerId});
+            if (rests_ids && !Array.isArray(rests_ids))
+                rests_ids = [rests_ids];
+            const rests = await this.restaurantRoute.getRestaurantsObjects({ filters: { a_rest_id: rests_ids } });
             res.status(200).json(message.fetch(`restaurants by owner id ${ownerId}`, rests));
 
         } catch (error) {
@@ -85,7 +92,10 @@ module.exports = class OwnsRoute {
         const { restId } = req.params;
 
         try {
-            const owners = await this.server.db('t_owns').joinRaw('natural full join t_user').select("a_user_id", "a_name", "a_email").where({a_rest_id: restId});
+            let users_ids = await this.server.db('t_owns').select("a_rest_id").where({a_rest_id: restId});
+            if (users_ids && !Array.isArray(users_ids))
+                users_ids = [users_ids];
+            const owners = await this.userRoute.getUsersObjects({ filters: { a_user_id: users_ids } });
             res.status(200).json(message.fetch(`owners by restaurant id ${restId}`, owners));
         } catch (error) {
             console.log(error);
