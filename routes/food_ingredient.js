@@ -16,7 +16,7 @@ module.exports = class FoodIngredientRoute {
             .delete(this.unLinkfoodAndIngr.bind(this));
 
         app.get('/food/:foodId/ingredient', this.getIngrsByFood.bind(this));
-        app.get('/ingredient/:ingrId/foods', this.getFoodsByIngr.bind(this));
+        app.get('/ingredient/:ingrId/food', this.getFoodsByIngr.bind(this));
     }
 
     async linkFoodAndIngr(req, res) {
@@ -69,6 +69,9 @@ module.exports = class FoodIngredientRoute {
         let ingrs_ids = await this.server.db('t_food_has_ingredient').select("a_ingr_id").where({a_food_id: foodId});
         if (ingrs_ids && !Array.isArray(ingrs_ids))
             ingrs_ids = [ingrs_ids];
+        if (ingrs_ids) {
+            ingrs_ids = ingrs_ids.map(i => i.a_ingr_id);
+        }
         return await this.ingrRoute.getIngredientsObjects({ filters: {a_ingr_id: ingrs_ids} });
     }
 
@@ -87,6 +90,9 @@ module.exports = class FoodIngredientRoute {
         let foods_ids = await this.server.db('t_food_has_ingredient').select("a_food_id").where({a_ingr_id: ingrId});
         if (foods_ids && !Array.isArray(foods_ids))
             foods_ids = [foods_ids];
+        if (foods_ids) {
+            foods_ids = foods_ids.map(f => f.a_food_id);
+        }
         return await this.foodRoute.getFoodsObjects({ filters: {a_food_id: foods_ids} });
     }
 
