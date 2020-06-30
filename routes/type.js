@@ -27,18 +27,18 @@ module.exports = class TypeRoute {
     }
 
     async addType(req, res) {
-        let { name } = req.body;
+        let { a_type_name } = req.body;
 
-        if(typeof(name) !== 'string') {
-            res.status(400).json(message.badRequest('type', '"name"', name));
+        if(typeof(a_type_name) !== 'string') {
+            res.status(400).json(message.badRequest('type', '"name"', a_type_name));
             return;
         }
 
-        name = name.toLowerCase();
+        a_type_name = a_type_name.toLowerCase();
 
         try {
             const aux = await this.server.db('t_type').select("*").where({
-                a_type_name: name
+                a_type_name: a_type_name
             })
     
             if(aux.length != 0) {
@@ -47,7 +47,7 @@ module.exports = class TypeRoute {
             }
 
             const type = await this.server.db('t_type').insert({
-                a_type_name: name
+                a_type_name: a_type_name
             }).returning("*");
 
             res.status(200).json(message.post('type', type));
@@ -58,18 +58,18 @@ module.exports = class TypeRoute {
 
     async editType(req, res) {
         const { id } = req.params;
-        let { name } = req.body;
+        let { a_type_name } = req.body;
 
-        if(typeof(name) !== 'string') {
-            res.status(400).json(message.badRequest('type', '"name"', name));
+        if(typeof(a_type_name) !== 'string') {
+            res.status(400).json(message.badRequest('type', '"name"', a_type_name));
             return;
         }
 
-        name = name.toLowerCase();
+        a_type_name = a_type_name.toLowerCase();
 
         try {
             const aux = await this.server.db('t_type').select("*").where({
-                a_type_name: name
+                a_type_name: a_type_name
             })
     
             if(aux.length != 0) {
@@ -78,7 +78,7 @@ module.exports = class TypeRoute {
             }
 
             const type = await this.server.db('t_type').update({
-                a_type_name: name
+                a_type_name: a_type_name
             }).where({ a_type_id: id });
 
             if(type)
