@@ -15,10 +15,9 @@ module.exports = class FoodRoute {
             .get(this.getAll.bind(this));
 
         app.route('/food/:id')
-        .put(this.editFood.bind(this))
-        .get(this.getFood.bind(this))
-        .delete(this.delFood.bind(this));
-
+            .put(this.editFood.bind(this))
+            .get(this.getFood.bind(this))
+            .delete(this.delFood.bind(this));
     }
 
     async getAll(req, res) {

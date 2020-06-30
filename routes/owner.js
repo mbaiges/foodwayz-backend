@@ -49,7 +49,7 @@ module.exports = class OwnerRoute {
         const { a_premium_level } = req.body;
 
         if(!Number.isInteger(a_premium_level)) {
-            res.status(400).json(message.badRequest('premium level', id, premium_level));
+            res.status(400).json(message.badRequest('premium level', id, a_premium_level));
             return;
         }
 
