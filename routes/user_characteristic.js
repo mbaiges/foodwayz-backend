@@ -25,11 +25,11 @@ module.exports = class UserCharacteristicRoute {
             
         try {
             const link = await this.server.db('t_user_has_characteristic').where({a_user_id: userId, a_char_id: charId});
-            if (link) {
+            if (link.length != 0) {
                 res.status(409).json(message.conflict('userHasCharacteristic', 'already exists', link));
             }
             else {
-                const added_link = await this.server.db('t_user_has_characteristic').insert({a_user_id: userId, a_char_id: charId});
+                const added_link = await this.server.db('t_user_has_characteristic').insert({a_user_id: userId, a_char_id: charId}).returning('*');
                 res.status(200).json(message.post('user has charactersitic', added_link));
             }
         } catch (error) {
