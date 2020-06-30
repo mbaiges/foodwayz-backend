@@ -72,13 +72,13 @@ module.exports = class ReviewRoute {
     async addRev(req, res) {
         const { foodId } = req.params;
         const userId = req.user.a_user_id;
-        const { desc, score } = req.body;
+        const { a_desc, a_score } = req.body;
 
         console.log(score);
 
         const params = {
-            desc: [desc, typeof(desc) === 'string'],
-            score: [score, (Number(score) === score && score >= 0 && score <= 5)],
+            a_desc: [a_desc, typeof(a_desc) === 'string'],
+            a_score: [a_score, (Number(a_score) === a_score && a_score >= 0 && a_score <= 5)],
         }
 
         let errors = {};
@@ -99,8 +99,8 @@ module.exports = class ReviewRoute {
             const rev = await this.server.db('t_review').insert({
                 a_user_id: userId,
                 a_food_id: foodId,
-                a_score: score,
-                a_desc: desc
+                a_score: a_score,
+                a_desc: a_desc
             }).returning('*');
 
             res.status(200).json(message.post('review', rev));            

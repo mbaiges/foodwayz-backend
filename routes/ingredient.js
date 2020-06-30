@@ -28,22 +28,22 @@ module.exports = class IngredientRoute {
 
     async addIngr(req, res) {
         try {
-            let { name } = req.body;
-            if(typeof(name) !== 'string') {
-                res.status(409).json(message.conflict('ingredient', 'name must be a string', name));
+            let { a_ingr_name } = req.body;
+            if(typeof(a_ingr_name) !== 'string') {
+                res.status(409).json(message.conflict('ingredient', 'name must be a string', a_ingr_name));
                 return; 
             }
-            name = name.toLowerCase();
+            a_ingr_name = a_ingr_name.toLowerCase();
             const aux = await this.server.db('t_ingredient').select('*').where({
-                a_ingr_name: name
+                a_ingr_name: a_ingr_name
             });
 
             if(aux.length != 0) {
-                res.status(409).json(message.conflict('ingredient', `Cannot add ${name}`, aux));
+                res.status(409).json(message.conflict('ingredient', `Cannot add ${a_ingr_name}`, aux));
             }
             else {
                 let resp = await this.server.db('t_ingredient').insert({
-                    a_ingr_name: name
+                    a_ingr_name: a_ingr_name
                 }).returning('*');
                 res.status(200).json(message.post('ingredient', resp));
             }
@@ -56,22 +56,22 @@ module.exports = class IngredientRoute {
     async editIngr(req, res) {
         try {
             const { id } = req.params;
-            let { name } = req.body;
+            let { a_ingr_name } = req.body;
 
-            if(typeof(name) !== 'string') {
-                res.status(409).json(message.conflict('ingredient', 'name must be a string', name));
+            if(typeof(a_ingr_name) !== 'string') {
+                res.status(409).json(message.conflict('ingredient', 'name must be a string', a_ingr_name));
                 return; 
             }
-            name = name.toLowerCase();
+            a_ingr_name = a_ingr_name.toLowerCase();
             const aux = await this.server.db('t_ingredient').select('*').where({
-                a_ingr_name: name
+                a_ingr_name: a_ingr_name
             });    
 
             if(aux.length != 0) {
-                res.status(409).json(message.conflict('ingredient', `Cannot put ${name} to id: ${id}`, aux));
+                res.status(409).json(message.conflict('ingredient', `Cannot put ${a_ingr_name} to id: ${id}`, aux));
             }
             else {
-                const ret = await this.server.db('t_ingredient').where({a_ingr_id: id}).update({a_ingr_name: name}).returning('*');
+                const ret = await this.server.db('t_ingredient').where({a_ingr_id: id}).update({a_ingr_name: a_ingr_name}).returning('*');
                 if(ret.length == 0)
                     res.status(404).json(message.notFound('ingredient', id));
                 else

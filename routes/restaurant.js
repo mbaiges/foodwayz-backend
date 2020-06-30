@@ -21,7 +21,7 @@ module.exports = class RestaurantRoute {
             .get(this.getAllImages.bind(this))
             .post(this.addImage.bind(this));
         
-        app.route('/restaurant/:id/image/:image_id')
+        app.route('/restaurant/:id/image/:imageId')
             .get(this.getImage.bind(this))
             .put(this.modifyImage.bind(this))
             .delete(this.removeImage.bind(this));
@@ -42,12 +42,12 @@ module.exports = class RestaurantRoute {
     async addRestaurant(req, res) {
 
         const {
-            name,
-            state,
-            postal_code,
-            city,
-            address,
-            rest_chain_id
+            a_name,
+            a_state,
+            a_postal_code,
+            a_city,
+            a_address,
+            a_rest_chain_id
         } = req.body;
 
         try {
@@ -57,29 +57,29 @@ module.exports = class RestaurantRoute {
             }).first();
             if (owner.length === 0) return res.status(401).json(message.unauth('add restaurant', 'Not registered as owner'));
 
-            if (rest_chain_id) {
+            if (a_rest_chain_id) {
                 const rest_chain = await this.server.db('t_restaurant_chain').where({
-                    a_rest_chain_id: rest_chain_id
+                    a_rest_chain_id: a_rest_chain_id
                 }).first();
-                if (rest_chain) return res.status(404).json(message.notFound('restaurant chain', rest_chain_id));
+                if (rest_chain) return res.status(404).json(message.notFound('restaurant chain', a_rest_chain_id));
             }
 
             const exists = await this.server.db('t_restaurant').where({
-                a_state: state,
-                a_postal_code: postal_code,
-                a_city: city,
-                a_address: address
+                a_state: a_state,
+                a_postal_code: a_postal_code,
+                a_city: a_city,
+                a_address: a_address
             }).first();
             if (exists) return res.status(409).json(message.conflict('restaurant', 'already exists', exists));
 
             const insert = await this.server.db('t_restaurant')
                 .insert({
-                    a_name: name,
-                    a_city: city,
-                    a_state: state,
-                    a_postal_code: postal_code,
-                    a_rest_chain_id: rest_chain_id,
-                    a_address: address
+                    a_name: a_name,
+                    a_city: a_city,
+                    a_state: a_state,
+                    a_postal_code: a_postal_code,
+                    a_rest_chain_id: a_rest_chain_id,
+                    a_address: a_address
                 })
                 .returning('*');
 
@@ -114,12 +114,12 @@ module.exports = class RestaurantRoute {
                 id
             } = req.params;
             const {
-                name,
-                score,
-                rest_chain_id
+                a_name,
+                a_score,
+                a_rest_chain_id
             } = req.body;
-            if (!name || !score) {
-                res.status(400).json(message.badRequest('restaurant', id, [name, score].filter(p => !p)));
+            if (!a_name || !a_score) {
+                res.status(400).json(message.badRequest('restaurant', id, [a_name, a_score].filter(p => !p)));
             }
 
             const owns = await this.server.db('t_owns').where({a_user_id: req.user.id, a_rest_id: id});
@@ -131,9 +131,9 @@ module.exports = class RestaurantRoute {
             const rest = await this.server.db('t_restaurant').where({
                 a_rest_id: id
             }).update({
-                a_name: name,
-                a_score: score,
-                a_rest_chain_id: rest_chain_id
+                a_name: a_name,
+                a_score: a_score,
+                a_rest_chain_id: a_rest_chain_id
             });
 
             res.status(200).json(message.put('restaurant', rest));
@@ -213,7 +213,7 @@ module.exports = class RestaurantRoute {
         } = req.params;
 
         const {
-            image_url
+            a_image_url
         } = req.body;
 
         if (typeof(image_url) !== 'string')
@@ -239,7 +239,7 @@ module.exports = class RestaurantRoute {
             const insert = await this.server.db('t_restaurant_images')
                 .insert({
                     a_rest_id: id,
-                    a_image_url: image_url
+                    a_image_url: a_image_url
                 })
                 .returning('a_image_id','a_image_url');
 
@@ -255,7 +255,7 @@ module.exports = class RestaurantRoute {
 
     async getImage(req, res) {
         try {
-            const {id, image_id} = req.params;
+            const {id, imageId} = req.params;
             
             const exists = await this.server.db('t_restaurant').where({
                 a_rest_id: id
@@ -274,19 +274,19 @@ module.exports = class RestaurantRoute {
             
             const rest_image = await this.server.db('t_restaurant_images').select('a_image_id', 'a_image_url').where({
                 a_rest_id: id,
-                a_image_id: image_id
+                a_image_id: imageId
             });
             if (rest.length == 1)
                 res.status(200).json(message.fetch('restaurant image', rest));
             else
-                res.status(404).json(message.notFound('restaurant image', image_id));
+                res.status(404).json(message.notFound('restaurant image', imageId));
         } catch (error) {
             console.log(error);
         }
     }
 
     async removeImage(req, res) {
-        const { id, image_id } = req.params;
+        const { id, imageId } = req.params;
         
         try {
             const exists = await this.server.db('t_restaurant').where({
@@ -305,11 +305,11 @@ module.exports = class RestaurantRoute {
             }
     
             const del = await this.server.db('t_restaurant_images')
-                        .where({a_rest_id: id, a_image_id: image_id})
+                        .where({a_rest_id: id, a_image_id: imageId})
                         .del();
             
             if(del.length == 0)
-                res.status(404).json(message.notFound('restaurant image', image_id));
+                res.status(404).json(message.notFound('restaurant image', imageId));
             else
                 res.status(200).json(message.delete('restaurant image', [del]));
                 
@@ -319,7 +319,7 @@ module.exports = class RestaurantRoute {
     }
 
     async modifyImage(req, res) {
-        const { id, image_id } = req.params;
+        const { id, imageId } = req.params;
         const { image_url } = req.body;
         
         try {
@@ -339,12 +339,12 @@ module.exports = class RestaurantRoute {
             }
     
             const mod = await this.server.db('t_restaurant_images')
-                        .where({a_rest_id: id, a_image_id: image_id})
+                        .where({a_rest_id: id, a_image_id: imageId})
                         .update({a_image_url: image_url})
                         .returning("a_image_id", "a_image_url");
             
             if(mod.length == 0)
-                res.status(404).json(message.notFound('restaurant image', image_id));
+                res.status(404).json(message.notFound('restaurant image', imageId));
             else
                 res.status(200).json(message.update('restaurant image', mod));
                 

@@ -46,16 +46,16 @@ module.exports = class OwnerRoute {
 
     async updatePremiumStatus(req, res) {
         const { id } = req.user;
-        const { premium_level } = req.body;
+        const { a_premium_level } = req.body;
 
-        if(!Number.isInteger(premium_level)) {
+        if(!Number.isInteger(a_premium_level)) {
             res.status(400).json(message.badRequest('premium level', id, premium_level));
             return;
         }
 
         try {
             const user = await this.server.db('t_owner').update({
-                a_premium_level: premium_level
+                a_premium_level: a_premium_level
             }).where({a_user_id: id});
 
             if(user == 0)
