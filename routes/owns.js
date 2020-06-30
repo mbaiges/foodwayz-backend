@@ -7,11 +7,12 @@ module.exports = class OwnsRoute {
 
     async initialize(app) {
         
-        app.route('/owner/:ownerId/restaurant/:restId')
+        app.get('/owner/restaurant', this.getRestsByOwner.bind(this));
+
+        app.route('/owner/restaurant/:restId')
             .post(this.linkRest.bind(this))
             .delete(this.unLinkRest.bind(this));
-
-        app.get('/owner/:ownerId/restaurant', this.getRestsByOwner.bind(this));
+        
         app.get('/restaurant/:restId/users', this.getOwnersByRest.bind(this));
     }
 
