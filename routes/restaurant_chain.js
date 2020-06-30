@@ -27,12 +27,12 @@ module.exports = class RestaurantChainRoute {
     }
 
     async addChain(req, res) {
-        let {name, score = null, image_url = null} = req.body;
+        let {a_name, a_score = null, a_image_url = null} = req.body;
 
         const params = {
-            name: [name, typeof(name) === 'string'],
-            score: [score, (score == null || Number.isInteger(score))],
-            image_url: [image_url, (image_url == null || typeof(image_url) === 'string')]
+            a_name: [a_name, typeof(a_name) === 'string'],
+            a_score: [a_score, (a_score == null || Number.isInteger(a_score))],
+            a_image_url: [a_image_url, (a_image_url == null || typeof(a_image_url) === 'string')]
         }
         let errors = {};
         Object.entries(params).forEach(prop => {
@@ -48,13 +48,13 @@ module.exports = class RestaurantChainRoute {
             return;
         }
 
-        name = name.toLowerCase();
+        a_name = a_name.toLowerCase();
 
         try {
             const chain = await this.server.db('t_restaurant_chain').insert({
-                a_name: name,
-                a_score: score,
-                a_image_url: image_url
+                a_name: a_name,
+                a_score: a_score,
+                a_image_url: a_image_url
             }).returning('*');
 
             res.status(200).json(message.post('restaurant chain', chain));
@@ -66,12 +66,12 @@ module.exports = class RestaurantChainRoute {
 
     async editChain(req, res) {
         const { id } = req.params;
-        let {name, score = null, image_url = null} = req.body;
+        let {a_name, a_score = null, a_image_url = null} = req.body;
 
         const params = {
-            name: [name, typeof(name) === 'string'],
-            score: [score, (score == null || Number.isInteger(score))],
-            image_url: [image_url, (image_url == null || typeof(image_url) === 'string')]
+            a_name: [a_name, typeof(a_name) === 'string'],
+            a_score: [a_score, (a_score == null || Number.isInteger(a_score))],
+            a_image_url: [a_image_url, (a_image_url == null || typeof(a_image_url) === 'string')]
         }
         let errors = {};
         Object.entries(params).forEach(prop => {
@@ -87,13 +87,13 @@ module.exports = class RestaurantChainRoute {
             return;
         }
 
-        name = name.toLowerCase();
+        a_name = a_name.toLowerCase();
 
         try {
             const chain = await this.server.db('t_restaurant_chain').update({
-                a_name: name,
-                a_score: score,
-                a_image_url: image_url
+                a_name: a_name,
+                a_score: a_score,
+                a_image_url: a_image_url
             }).where({ a_rest_chain_id: id }).returning('*');
 
             res.status(200).json(message.put('restaurant chain', chain));

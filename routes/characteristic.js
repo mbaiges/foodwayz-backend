@@ -27,18 +27,18 @@ module.exports = class CharacteristicRoute {
     }
 
     async addChar(req, res) {
-        let { name } = req.body;
+        let { a_char_name } = req.body;
 
-        if(typeof(name) !== 'string') {
-            res.status(400).json(message.badRequest('characteristic', '"name"', name));
+        if(typeof(a_name) !== 'string') {
+            res.status(400).json(message.badRequest('characteristic', '"name"', a_name));
             return;
         }
 
-        name = name.toLowerCase();
+        a_char_name = a_char_name.toLowerCase();
 
         try {
             const aux = await this.server.db('t_characteristic').select("*").where({
-                a_char_name: name
+                a_char_name: a_char_name
             })
     
             if(aux.length != 0) {
@@ -47,7 +47,7 @@ module.exports = class CharacteristicRoute {
             }
 
             const char = await this.server.db('t_characteristic').insert({
-                a_char_name: name
+                a_char_name: a_char_name
             }).returning("*");
 
             res.status(200).json(message.post('characteristic', char));
@@ -58,18 +58,18 @@ module.exports = class CharacteristicRoute {
 
     async editChar(req, res) {
         const { id } = req.params;
-        let { name } = req.body;
+        let { a_char_name } = req.body;
 
-        if(typeof(name) !== 'string') {
-            res.status(400).json(message.badRequest('characteristic', '"name"', name));
+        if(typeof(a_char_name) !== 'string') {
+            res.status(400).json(message.badRequest('characteristic', '"name"', a_char_name));
             return;
         }
 
-        name = name.toLowerCase();
+        a_char_name = a_char_name.toLowerCase();
 
         try {
             const aux = await this.server.db('t_characteristic').select("*").where({
-                a_char_name: name
+                a_char_name: a_char_name
             })
     
             if(aux.length != 0) {
@@ -78,7 +78,7 @@ module.exports = class CharacteristicRoute {
             }
 
             const char = await this.server.db('t_characteristic').update({
-                a_char_name: name
+                a_char_name: a_char_name
             }).where({ a_char_id: id });
 
             if(char)
