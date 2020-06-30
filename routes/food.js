@@ -1,16 +1,12 @@
 const message = require('../interface').message;
 const RestaurantRoute = require('./restaurant');
 const TypeRoute = require('./type');
-//const FoodIngredientRoute = require('./food_ingredient');
-//const FoodCharacteristicRoute = require('./food_characteristic');
 
 module.exports = class FoodRoute {
     constructor(server) {
         this.server = server;
         this.restaurantRoute = new RestaurantRoute(server);
         this.typeRoute = new TypeRoute(server);
-        //this.foodIngrRoute = new FoodIngredientRoute(server);
-        //this.foodCharRoute = new FoodCharacteristicRoute(server);
     }
 
     async initialize(app) {
@@ -26,7 +22,7 @@ module.exports = class FoodRoute {
 
     async getAll(req, res) {
         try {
-            const foods = await this.getFoodsObjects();
+            const foods = await this.getFoodsObjects({ detailed: true });
             res.status(200).json(message.fetch('foods', foods));
         } catch (error) {
             console.log(error);
@@ -130,7 +126,7 @@ module.exports = class FoodRoute {
     async getFood(req, res) {
         const {id} = req.params;
         try {
-            let food = await this.getFoodsObjects({ filters: {a_food_id: id} });
+            let food = await this.getFoodsObjects({ filters: {a_food_id: id}, detailed: true });
             if(food) {
                 food = food[0];
                 res.status(200).json(message.fetch('food', food));
@@ -175,9 +171,15 @@ module.exports = class FoodRoute {
                     foods[i].a_type = type;
                 }
                 if (detailed && detailed === true) {
-                    ingrs = await this.foodIngrRoute.getIngrsByFoodObjects({ filters: {a_food_id: foods[i].a_food_id} });
+                    if (!this.foodIngrRoute || !this.foodCharRoute) {
+                        const FoodIngredientRoute = require('./food_ingredient');
+                        this.foodIngrRoute = new FoodIngredientRoute(this.server);
+                        const FoodCharacteristicRoute = require('./food_characteristic');
+                        this.foodCharRoute = new FoodCharacteristicRoute(this.server);
+                    }
+                    ingrs = await this.foodIngrRoute.getIngrsByFoodObjects(foods[i].a_food_id);
                     foods[i].a_ingredients = ingrs;
-                    chars = await this.foodCharRoute.getCharsByFoodObjects({ filters: {a_food_id: foods[i].a_food_id} });
+                    chars = await this.foodCharRoute.getCharsByFoodObjects(foods[i].a_food_id);
                     foods[i].a_characteristics = chars;
                 }
             }
