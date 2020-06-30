@@ -95,7 +95,7 @@ module.exports = class CharacteristicRoute {
         const { id } = req.params;
 
         try {
-            let char = await this.getCharacteristicsObjects({a_char_id: id});
+            let char = await this.getCharacteristicsObjects({ filters: {a_char_id: id} });
             if(char) {
                 char = char[0];
                 res.status(200).json(message.fetch('characteristic', char)); 
@@ -107,7 +107,10 @@ module.exports = class CharacteristicRoute {
         }
     }
 
-    async getCharacteristicsObjects(filters) {
+    async getCharacteristicsObjects(cfg) {
+        if (!cfg)
+            cfg = {};
+        const { filters } = cfg;
         let chars;
         if (!filters)
             chars = await this.server.db('t_characteristic');

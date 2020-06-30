@@ -24,7 +24,7 @@ CREATE TABLE t_restaurant_images (
   a_image_id SERIAL,
   a_image_url varchar(512),
   PRIMARY KEY (a_rest_id, a_image_id),
-  FOREIGN KEY (a_rest_id) REFERENCES t_restaurant(a_rest_id)
+  FOREIGN KEY (a_rest_id) REFERENCES t_restaurant(a_rest_id) ON DELETE CASCADE
 );
 
 CREATE TABLE t_type (
@@ -58,8 +58,8 @@ CREATE TABLE t_user_has_characteristic (
   a_user_id int,
   a_char_id int,
   PRIMARY KEY(a_user_id, a_char_id),
-  FOREIGN KEY (a_user_id) REFERENCES t_user(a_user_id),
-  FOREIGN KEY (a_char_id) REFERENCES t_characteristic(a_char_id)
+  FOREIGN KEY (a_user_id) REFERENCES t_user(a_user_id) ON DELETE CASCADE,
+  FOREIGN KEY (a_char_id) REFERENCES t_characteristic(a_char_id) ON DELETE CASCADE
 );
 
 CREATE TABLE t_food (
@@ -70,24 +70,24 @@ CREATE TABLE t_food (
   a_type_id int NOT NULL,
   a_rest_id int NOT NULL,
   a_image_url varchar(512),
-  FOREIGN KEY (a_rest_id) REFERENCES t_restaurant(a_rest_id),
-  FOREIGN KEY (a_type_id) REFERENCES t_type(a_type_id)
+  FOREIGN KEY (a_rest_id) REFERENCES t_restaurant(a_rest_id) ON DELETE CASCADE,
+  FOREIGN KEY (a_type_id) REFERENCES t_type(a_type_id) ON DELETE CASCADE
 );
 
 CREATE TABLE t_food_has_characteristic (
   a_food_id int,
   a_char_id int,
   PRIMARY KEY(a_food_id, a_char_id),
-  FOREIGN KEY (a_food_id) REFERENCES t_food(a_food_id),
-  FOREIGN KEY (a_char_id) REFERENCES t_characteristic(a_char_id)
+  FOREIGN KEY (a_food_id) REFERENCES t_food(a_food_id) ON DELETE CASCADE,
+  FOREIGN KEY (a_char_id) REFERENCES t_characteristic(a_char_id) ON DELETE CASCADE
 );
 
 CREATE TABLE t_food_has_ingredient (
   a_food_id int,
   a_ingr_id int,
   PRIMARY KEY(a_food_id, a_ingr_id),
-  FOREIGN KEY (a_food_id) REFERENCES t_food(a_food_id),
-  FOREIGN KEY (a_ingr_id) REFERENCES t_ingredient(a_ingr_id)
+  FOREIGN KEY (a_food_id) REFERENCES t_food(a_food_id) ON DELETE CASCADE,
+  FOREIGN KEY (a_ingr_id) REFERENCES t_ingredient(a_ingr_id) ON DELETE CASCADE
 );
 
 CREATE TABLE t_review (
@@ -98,20 +98,21 @@ CREATE TABLE t_review (
   a_score decimal(10,2) NOT NULL,
   a_created_at timestamp NOT NULL DEFAULT NOW(),
   PRIMARY KEY(a_review_id, a_user_id, a_food_id),
-  FOREIGN KEY (a_user_id) REFERENCES t_user(a_user_id),
-  FOREIGN KEY (a_food_id) REFERENCES t_food(a_food_id)
+  FOREIGN KEY (a_user_id) REFERENCES t_user(a_user_id) ON DELETE CASCADE,
+  FOREIGN KEY (a_food_id) REFERENCES t_food(a_food_id) ON DELETE CASCADE
 );
 
 CREATE TABLE t_owner (
   a_user_id int PRIMARY KEY,
   a_premium_level int NOT NULL,
-  FOREIGN KEY (a_user_id) REFERENCES t_user(a_user_id)
+  FOREIGN KEY (a_user_id) REFERENCES t_user(a_user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE t_owns (
   a_user_id int,
   a_rest_id int,
   PRIMARY KEY(a_rest_id, a_user_id),
+  FOREIGN KEY (a_user_id) REFERENCES t_owner(a_user_id) ON DELETE CASCADE,
   FOREIGN KEY (a_rest_id) REFERENCES t_restaurant(a_rest_id) ON DELETE CASCADE
 );
 

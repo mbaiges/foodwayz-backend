@@ -86,7 +86,7 @@ module.exports = class IngredientRoute {
     async getIngr(req, res) {
         try {
             const { id } = req.params;
-            let ingr = await this.getIngredientsObjects({a_ingr_id: id});
+            let ingr = await this.getIngredientsObjects({ filters: {a_ingr_id: id} });
             if(ingr) {
                 ingr = ingr[0];
                 res.status(200).json(message.fetch('ingredient', ingr));
@@ -98,7 +98,10 @@ module.exports = class IngredientRoute {
         }
     }
 
-    async getIngredientsObjects(filters) {
+    async getIngredientsObjects(cfg) {
+        if (!cfg)
+            cfg = {};
+        const { filters } = cfg;
         let ingrs;
         if (!filters)
             ingrs = await this.server.db('t_ingredient');

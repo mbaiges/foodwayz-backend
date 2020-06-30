@@ -127,7 +127,10 @@ module.exports = class FoodRoute {
         }
     }
 
-    async getFoodsObjects(filters) {
+    async getFoodsObjects(cfg) {
+        if (!cfg)
+            cfg = {};
+        const { filters, detailed } = cfg;
         let foods;
         if (!filters)
             foods = await this.server.db('t_food');
@@ -143,18 +146,19 @@ module.exports = class FoodRoute {
             if (!Array.isArray(foods))
                 foods = [foods];
             for (let i = 0; i < foods.length; i++) {
-                rest = await this.restaurantRoute.getRestaurantsObjects({a_rest_id: foods[i].a_rest_id});
+                rest = await this.restaurantRoute.getRestaurantsObjects({ filters: {a_rest_id: foods[i].a_rest_id} });
                 if (rest) {
                     rest = rest[0];
                     delete foods[i].a_rest_id;
                     foods[i].a_rest = rest;
                 }
-                type = await this.typeRoute.getTypesObjects({a_type_id: foods[i].a_type_id});
+                type = await this.typeRoute.getTypesObjects({ filters: {a_type_id: foods[i].a_type_id} });
                 if (type) {
                     type = type[0];
                     delete foods[i].a_type_id;
                     foods[i].a_type = type;
                 }
+                if (detailed) {}
             }
             return foods;
         }

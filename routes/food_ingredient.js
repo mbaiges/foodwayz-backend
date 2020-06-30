@@ -1,10 +1,12 @@
 const message = require('../interface').message;
-const FoodRoute = require('./food.js');
+const FoodRoute = require('./food');
+const IngredientRoute = require('./ingredient');
 
 module.exports = class FoodIngredientRoute {
     constructor(server) {
         this.server = server;
-        this.foodRoute = new FoodRoute(this.server);
+        this.foodRoute = new FoodRoute(server);
+        this.ingrRoute = new IngredientRoute(server);
     }
 
     async initialize(app) {
@@ -54,7 +56,10 @@ module.exports = class FoodIngredientRoute {
         const { foodId } = req.params;
 
         try {
-            const ingrs = await this.server.db('t_food_has_ingredient').joinRaw('natural full join t_ingredient').select("a_ingr_id", "a_ingr_name").where({a_food_id: foodId});
+            let ingrs_ids = await this.server.db('t_food_has_ingredient').select("a_ingr_id").where({a_food_id: foodId});
+            if (ingrs_ids && !Array.isArray(ingrs_ids))
+                ingrs_ids = [ingrs_ids];
+            const ingrs = await this.ingrRoute.getIngredientsObjects({ filters: {a_ingr_id: ingrs_ids} });
             res.status(200).json(message.fetch(`ingredients by food id ${foodId}`, ingrs));
 
         } catch (error) {
@@ -70,7 +75,7 @@ module.exports = class FoodIngredientRoute {
             let foods_ids = await this.server.db('t_food_has_ingredient').select("a_food_id").where({a_ingr_id: ingrId});
             if (foods_ids && !Array.isArray(foods_ids))
                 foods_ids = [foods_ids];
-            const foods = await this.foodRoute.getFoodsObjects({a_food_id: foods_ids});
+            const foods = await this.foodRoute.getFoodsObjects({ filters: {a_food_id: foods_ids} });
             res.status(200).json(message.fetch(`food by ingredients id ${ingrId}`, foods));
         } catch (error) {
             console.log(error);
