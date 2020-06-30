@@ -13,7 +13,7 @@ module.exports = class UserCharacteristicRoute {
             .delete(this.unLinkUserAndChar.bind(this));
 
         app.get('/user/:id/characteristic', this.getCharsByUser.bind(this));
-        app.get('/characteristic/:id/users', this.getUsersByChar.bind(this));
+        app.get('/characteristic/:id/user', this.getUsersByChar.bind(this));
     }
 
     async linkUserAndChar(req, res) {
