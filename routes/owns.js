@@ -17,7 +17,7 @@ module.exports = class OwnsRoute {
             .post(this.linkRest.bind(this))
             .delete(this.unLinkRest.bind(this));
         
-        app.get('/restaurant/:restId/users', this.getOwnersByRest.bind(this));
+        app.get('/restaurant/:restId/owner', this.getOwnersByRest.bind(this));
     }
 
     async linkRest(req, res) {
@@ -31,7 +31,7 @@ module.exports = class OwnsRoute {
         try {
             const owner = await this.server.db('t_owner').where({
                 a_user_id: ownerId
-            }).first();
+            });
             if (owner.length === 0) return res.status(401).json(message.unauth('give restaurant ownership', 'Not registered as owner'));
 
             const link = await this.server.db('t_owns').where({a_user_id: ownerId, a_rest_id: restId});
@@ -58,7 +58,7 @@ module.exports = class OwnsRoute {
         try {
             const owner = await this.server.db('t_owner').where({
                 a_user_id: ownerId
-            }).first();
+            });
             if (owner.length === 0) return res.status(401).json(message.unauth('give restaurant ownership', 'Not registered as owner'));
 
             const unliked = await this.server.db('t_owns').where({a_user_id: ownerId, a_rest_id: restId}).del();
@@ -66,14 +66,14 @@ module.exports = class OwnsRoute {
             if(unliked) 
                 res.status(200).json(message.delete('ownership', unliked));
             else
-                res.status(404).json(message.notFound('ownership', [ownerId, restId]));
+                res.status(404).json(message.notFound('ownership of the restaurant', restId));
         } catch (error) {
             console.log(error);
         }
     }
 
     async getRestsByOwner(req, res) {
-        const { ownerId } = req.params;
+        const { a_user_id: ownerId } = req.user;
 
         try {
             let rests_ids = await this.server.db('t_owns').select("a_rest_id").where({a_user_id: ownerId});
