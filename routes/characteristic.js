@@ -79,7 +79,7 @@ module.exports = class CharacteristicRoute {
 
             const char = await this.server.db('t_characteristic').update({
                 a_char_name: a_char_name
-            }).where({ a_char_id: id });
+            }).where({ a_char_id: id }).returning('*');
 
             if(char)
                 res.status(200).json(message.put('characteristic', char));
