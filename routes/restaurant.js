@@ -122,7 +122,7 @@ module.exports = class RestaurantRoute {
                 res.status(400).json(message.badRequest('restaurant', id, [a_name, a_score].filter(p => !p)));
             }
 
-            const owns = await this.server.db('t_owns').where({a_user_id: req.user.id, a_rest_id: id});
+            const owns = await this.server.db('t_owns').where({a_user_id: req.user.a_user_id, a_rest_id: id});
             if (owns.length == 0) {
                 res.status(401).json(message.unauth('restaurant modify', 'not an owner'));
                 return;
@@ -230,7 +230,7 @@ module.exports = class RestaurantRoute {
                 return;
             }
 
-            const owns = await this.server.db('t_owns').where({a_user_id: req.user.id, a_rest_id: id});
+            const owns = await this.server.db('t_owns').where({a_user_id: req.user.a_user_id, a_rest_id: id});
             if (owns.length == 0) {
                 res.status(401).json(message.unauth('restaurant image add', 'not an owner'));
                 return;
@@ -266,7 +266,7 @@ module.exports = class RestaurantRoute {
                 return;
             }
 
-            const owns = await this.server.db('t_owns').where({a_user_id: req.user.id, a_rest_id: id});
+            const owns = await this.server.db('t_owns').where({a_user_id: req.user.a_user_id, a_rest_id: id});
             if (!owns || owns.length == 0) {
                 res.status(401).json(message.unauth('restaurant image add', 'not an owner'));
                 return;
@@ -298,7 +298,7 @@ module.exports = class RestaurantRoute {
                 return;
             }
     
-            const owns = await this.server.db('t_owns').where({a_user_id: req.user.id, a_rest_id: id});
+            const owns = await this.server.db('t_owns').where({a_user_id: req.user.a_user_id, a_rest_id: id});
             if (!owns || owns.length == 0) {
                 res.status(401).json(message.unauth('restaurant image add', 'not an owner'));
                 return;
@@ -332,7 +332,7 @@ module.exports = class RestaurantRoute {
                 return;
             }
     
-            const owns = await this.server.db('t_owns').where({a_user_id: req.user.id, a_rest_id: id});
+            const owns = await this.server.db('t_owns').where({a_user_id: req.user.a_user_id, a_rest_id: id});
             if (!owns || owns.length == 0) {
                 res.status(401).json(message.unauth('restaurant image add', 'not an owner'));
                 return;

@@ -16,7 +16,7 @@ module.exports = class OwnsRoute {
     }
 
     async linkRest(req, res) {
-        req.params.userId = req.user.id;
+        req.params.userId = req.user.a_user_id;
         return this.linkRest(req, res);
     }
 
@@ -43,7 +43,7 @@ module.exports = class OwnsRoute {
     }
 
     async unLinkRest(req, res) {
-        req.params.userId = req.user.id;
+        req.params.userId = req.user.a_user_id;
         return this.unLinkUserAndRest(req, res);
     }
 
