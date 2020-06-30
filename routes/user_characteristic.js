@@ -57,9 +57,8 @@ module.exports = class UserCharacteristicRoute {
         const { userId } = req.params;
 
         try {
-            const chars = this.getCharsByUserObjects(userId);
-            res.status(200).json(message.fetch(`characteristics by user id ${id}`, chars));
-
+            const chars = await this.getCharsByUserObjects(userId);
+            res.status(200).json(message.fetch(`characteristics by user id ${userId}`, chars));
         } catch (error) {
             console.log(error);
         }
@@ -67,7 +66,7 @@ module.exports = class UserCharacteristicRoute {
     }
 
     async getCharsByUserObjects(userId) {
-        let chars_ids = await this.server.db('t_food_has_characteristic').select("a_char_id").where({a_user_id: userId});
+        let chars_ids = await this.server.db('t_user_has_characteristic').select("a_char_id").where({a_user_id: userId});
         if (chars_ids && !Array.isArray(chars_ids))
             chars_ids = [chars_ids];
         if (chars_ids) {
@@ -81,7 +80,7 @@ module.exports = class UserCharacteristicRoute {
 
         try {
             const users = await this.getUsersByCharObjects(charId);
-            res.status(200).json(message.fetch(`user by characteristics id ${id}`, users));
+            res.status(200).json(message.fetch(`user by characteristics id ${charId}`, users));
 
         } catch (error) {
             console.log(error);
@@ -89,7 +88,7 @@ module.exports = class UserCharacteristicRoute {
     }
 
     async getUsersByCharObjects(charId) {
-        let users_ids = await this.server.db('t_food_has_characteristic').select("a_char_id").where({a_char_id: charId});
+        let users_ids = await this.server.db('t_user_has_characteristic').select("a_user_id").where({a_char_id: charId});
         if (users_ids && !Array.isArray(users_ids))
             users_ids = [users_ids];
         if (users_ids) {

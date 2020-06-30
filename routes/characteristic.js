@@ -120,7 +120,7 @@ module.exports = class CharacteristicRoute {
             chars = await this.server.db('t_characteristic').whereIn('a_char_id', ids).where(filters);
         }    
         else
-        chars = await this.server.db('t_characteristic').where(filters);
+            chars = await this.server.db('t_characteristic').where(filters);
         if (chars) {
             if (!Array.isArray(chars))
                 chars = [chars];
