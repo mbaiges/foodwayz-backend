@@ -14,7 +14,6 @@ module.exports = class RestaurantChainRoute {
             .put(this.editChain.bind(this))
             .get(this.getChain.bind(this))
             .delete(this.delChain.bind(this));
-
     }
 
     async getAll(req, res) {
@@ -108,7 +107,7 @@ module.exports = class RestaurantChainRoute {
         const { id } = req.params;
 
         try {
-            const restChain = this.getRestaurantChainsObjects({a_rest_chain_id: id});
+            const restChain = this.getRestaurantChainsObjects({ filters: {a_rest_chain_id: id} });
             if(!restChain)
                 res.status(404).json(message.notFound('t_restaurant_chain', id));
             else 
@@ -119,7 +118,10 @@ module.exports = class RestaurantChainRoute {
         }
     }
 
-    async getRestaurantChainsObjects(filters) {
+    async getRestaurantChainsObjects(cfg) {
+        if (!cfg)
+            cfg = {};
+        const { filters } = cfg;
         let restChains;
         if (!filters)
             restChains = await this.server.db('t_restaurant_chain');

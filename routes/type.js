@@ -19,7 +19,7 @@ module.exports = class TypeRoute {
 
     async getAll(req, res) {
         try {
-            const types = await this.getTypesObjects({a_type_id: [1,2,4]});
+            const types = await this.getTypesObjects({ filters: {a_type_id: [1,2,4]} });
             res.status(200).json(message.fetch('types', types)); 
         } catch (error) {
             console.log(error);
@@ -95,7 +95,7 @@ module.exports = class TypeRoute {
         const { id } = req.params;
 
         try {
-            let type = await this.getTypesObjects({a_type_id: id});
+            let type = await this.getTypesObjects({ filters: {a_type_id: id} });
             if(type) {
                 type = type[0];
                 res.status(200).json(message.fetch('type', type));
@@ -107,7 +107,10 @@ module.exports = class TypeRoute {
         }
     }
 
-    async getTypesObjects(filters) {
+    async getTypesObjects(cfg) {
+        if (!cfg)
+            cfg = {};
+        const { filters } = cfg;
         let types;
         if (!filters)
             types = await this.server.db('t_type');

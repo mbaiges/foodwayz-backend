@@ -59,7 +59,7 @@ module.exports = class FoodCharacteristicRoute {
             let chars_ids = await this.server.db('t_food_has_characteristic').select("a_char_id").where({a_food_id: foodId});
             if (chars_ids && !Array.isArray(chars_ids))
                 chars_ids = [chars_ids];
-            const chars = await this.charRoute.getIngredientsObjects({ filters: {a_char_id: chars_ids} });
+            const chars = await this.charRoute.getCharacteristicsObjects({ filters: {a_char_id: chars_ids} });
             res.status(200).json(message.fetch(`characteristics by food id ${foodId}`, chars));
 
         } catch (error) {

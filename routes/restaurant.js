@@ -147,7 +147,7 @@ module.exports = class RestaurantRoute {
             const {
                 id
             } = req.params;
-            let rest = await this.getRestaurantsObjects({a_rest_id: id});
+            let rest = await this.getRestaurantsObjects({ filters: {a_rest_id: id} });
             if (rest) {
                 rest = rest[0];
                 res.status(200).json(message.fetch('restaurant', rest));
@@ -159,7 +159,10 @@ module.exports = class RestaurantRoute {
         }
     }
 
-    async getRestaurantsObjects(filters) {
+    async getRestaurantsObjects(cfg) {
+        if (!cfg)
+            cfg = {};
+        const { filters } = cfg;
         let rests;
         if (!filters)
             rests = await this.server.db('t_restaurant');
