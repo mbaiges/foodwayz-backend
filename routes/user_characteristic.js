@@ -1,8 +1,12 @@
 const message = require('../interface').message;
+const UserRoute = require('./user');
+const CharacteristicRoute = require('./characteristic');
 
 module.exports = class UserCharacteristicRoute {
     constructor(server) {
         this.server = server;
+        this.userRoute = new UserRoute(server);
+        this.charRoute = new CharacteristicRoute(server);
     }
 
     async initialize(app) {
@@ -12,8 +16,8 @@ module.exports = class UserCharacteristicRoute {
             .post(this.linkUserAndChar.bind(this))
             .delete(this.unLinkUserAndChar.bind(this));
 
-        app.get('/user/:id/characteristic', this.getCharsByUser.bind(this));
-        app.get('/characteristic/:id/user', this.getUsersByChar.bind(this));
+        app.get('/user/:userId/characteristic', this.getCharsByUser.bind(this));
+        app.get('/characteristic/:charId/user', this.getUsersByChar.bind(this));
     }
 
     async linkUserAndChar(req, res) {
@@ -50,10 +54,13 @@ module.exports = class UserCharacteristicRoute {
     }
 
     async getCharsByUser(req, res) {
-        const { id } = req.params;
+        const { userId } = req.params;
 
         try {
-            const chars = await this.server.db('t_user_has_characteristic').joinRaw('natural full join t_characteristic').select("a_char_id", "a_char_name").where({a_user_id: id});
+            let chars_ids = await this.server.db('t_food_has_characteristic').select("a_char_id").where({a_user_id: userId});
+            if (chars_ids && !Array.isArray(chars_ids))
+                chars_ids = [chars_ids];
+            const chars = await this.charRoute.getCharacteristicsObjects({ filters: {a_char_id: chars_ids} });
             res.status(200).json(message.fetch(`characteristics by user id ${id}`, chars));
 
         } catch (error) {
@@ -63,10 +70,13 @@ module.exports = class UserCharacteristicRoute {
     }
 
     async getUsersByChar(req, res) {
-        const { id } = req.params;
+        const { charId } = req.params;
 
         try {
-            const users = await this.server.db('t_user_has_characteristic').joinRaw('natural full join t_user').select("a_user_id", "a_name", "a_email").where({a_char_id: id});
+            let users_ids = await this.server.db('t_food_has_characteristic').select("a_char_id").where({a_char_id: charId});
+            if (users_ids && !Array.isArray(users_ids))
+            users_ids = [users_ids];
+            const users = await this.userRoute.getUsersObjects({ filters: {a_user_id: users_ids} });
             res.status(200).json(message.fetch(`user by characteristics id ${id}`, users));
 
         } catch (error) {

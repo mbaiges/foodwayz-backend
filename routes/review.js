@@ -34,10 +34,10 @@ module.exports = class ReviewRoute {
                 if (Array.isArray(rev))
                     rev = rev[0];
 
-                rev.a_user = (await this.userRoute.getUsersObjects({ a_user_id: rev.a_user_id }))[0];
+                rev.a_user = (await this.userRoute.getUsersObjects({ filters: { a_user_id: rev.a_user_id } }))[0];
                 delete rev.a_user_id;
 
-                rev.a_food = (await this.userRoute.getUsersObjects({ a_food_id: rev.a_food_id }))[0];
+                rev.a_food = (await this.userRoute.getUsersObjects({ filters: { a_food_id: rev.a_food_id } }))[0];
                 delete rev.a_food_id;
 
                 res.status(200).json(message.fetch('review', rev));
@@ -117,7 +117,7 @@ module.exports = class ReviewRoute {
             let revs = await this.server.db('t_review').where({a_food_id: foodId});
             if (revs) {
                 for(r in revs) {
-                    r.a_user = (await this.userRoute.getUsersObjects({ a_user_id: r.a_user_id }))[0];
+                    r.a_user = (await this.userRoute.getUsersObjects({ filters: { a_user_id: r.a_user_id } }))[0];
                     delete r.a_user_id;
                 }
 
@@ -140,7 +140,7 @@ module.exports = class ReviewRoute {
         
             if (revs) {
                 for (let i = 0; i < revs.length; i++) {
-                    revs[i].a_food = (await this.foodRoute.getFoodsObjects({ a_food_id: revs[i].a_food_id }))[0];
+                    revs[i].a_food = (await this.foodRoute.getFoodsObjects({ filters: { a_food_id: revs[i].a_food_id } }))[0];
                     delete revs[i].a_food_id;
                 }
                 res.status(200).json(message.fetch('reviews by user', revs));

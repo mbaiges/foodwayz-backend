@@ -43,7 +43,7 @@ module.exports = class UserRoute {
     async getUser(req, res) {
         const { id } = req.params;
         try {
-            let user = await this.getUsersObjects({a_user_id: id});
+            let user = await this.getUsersObjects({ filters: {a_user_id: id} });
             if(user) {
                 user = user[0];
                 res.status(200).json(message.fetch('user', user));
@@ -55,7 +55,10 @@ module.exports = class UserRoute {
         }
     }
 
-    async getUsersObjects(filters) {
+    async getUsersObjects(cfg) {
+        if (!cfg)
+            cfg = {};
+        const { filters } = cfg;
         let users;
         if (!filters)
             users = await this.server.db('t_user');
