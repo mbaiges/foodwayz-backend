@@ -34,9 +34,10 @@ module.exports = class FoodRoute {
     }
 
     async addFood(req, res) {
-        const {a_description, a_score = null, a_type_id, a_rest_id, a_image_url = null} = req.body;
+        const {a_title, a_description, a_score = null, a_type_id, a_rest_id, a_image_url = null} = req.body;
 
         const params = {
+            a_title: [a_title, typeof(a_title) === 'string'],
             a_description: [a_description, typeof(a_description) === 'string'],
             a_score: [a_score, (a_score == null || Number.isInteger(a_score))],
             a_type_id: [a_type_id, Number.isInteger(a_type_id)],
@@ -60,6 +61,7 @@ module.exports = class FoodRoute {
         try {
 
             const food = await this.server.db('t_food').insert({
+                a_title: a_title,
                 a_description: a_description,
                 a_score: a_score,
                 a_type_id: a_type_id,
@@ -76,10 +78,12 @@ module.exports = class FoodRoute {
 
     async editFood(req, res) {
         const { id } = req.params;
-        const { a_description, a_type_id = null, a_image_url = null } = req.body;
+        const {a_title, a_description, a_score = null, a_type_id = null, a_image_url = null} = req.body
         
         const params = {
+            a_title: [a_title, typeof(a_title) === 'string'],
             a_description: [a_description, typeof(a_description) === 'string'],
+            a_score: [a_score, (a_score == null || Number.isInteger(a_score))],
             a_type_id: [a_type_id, (a_type_id == null || Number.isInteger(a_type_id))],
             a_image_url: [a_image_url, (a_image_url == null || typeof(a_image_url) === 'string')]
         }
@@ -98,13 +102,20 @@ module.exports = class FoodRoute {
         }
 
         try {
-            let col_type = null;
+            let col_type = null, col_score = null, col_img = null;
             if(a_type_id != null) {
                 col_type = 'a_type_id';
             }
+            if(a_score != null) {
+                col_score = 'a_score';
+            }
+            if(a_image_url != null) {
+                col_img = 'a_image_url';
+            }
+
 
             const cant = await this.server.db('t_food')
-                        .update('a_description', description, col_type, a_type_id, 'a_image_url', a_image_url).where({a_food_id: id});
+                        .update('a_title', a_title,'a_description', a_description, col_score, a_score, col_type, a_type_id, col_img, a_image_url).where({a_food_id: id});
 
             if(cant)
                 res.status(200).json(message.put('food', cant));
