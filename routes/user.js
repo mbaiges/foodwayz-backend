@@ -71,7 +71,6 @@ module.exports = class UserRoute {
                 users = [users];
             for (let i = 0; i < users.length; i++) {
                 delete users[i].a_password;
-                delete users[i].a_email;
             }
             return users;
         }
