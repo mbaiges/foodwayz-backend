@@ -15,12 +15,12 @@ module.exports = class AuthRoutes {
 
   async registerUser(req, res) {
     const {
-      name,
-      email,
-      password
+      a_name,
+      a_email,
+      a_password
     } = req.body;
 
-    if (!name || !email || !password)
+    if (!a_name || !a_email || !a_password)
       return res
         .status(400)
         .json({
@@ -32,7 +32,7 @@ module.exports = class AuthRoutes {
       const exists = await this.server
         .db("t_user")
         .where({
-          a_name: name
+          a_name: a_name
         })
         .first();
       if (exists)
@@ -48,8 +48,8 @@ module.exports = class AuthRoutes {
       console.log("asdasdasd");
 
       await this.server.db.table("t_user").insert({
-        a_name: name,
-        a_email: email,
+        a_name: a_name,
+        a_email: a_email,
         a_password: hash,
       });
 
@@ -68,15 +68,15 @@ module.exports = class AuthRoutes {
 
   async loginUser(req, res) {
     const {
-      email,
-      password
+      a_email,
+      a_password
     } = req.body;
 
     try {
       const user = await this.server
         .db("t_user")
         .where({
-          a_email: email
+          a_email: a_email
         })
         .first();
       if (!user)
@@ -85,7 +85,7 @@ module.exports = class AuthRoutes {
           message: "A user with that mail address was not found.",
         });
 
-      const comparePassword = await bcrypt.compare(password, user.a_password);
+      const comparePassword = await bcrypt.compare(a_password, user.a_password);
       if (!comparePassword)
         return res
           .status(401)
@@ -108,9 +108,9 @@ module.exports = class AuthRoutes {
         code: "user-logged",
         message: "Successfully logged in.",
         user: {
-          id: user.a_user_id,
-          email: user.a_email,
-          name: user.a_name,
+          a_user_id: user.a_user_id,
+          a_email: user.a_email,
+          a_name: user.a_name,
         },
         accessToken: jwt,
       });
@@ -125,15 +125,15 @@ module.exports = class AuthRoutes {
 
   async removeUser(req, res) {
     const {
-      email,
-      password
+      a_email,
+      a_password
     } = req.body;
 
     try {
       const user = await this.server
         .db("t_user")
         .where({
-          a_email: email
+          a_email: a_email
         })
         .first();
       if (!user)
@@ -142,7 +142,7 @@ module.exports = class AuthRoutes {
           message: "A user with that mail address was not found.",
         });
 
-      const comparePassword = await bcrypt.compare(password, user.a_password);
+      const comparePassword = await bcrypt.compare(a_password, user.a_password);
       if (!comparePassword)
         return res
           .status(401)
@@ -154,7 +154,7 @@ module.exports = class AuthRoutes {
       const del = await this.server
         .db("t_user")
         .where({
-          a_email: email
+          a_email: a_email
         })
         .first()
         .del();
