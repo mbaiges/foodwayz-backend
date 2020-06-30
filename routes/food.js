@@ -116,8 +116,7 @@ module.exports = class FoodRoute {
         const {id} = req.params;
         try {
             let food = await this.getFoodsObjects({a_food_id: id});
-            if(food) {
-                food = food[0];
+            if(food.length !== 0) {
                 res.status(200).json(message.fetch('food', food));
             }
             else {
