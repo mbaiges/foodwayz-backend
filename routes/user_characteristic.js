@@ -57,10 +57,7 @@ module.exports = class UserCharacteristicRoute {
         const { userId } = req.params;
 
         try {
-            let chars_ids = await this.server.db('t_food_has_characteristic').select("a_char_id").where({a_user_id: userId});
-            if (chars_ids && !Array.isArray(chars_ids))
-                chars_ids = [chars_ids];
-            const chars = await this.charRoute.getCharacteristicsObjects({ filters: {a_char_id: chars_ids} });
+            const chars = this.getCharsByUserObjects(userId);
             res.status(200).json(message.fetch(`characteristics by user id ${id}`, chars));
 
         } catch (error) {
@@ -69,19 +66,30 @@ module.exports = class UserCharacteristicRoute {
         
     }
 
+    async getCharsByUserObjects(userId) {
+        let chars_ids = await this.server.db('t_food_has_characteristic').select("a_char_id").where({a_user_id: userId});
+        if (chars_ids && !Array.isArray(chars_ids))
+            chars_ids = [chars_ids];
+        return await this.charRoute.getCharacteristicsObjects({ filters: {a_char_id: chars_ids} });
+    }
+
     async getUsersByChar(req, res) {
         const { charId } = req.params;
 
         try {
-            let users_ids = await this.server.db('t_food_has_characteristic').select("a_char_id").where({a_char_id: charId});
-            if (users_ids && !Array.isArray(users_ids))
-            users_ids = [users_ids];
-            const users = await this.userRoute.getUsersObjects({ filters: {a_user_id: users_ids} });
+            const users = await this.getUsersByCharObjects(charId);
             res.status(200).json(message.fetch(`user by characteristics id ${id}`, users));
 
         } catch (error) {
             console.log(error);
         }
+    }
+
+    async getUsersByCharObjects(charId) {
+        let users_ids = await this.server.db('t_food_has_characteristic').select("a_char_id").where({a_char_id: charId});
+        if (users_ids && !Array.isArray(users_ids))
+        users_ids = [users_ids];
+        return await this.userRoute.getUsersObjects({ filters: {a_user_id: users_ids} });
     }
 };
 

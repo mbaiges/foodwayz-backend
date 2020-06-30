@@ -56,10 +56,7 @@ module.exports = class FoodIngredientRoute {
         const { foodId } = req.params;
 
         try {
-            let ingrs_ids = await this.server.db('t_food_has_ingredient').select("a_ingr_id").where({a_food_id: foodId});
-            if (ingrs_ids && !Array.isArray(ingrs_ids))
-                ingrs_ids = [ingrs_ids];
-            const ingrs = await this.ingrRoute.getIngredientsObjects({ filters: {a_ingr_id: ingrs_ids} });
+            const ingrs = await this.getIngrsByFoodObjects(foodId);
             res.status(200).json(message.fetch(`ingredients by food id ${foodId}`, ingrs));
 
         } catch (error) {
@@ -68,18 +65,29 @@ module.exports = class FoodIngredientRoute {
         
     }
 
+    async getIngrsByFoodObjects(foodId) {
+        let ingrs_ids = await this.server.db('t_food_has_ingredient').select("a_ingr_id").where({a_food_id: foodId});
+        if (ingrs_ids && !Array.isArray(ingrs_ids))
+            ingrs_ids = [ingrs_ids];
+        return await this.ingrRoute.getIngredientsObjects({ filters: {a_ingr_id: ingrs_ids} });
+    }
+
     async getFoodsByIngr(req, res) {
         const { ingrId } = req.params;
 
         try {
-            let foods_ids = await this.server.db('t_food_has_ingredient').select("a_food_id").where({a_ingr_id: ingrId});
-            if (foods_ids && !Array.isArray(foods_ids))
-                foods_ids = [foods_ids];
-            const foods = await this.foodRoute.getFoodsObjects({ filters: {a_food_id: foods_ids} });
+            const foods = await this.getFoodsByIngrObjects(ingrId);
             res.status(200).json(message.fetch(`food by ingredients id ${ingrId}`, foods));
         } catch (error) {
             console.log(error);
         }
+    }
+
+    async getFoodsByIngrObjects(ingrId) {
+        let foods_ids = await this.server.db('t_food_has_ingredient').select("a_food_id").where({a_ingr_id: ingrId});
+        if (foods_ids && !Array.isArray(foods_ids))
+            foods_ids = [foods_ids];
+        return await this.foodRoute.getFoodsObjects({ filters: {a_food_id: foods_ids} });
     }
 
 };

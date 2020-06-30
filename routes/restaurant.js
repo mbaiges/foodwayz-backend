@@ -179,7 +179,7 @@ module.exports = class RestaurantRoute {
                 rests = [rests];
             for (let i = 0; i < rests.length; i++) {
                 if (rests[i].a_rest_chain_id) {
-                    chain = await this.restaurantChainRoute.getRestaurantChainsObjects({a_rest_chain_id: rests[i].a_rest_chain_id});
+                    chain = await this.restaurantChainRoute.getRestaurantChainsObjects({ filters: {a_rest_chain_id: rests[i].a_rest_chain_id} });
                     if (chain) {
                         chain = chain[0];
                         delete rests[i].a_rest_chain_id;

@@ -1,12 +1,16 @@
 const message = require('../interface').message;
 const RestaurantRoute = require('./restaurant');
 const TypeRoute = require('./type');
+//const FoodIngredientRoute = require('./food_ingredient');
+//const FoodCharacteristicRoute = require('./food_characteristic');
 
 module.exports = class FoodRoute {
     constructor(server) {
         this.server = server;
         this.restaurantRoute = new RestaurantRoute(server);
         this.typeRoute = new TypeRoute(server);
+        //this.foodIngrRoute = new FoodIngredientRoute(server);
+        //this.foodCharRoute = new FoodCharacteristicRoute(server);
     }
 
     async initialize(app) {
@@ -115,8 +119,9 @@ module.exports = class FoodRoute {
     async getFood(req, res) {
         const {id} = req.params;
         try {
-            let food = await this.getFoodsObjects({a_food_id: id});
-            if(food.length !== 0) {
+            let food = await this.getFoodsObjects({ filters: {a_food_id: id} });
+            if(food) {
+                food = food[0];
                 res.status(200).json(message.fetch('food', food));
             }
             else {
@@ -141,7 +146,7 @@ module.exports = class FoodRoute {
         }    
         else
             foods = await this.server.db('t_food').where(filters);
-        let rest, type;
+        let rest, type, ingrs, chars;
         if (foods) {
             if (!Array.isArray(foods))
                 foods = [foods];
@@ -158,7 +163,12 @@ module.exports = class FoodRoute {
                     delete foods[i].a_type_id;
                     foods[i].a_type = type;
                 }
-                if (detailed) {}
+                if (detailed && detailed === true) {
+                    ingrs = await this.foodIngrRoute.getIngrsByFoodObjects({ filters: {a_food_id: foods[i].a_food_id} });
+                    foods[i].a_ingredients = ingrs;
+                    chars = await this.foodCharRoute.getCharsByFoodObjects({ filters: {a_food_id: foods[i].a_food_id} });
+                    foods[i].a_characteristics = chars;
+                }
             }
             return foods;
         }

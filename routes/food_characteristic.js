@@ -56,10 +56,7 @@ module.exports = class FoodCharacteristicRoute {
         const { foodId } = req.params;
 
         try {
-            let chars_ids = await this.server.db('t_food_has_characteristic').select("a_char_id").where({a_food_id: foodId});
-            if (chars_ids && !Array.isArray(chars_ids))
-                chars_ids = [chars_ids];
-            const chars = await this.charRoute.getCharacteristicsObjects({ filters: {a_char_id: chars_ids} });
+            const chars = await this.getCharsByFoodObjects(foodId);
             res.status(200).json(message.fetch(`characteristics by food id ${foodId}`, chars));
 
         } catch (error) {
@@ -68,19 +65,30 @@ module.exports = class FoodCharacteristicRoute {
         
     }
 
+    async getCharsByFoodObjects(foodId) {
+        let chars_ids = await this.server.db('t_food_has_characteristic').select("a_char_id").where({a_food_id: foodId});
+        if (chars_ids && !Array.isArray(chars_ids))
+            chars_ids = [chars_ids];
+        return await this.charRoute.getCharacteristicsObjects({ filters: {a_char_id: chars_ids} });
+    }
+
     async getFoodsByChar(req, res) {
         const { charId } = req.params;
 
         try {
-            let foods_ids = await this.server.db('t_food_has_characteristic').select("a_food_id").where({a_char_id: charId});
-            if (foods_ids && !Array.isArray(foods_ids))
-                foods_ids = [foods_ids];
-            const foods = await this.foodRoute.getFoodsObjects({ filters: {a_food_id: foods_ids} });
+            const foods = await this.getFoodsByCharObjects(charId);
             res.status(200).json(message.fetch(`food by characteristics id ${charId}`, foods));
 
         } catch (error) {
             console.log(error);
         }
+    }
+
+    async getFoodsByCharObjects(charId) {
+        let foods_ids = await this.server.db('t_food_has_characteristic').select("a_food_id").where({a_char_id: charId});
+        if (foods_ids && !Array.isArray(foods_ids))
+            foods_ids = [foods_ids];
+        return await this.foodRoute.getFoodsObjects({ filters: {a_food_id: foods_ids} });
     }
 
 };
