@@ -102,20 +102,23 @@ module.exports = class FoodRoute {
         }
 
         try {
-            let col_type = null, col_score = null, col_img = null;
+            let update = {
+                a_title: a_title,
+                a_description: a_description
+            }
             if(a_type_id != null) {
-                col_type = 'a_type_id';
+                update.a_type_id = a_type_id;
             }
             if(a_score != null) {
-                col_score = 'a_score';
+                update.a_score = a_score;
             }
             if(a_image_url != null) {
-                col_img = 'a_image_url';
+                update.a_image_url = a_image_url;
             }
 
 
             const cant = await this.server.db('t_food')
-                        .update('a_title', a_title,'a_description', a_description, col_score, a_score, col_type, a_type_id, col_img, a_image_url).where({a_food_id: id});
+                        .update(update).where({a_food_id: id});
 
             if(cant)
                 res.status(200).json(message.put('food', cant));
