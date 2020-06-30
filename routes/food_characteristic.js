@@ -69,6 +69,9 @@ module.exports = class FoodCharacteristicRoute {
         let chars_ids = await this.server.db('t_food_has_characteristic').select("a_char_id").where({a_food_id: foodId});
         if (chars_ids && !Array.isArray(chars_ids))
             chars_ids = [chars_ids];
+        if (chars_ids) {
+            chars_ids = chars_ids.map(c => c.a_char_id);
+        }
         return await this.charRoute.getCharacteristicsObjects({ filters: {a_char_id: chars_ids} });
     }
 
@@ -88,6 +91,9 @@ module.exports = class FoodCharacteristicRoute {
         let foods_ids = await this.server.db('t_food_has_characteristic').select("a_food_id").where({a_char_id: charId});
         if (foods_ids && !Array.isArray(foods_ids))
             foods_ids = [foods_ids];
+        if (foods_ids) {
+            foods_ids = foods_ids.map(f => f.a_food_id);
+        }
         return await this.foodRoute.getFoodsObjects({ filters: {a_food_id: foods_ids} });
     }
 

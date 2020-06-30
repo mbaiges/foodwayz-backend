@@ -56,6 +56,12 @@ module.exports = class FoodRoute {
 
         try {
 
+            const owns = await this.server.db('t_owns').where({a_user_id: req.user.a_user_id, a_rest_id: a_rest_id});
+            if (owns.length == 0) {
+                res.status(401).json(message.unauth('restaurant food add', 'not an owner'));
+                return;
+            }
+
             const food = await this.server.db('t_food').insert({
                 a_title: a_title,
                 a_description: a_description,
@@ -110,6 +116,18 @@ module.exports = class FoodRoute {
             }
             if(a_image_url != null) {
                 update.a_image_url = a_image_url;
+            }
+
+            const food_rest = await this.server.db('t_food').select('a_rest_id').where({a_food_id: id});
+            if (!food_rest) {
+                // res.status
+                return;
+            }
+
+            const owns = await this.server.db('t_owns').where({a_user_id: req.user.a_user_id, a_rest_id: food_rest.a_rest_id});
+            if (owns.length == 0) {
+                res.status(401).json(message.unauth('restaurant food modify', 'not an owner'));
+                return;
             }
 
 
@@ -194,6 +212,19 @@ module.exports = class FoodRoute {
     async delFood(req, res) {
         try {
             const { id } = req.params;
+
+            const food_rest = await this.server.db('t_food').select('a_rest_id').where({a_food_id: id});
+            if (!food_rest) {
+                // res.status
+                return;
+            }
+
+            const owns = await this.server.db('t_owns').where({a_user_id: req.user.a_user_id, a_rest_id: food_rest.a_rest_id});
+            if (owns.length == 0) {
+                res.status(401).json(message.unauth('restaurant food modify', 'not an owner'));
+                return;
+            }
+
             const ret = await this.server.db('t_food').where({a_food_id: id}).del();
 
             if(ret)

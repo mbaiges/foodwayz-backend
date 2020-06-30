@@ -70,6 +70,9 @@ module.exports = class UserCharacteristicRoute {
         let chars_ids = await this.server.db('t_food_has_characteristic').select("a_char_id").where({a_user_id: userId});
         if (chars_ids && !Array.isArray(chars_ids))
             chars_ids = [chars_ids];
+        if (chars_ids) {
+            chars_ids = chars_ids.map(c => c.a_char_id);
+        }
         return await this.charRoute.getCharacteristicsObjects({ filters: {a_char_id: chars_ids} });
     }
 
@@ -88,7 +91,10 @@ module.exports = class UserCharacteristicRoute {
     async getUsersByCharObjects(charId) {
         let users_ids = await this.server.db('t_food_has_characteristic').select("a_char_id").where({a_char_id: charId});
         if (users_ids && !Array.isArray(users_ids))
-        users_ids = [users_ids];
+            users_ids = [users_ids];
+        if (users_ids) {
+            users_ids = users_ids.map(u => u.a_user_id);
+        }
         return await this.userRoute.getUsersObjects({ filters: {a_user_id: users_ids} });
     }
 };
