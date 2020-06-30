@@ -191,18 +191,18 @@ module.exports = class FoodRoute {
                     delete foods[i].a_type_id;
                     foods[i].a_type = type;
                 }
-                // if (detailed && detailed === true) {
-                //     if (!this.foodIngrRoute || !this.foodCharRoute) {
-                //         const FoodIngredientRoute = require('./food_ingredient');
-                //         this.foodIngrRoute = new FoodIngredientRoute(this.server);
-                //         const FoodCharacteristicRoute = require('./food_characteristic');
-                //         this.foodCharRoute = new FoodCharacteristicRoute(this.server);
-                //     }
-                //     ingrs = await this.foodIngrRoute.getIngrsByFoodObjects(foods[i].a_food_id);
-                //     foods[i].a_ingredients = ingrs;
-                //     chars = await this.foodCharRoute.getCharsByFoodObjects(foods[i].a_food_id);
-                //     foods[i].a_characteristics = chars;
-                // }
+                if (detailed && detailed === true) {
+                    if (!this.foodIngrRoute || !this.foodCharRoute) {
+                        const FoodIngredientRoute = require('./food_ingredient');
+                        this.foodIngrRoute = new FoodIngredientRoute(this.server);
+                        const FoodCharacteristicRoute = require('./food_characteristic');
+                        this.foodCharRoute = new FoodCharacteristicRoute(this.server);
+                    }
+                    ingrs = await this.foodIngrRoute.getIngrsByFoodObjects(foods[i].a_food_id);
+                    foods[i].a_ingredients = ingrs;
+                    chars = await this.foodCharRoute.getCharsByFoodObjects(foods[i].a_food_id);
+                    foods[i].a_characteristics = chars;
+                }
             }
             return foods;
         }
