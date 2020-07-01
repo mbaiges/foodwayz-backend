@@ -15,6 +15,9 @@ module.exports = class RestaurantRoute {
             .delete(this.removeRestaurant.bind(this))
             .put(this.modifyRestaurant.bind(this));
 
+        app.route('/restaurant/:id/food')
+            .get(this.getFoods.bind(this));
+
         app.route('/restaurant/:id/image')
             .get(this.getAllImages.bind(this))
             .post(this.addImages.bind(this));
@@ -200,32 +203,21 @@ module.exports = class RestaurantRoute {
     }
 
     async getFoods(req, res) {
-        const { foodId } = req.params;
-
-        try {
-            const chars = await this.getCharsByFoodObjects(foodId);
-            res.status(200).json(message.fetch(`characteristics by food id ${foodId}`, chars));
-
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({message: error.message});
-        }
-        
-    }
-
-    async getRestaurantFoodsObjects(restId) {
         if (!this.foodRoute) {
             const FoodRoute = require('./food');
             this.foodRoute = new FoodRoute(this.server);
         }
 
-        let rests_ids = await this.server.db('t_food').select("a_rest_id").where({a_rest_id: restId});
-        if (rests_ids && !Array.isArray(rests_ids))
-            rests_ids = [rests_ids];
-        if (rests_ids) {
-            rests_ids = rests_ids.map(c => c.a_rest_id);
+        const { id } = req.params;
+
+        try {
+            const foods = await this.foodRoute.getFoodsObjects({ filters: {a_rest_id: id} });
+            res.status(200).json(message.fetch(`foods by restaurant id ${id}`, foods));
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message: error.message});
         }
-        return await this.foodRoute.getFoodsObjects({ filters: {a_rest_id: rests_ids} });
+        
     }
 
     async getAllImages(req, res) {
