@@ -228,10 +228,11 @@ module.exports = class RestaurantRoute {
             const rest_images = await this.server.db('t_restaurant_images').select('a_image_id', 'a_image_url').where({
                 a_rest_id: id
             });
-            if (rest_images.length != 0)
-                res.status(200).json(message.fetch('images from the restaurant', rest_images));
-            else
-                res.status(404).json(message.notFound('images from the restaurant', id));
+
+            if (!Array.isArray(rest_images)) {
+                rest_images = [rest_images];
+            }
+            res.status(200).json(message.fetch('restaurant image', rest_images));
         } catch (error) {
             console.log(error);
             res.status(500).json({message: error.message});
@@ -302,10 +303,10 @@ module.exports = class RestaurantRoute {
                 a_image_id: imageId
             });
 
-            if (!Array.isArray(rest_image)) {
-                rest_image = [rest_image];
-            }
-            res.status(200).json(message.fetch('restaurant image', rest_image));
+            if (rest_images.length != 0)
+                res.status(200).json(message.fetch('images from the restaurant', rest_image));
+            else
+                res.status(404).json(message.notFound('images from the restaurant', id));
         } catch (error) {
             console.log(error);
             res.status(500).json({message: error.message});
