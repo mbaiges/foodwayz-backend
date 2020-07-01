@@ -133,7 +133,7 @@ module.exports = class ReviewRoute {
 
         try {
             let revs = await this.server.db('t_review').where({a_food_id: foodId});
-            console.log(revs);
+            
             if (revs.length != 0) {
                 
                 for (let idx = 0; idx < revs.length; idx++) {
@@ -143,11 +143,12 @@ module.exports = class ReviewRoute {
                     delete revs[idx].a_food_id;
                 }
 
-                res.status(200).json(message.fetch('reviews by food', revs));
             }
             else
-                res.status(404).json(message.notFound('reviews by food', foodId));
-            
+                revs = [];
+
+
+            res.status(200).json(message.fetch('reviews by food', revs));
         } catch (error) {
             console.log(error);
             res.status(500).json({message: error.message});
