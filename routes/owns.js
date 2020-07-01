@@ -101,6 +101,9 @@ module.exports = class OwnsRoute {
             let users_ids = await this.server.db('t_owns').select("a_rest_id").where({a_rest_id: restId});
             if (users_ids && !Array.isArray(users_ids))
                 users_ids = [users_ids];
+            if (users_ids) {
+                users_ids = users_ids.map(u => u.a_user_id);
+            }
             const owners = await this.userRoute.getUsersObjects({ filters: { a_user_id: users_ids } });
             res.status(200).json(message.fetch(`owners by restaurant id ${restId}`, owners));
         } catch (error) {
