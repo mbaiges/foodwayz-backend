@@ -172,10 +172,24 @@ module.exports = class AuthRoutes {
 
   async removeUser(req, res) {
     const {
-      a_email,
+      a_password: real_password,
     } = req.user;
 
+    const {
+      a_password
+    } = req.body;
+
     try {
+      const comparePassword = await bcrypt.compare(a_password, real_password);
+      if (!comparePassword) {
+        return res
+        .status(401)
+        .json({
+          code: "invalid-auth",
+          message: "Invalid authorization."
+        });
+      }
+
       const del = await this.server
         .db("t_user")
         .where({

@@ -1,11 +1,9 @@
 const message = require('../interface').message;
-const FoodRoute = require('./food.js');
 const { restart } = require('nodemon');
 
 module.exports = class FoodTypeRoute {
     constructor(server) {
         this.server = server;
-        this.foodRoute = new FoodRoute(this.server);
     }
 
     async initialize(app) {
@@ -13,6 +11,11 @@ module.exports = class FoodTypeRoute {
     }
 
     async getFoodsByType(req, res) {
+        if (!this.foodRoute) {
+            const FoodRoute = require('./food.js');
+            this.foodRoute = new FoodRoute(this.server);
+        }
+
         const { typeId } = req.params;
 
         try {

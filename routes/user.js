@@ -10,15 +10,12 @@ module.exports = class UserRoute {
         app.route('/user/')
             .get(this.getCurrentUser.bind(this))
             .put(this.modifyCurrentUser.bind(this))
-            .delete(this.delCurrentUser.bind(this));
 
         app.route('/user/all')
             .get(this.getUsers.bind(this));
 
         app.route('/user/:id')
             .get(this.getUser.bind(this));
-            
-
     }
 
     async getCurrentUser(req, res) {

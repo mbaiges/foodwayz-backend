@@ -1,12 +1,8 @@
 const message = require('../interface').message;
-const RestaurantRoute = require('./restaurant');
-const TypeRoute = require('./type');
 
 module.exports = class FoodRoute {
     constructor(server) {
         this.server = server;
-        this.restaurantRoute = new RestaurantRoute(server);
-        this.typeRoute = new TypeRoute(server);
     }
 
     async initialize(app) {
@@ -169,6 +165,15 @@ module.exports = class FoodRoute {
     }
 
     async getFoodsObjects(cfg) {
+        if (!this.restaurantRoute) {
+            const RestaurantRoute = require('./restaurant');
+            this.restaurantRoute = new RestaurantRoute(this.server);
+        }
+        if (!this.typeRoute) {
+            const TypeRoute = require('./type');
+            this.typeRoute = new TypeRoute(this.server);
+        }
+
         if (!cfg)
             cfg = {};
         const { filters, detailed } = cfg;

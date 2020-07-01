@@ -1,12 +1,8 @@
 const message = require('../interface').message;
-const UserRoute = require('./user');
-const FoodRoute = require('./food');
 
 module.exports = class ReviewRoute {
     constructor(server) {
-        this.server = server;
-        this.userRoute = new UserRoute(server);
-        this.foodRoute = new FoodRoute(server);        
+        this.server = server;    
     }
 
     async initialize(app) {
@@ -24,6 +20,15 @@ module.exports = class ReviewRoute {
     }
 
     async getRev(req, res) {
+        if (!this.userRoute) {
+            const UserRoute = require('./user');
+            this.userRoute = new UserRoute(this.server);
+        }
+        if (!this.foodRoute) {
+            const FoodRoute = require('./food');
+            this.foodRoute = new FoodRoute(this.server);
+        }
+
         const { id } = req.params;
 
         try {
@@ -115,6 +120,11 @@ module.exports = class ReviewRoute {
     }
     
     async getRevsByFood(req, res) {
+        if (!this.userRoute) {
+            const UserRoute = require('./user');
+            this.userRoute = new UserRoute(this.server);
+        }
+
         const { foodId } = req.params;
 
         try {
@@ -140,6 +150,11 @@ module.exports = class ReviewRoute {
     }
 
     async getRevsByUser(req, res) {
+        if (!this.foodRoute) {
+            const FoodRoute = require('./food');
+            this.foodRoute = new FoodRoute(this.server);
+        }
+
         const { userId } = req.params;
 
         try {

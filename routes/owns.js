@@ -1,12 +1,8 @@
 const message = require('../interface').message;
-const UserRoute = require('./user');
-const RestaurantRoute = require('./restaurant');
 
 module.exports = class OwnsRoute {
     constructor(server) {
         this.server = server;
-        this.userRoute = new UserRoute(server);
-        this.restaurantRoute = new RestaurantRoute(server);
     }
 
     async initialize(app) {
@@ -75,6 +71,11 @@ module.exports = class OwnsRoute {
     }
 
     async getRestsByOwner(req, res) {
+        if (!this.restaurantRoute) {
+            const RestaurantRoute = require('./restaurant');
+            this.restaurantRoute = new RestaurantRoute(this.server);
+        }
+
         const { a_user_id: ownerId } = req.user;
 
         try {
@@ -95,6 +96,11 @@ module.exports = class OwnsRoute {
     }
 
     async getOwnersByRest(req, res) {
+        if (!this.userRoute) {
+            const UserRoute = require('./user');
+            this.userRoute = new UserRoute(this.server);
+        }
+
         const { restId } = req.params;
 
         try {

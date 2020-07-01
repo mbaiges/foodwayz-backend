@@ -1,12 +1,10 @@
-const message = require('../interface').message;
 const FoodRoute = require('./food');
-const IngredientRoute = require('./ingredient');
+
+const message = require('../interface').message;
 
 module.exports = class FoodIngredientRoute {
     constructor(server) {
         this.server = server;
-        this.foodRoute = new FoodRoute(server);
-        this.ingrRoute = new IngredientRoute(server);
     }
 
     async initialize(app) {
@@ -69,6 +67,11 @@ module.exports = class FoodIngredientRoute {
     }
 
     async getIngrsByFoodObjects(foodId) {
+        if (!this.ingrRoute) {
+            const IngredientRoute = require('./ingredient');
+            this.ingrRoute = new FoodRoute(this.server);
+        }
+
         let ingrs_ids = await this.server.db('t_food_has_ingredient').select("a_ingr_id").where({a_food_id: foodId});
         if (ingrs_ids && !Array.isArray(ingrs_ids))
             ingrs_ids = [ingrs_ids];
@@ -91,6 +94,11 @@ module.exports = class FoodIngredientRoute {
     }
 
     async getFoodsByIngrObjects(ingrId) {
+        if (!this.foodRoute) {
+            const FoodRoute = require('./food');
+            this.foodRoute = FoodRoute(this.server);
+        }
+        
         let foods_ids = await this.server.db('t_food_has_ingredient').select("a_food_id").where({a_ingr_id: ingrId});
         if (foods_ids && !Array.isArray(foods_ids))
             foods_ids = [foods_ids];

@@ -1,10 +1,8 @@
 const message = require('../interface').message;
-const RestaurantChainRoute = require('./restaurant_chain');
 
 module.exports = class RestaurantRoute {
     constructor(server) {
         this.server = server;
-        this.restaurantChainRoute = new RestaurantChainRoute(server);
     }
 
     async initialize(app) {
@@ -19,7 +17,7 @@ module.exports = class RestaurantRoute {
 
         app.route('/restaurant/:id/image')
             .get(this.getAllImages.bind(this))
-            .post(this.addImage.bind(this));
+            .post(this.addImages.bind(this));
         
         app.route('/restaurant/:id/image/:imageId')
             .get(this.getImage.bind(this))
@@ -164,6 +162,11 @@ module.exports = class RestaurantRoute {
     }
 
     async getRestaurantsObjects(cfg) {
+        if (!this.restaurantChainRoute) {
+            const RestaurantChainRoute = require('./restaurant_chain');
+            this.restaurantChainRoute = new RestaurantChainRoute(this.server);
+        }
+
         if (!cfg)
             cfg = {};
         const { filters } = cfg;
@@ -196,6 +199,35 @@ module.exports = class RestaurantRoute {
         return null;
     }
 
+    async getFoods(req, res) {
+        const { foodId } = req.params;
+
+        try {
+            const chars = await this.getCharsByFoodObjects(foodId);
+            res.status(200).json(message.fetch(`characteristics by food id ${foodId}`, chars));
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message: error.message});
+        }
+        
+    }
+
+    async getRestaurantFoodsObjects(restId) {
+        if (!this.foodRoute) {
+            const FoodRoute = require('./food');
+            this.foodRoute = new FoodRoute(this.server);
+        }
+
+        let rests_ids = await this.server.db('t_food').select("a_rest_id").where({a_rest_id: restId});
+        if (rests_ids && !Array.isArray(rests_ids))
+            rests_ids = [rests_ids];
+        if (rests_ids) {
+            rests_ids = rests_ids.map(c => c.a_rest_id);
+        }
+        return await this.foodRoute.getFoodsObjects({ filters: {a_rest_id: rests_ids} });
+    }
+
     async getAllImages(req, res) {
         try {
             const {
@@ -214,14 +246,14 @@ module.exports = class RestaurantRoute {
         }
     }
 
-    async addImage(req, res) {
+    async addImages(req, res) {
 
         const {
             id
         } = req.params;
 
         const {
-            a_image_url
+            a_image_urls
         } = req.body;
 
         if (typeof(image_url) !== 'string')
@@ -244,14 +276,13 @@ module.exports = class RestaurantRoute {
                 return;
             }
 
-            const insert = await this.server.db('t_restaurant_images')
-                .insert({
-                    a_rest_id: id,
-                    a_image_url: a_image_url
-                })
-                .returning('a_image_id','a_image_url');
+            if (Array.isArray(a_image_urls)) {
+                const insert = await this.server.db('t_restaurant_images')
+                    .insert(a_image_urls.map(url => Object.create({a_rest_id: id, a_image_url: url})))
+                    .returning('a_image_id','a_image_url');
+                res.status(200).json(message.post('restaurant image', insert));
+            }
 
-            res.status(200).json(message.post('restaurant image', insert));
         } catch (error) {
             console.error('Failed to add restaurant image:');
             console.error(error);

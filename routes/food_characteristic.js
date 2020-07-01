@@ -5,8 +5,6 @@ const CharacteristicRoute = require('./characteristic');
 module.exports = class FoodCharacteristicRoute {
     constructor(server) {
         this.server = server;
-        this.foodRoute = new FoodRoute(server);
-        this.charRoute = new CharacteristicRoute(server);
     }
 
     async initialize(app) {
@@ -69,6 +67,11 @@ module.exports = class FoodCharacteristicRoute {
     }
 
     async getCharsByFoodObjects(foodId) {
+        if (!this.charRoute) {
+            const CharacteristicRoute = require('./characteristic');
+            this.charRoute = new CharacteristicRoute(this.server);
+        }
+
         let chars_ids = await this.server.db('t_food_has_characteristic').select("a_char_id").where({a_food_id: foodId});
         if (chars_ids && !Array.isArray(chars_ids))
             chars_ids = [chars_ids];
@@ -92,6 +95,11 @@ module.exports = class FoodCharacteristicRoute {
     }
 
     async getFoodsByCharObjects(charId) {
+        if (!this.foodRoute) {
+            const FoodRoute = require('./food');
+            this.foodRoute = new FoodRoute(this.server);
+        }
+
         let foods_ids = await this.server.db('t_food_has_characteristic').select("a_food_id").where({a_char_id: charId});
         if (foods_ids && !Array.isArray(foods_ids))
             foods_ids = [foods_ids];
