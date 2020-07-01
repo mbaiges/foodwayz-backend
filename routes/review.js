@@ -42,7 +42,7 @@ module.exports = class ReviewRoute {
                 rev.a_user = (await this.userRoute.getUsersObjects({ filters: { a_user_id: rev.a_user_id } }))[0];
                 delete rev.a_user_id;
 
-                rev.a_food = (await this.foodRoute.getFoodsObjects({ filters: { a_food_id: rev.a_food_id } }))[0];
+                rev.a_food = (await this.foodRoute.getFoodsObjects({ filters: { a_food_id: rev.a_food_id }, detailed: true }))[0];
                 delete rev.a_food_id;
 
                 res.status(200).json(message.fetch('review', rev));
@@ -139,7 +139,7 @@ module.exports = class ReviewRoute {
                 for (let idx = 0; idx < revs.length; idx++) {
                     revs[idx].a_user = (await this.userRoute.getUsersObjects({ filters: { a_user_id: revs[idx].a_user_id } }))[0];
                     delete revs[idx].a_user_id;
-                    revs[idx].a_food = (await this.foodRoute.getFoodsObjects({ filters: { a_food_id: revs[idx].a_food_id } }))[0];
+                    revs[idx].a_food = (await this.foodRoute.getFoodsObjects({ filters: { a_food_id: revs[idx].a_food_id }, detailed: true }))[0];
                     delete revs[idx].a_food_id;
                 }
 
@@ -175,12 +175,13 @@ module.exports = class ReviewRoute {
                 for (let idx = 0; idx < revs.length; idx++) {
                     revs[idx].a_user = (await this.userRoute.getUsersObjects({ filters: { a_user_id: revs[idx].a_user_id } }))[0];
                     delete revs[idx].a_user_id;
-                    revs[idx].a_food = (await this.foodRoute.getFoodsObjects({ filters: { a_food_id: revs[idx].a_food_id } }))[0];
+                    revs[idx].a_food = (await this.foodRoute.getFoodsObjects({ filters: { a_food_id: revs[idx].a_food_id }, detailed: true }))[0];
                     delete revs[idx].a_food_id;
                 }
                 res.status(200).json(message.fetch('reviews by user', revs));
             }
             else
+                revs = [];
                 res.status(404).json(message.notFound('reviews by user', userId))
         } catch (error) {
             console.log(error);
