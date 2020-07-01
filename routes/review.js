@@ -169,9 +169,9 @@ module.exports = class ReviewRoute {
 
         try {
             let revs = await this.server.db('t_review').where({a_user_id: userId});
-        
+
             if (revs.length != 0) {
-                for (let i = 0; i < revs.length; i++) {
+                for (let idx = 0; idx < revs.length; idx++) {
                     revs[idx].a_user = (await this.userRoute.getUsersObjects({ filters: { a_user_id: revs[idx].a_user_id } }))[0];
                     delete revs[idx].a_user_id;
                     revs[idx].a_food = (await this.foodRoute.getFoodsObjects({ filters: { a_food_id: revs[idx].a_food_id } }))[0];
