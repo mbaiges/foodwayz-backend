@@ -11,6 +11,8 @@ module.exports = class AuthRoutes {
     // route.get(this.getBooks.bind(this));
     app.post("/login", this.loginUser.bind(this));
     app.post("/register", this.registerUser.bind(this));
+    app.delete("/delete_account", this.removeUser.bind(this));
+    app.put("/change_password", this.changePassword.bind(this));
   }
 
   async registerUser(req, res) {
@@ -43,7 +45,7 @@ module.exports = class AuthRoutes {
             message: "Username already exists"
           });
 
-      const hash = await bcrypt.hash(password, 10);
+      const hash = await bcrypt.hash(a_password, 10);
 
       console.log("asdasdasd");
 
@@ -104,7 +106,7 @@ module.exports = class AuthRoutes {
         }
       );
 
-      return res.json({
+      return res.status(200).json({
         code: "user-logged",
         message: "Successfully logged in.",
         user: {
@@ -123,34 +125,57 @@ module.exports = class AuthRoutes {
     }
   }
 
-  async removeUser(req, res) {
+  async changePassword(req, res) {
     const {
-      a_email,
+      a_user_id,
       a_password
+    } = req.user;  
+
+    const {
+      a_password_old,
+      a_password_new
     } = req.body;
 
     try {
-      const user = await this.server
-        .db("t_user")
-        .where({
-          a_email: a_email
-        })
-        .first();
-      if (!user)
-        return res.status(400).json({
-          code: "user-not-exists",
-          message: "A user with that mail address was not found.",
-        });
-
-      const comparePassword = await bcrypt.compare(a_password, user.a_password);
-      if (!comparePassword)
+      const comparePassword = await bcrypt.compare(a_password_old, a_password);
+      if (!comparePassword) {
         return res
-          .status(401)
-          .json({
-            code: "invalid-auth",
-            message: "Invalid authorization."
-          });
+        .status(401)
+        .json({
+          code: "invalid-auth",
+          message: "Invalid authorization."
+        });
+      }
+      
+      const hash = await bcrypt.hash(a_password_new, 10); 
 
+      const update = await this.server.db.table("t_user").update({a_password: hash}).where({a_user_id});
+      if (update == 1) {
+        return res.status(200).json({
+          code: "password-changed",
+          message: "Password changed successfully"
+        });
+      }
+      else {
+        return res.status(500).json({
+          message: "Password couldnt be updated"
+        });
+      }
+
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        message: "Failed to change password"
+      })
+    }
+  }
+
+  async removeUser(req, res) {
+    const {
+      a_email,
+    } = req.user;
+
+    try {
       const del = await this.server
         .db("t_user")
         .where({
@@ -164,7 +189,6 @@ module.exports = class AuthRoutes {
         message: "User deleted",
       });
     } catch (error) {
-      console.error("Failed to login user:");
       console.error(error);
       return res.status(500).json({
         message: "Failed to delete user"

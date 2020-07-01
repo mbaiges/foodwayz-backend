@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "bb65c2f8-92ec-4a99-8c2a-3e6c8e0ea556",
-		"name": "Insomnia",
+		"name": "FoodWayz-API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -9,7 +9,217 @@
 			"name": "Auth",
 			"item": [
 				{
-					"name": "Register",
+					"name": "changePassword",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"a_password_old\":\"user1password\",\r\n    \"a_password_new\":\"user1password2\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/change_password",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"change_password"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										},
+										{
+											"key": "scope",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"a_password_old\":\"user1password\",\r\n    \"a_password_new\":\"user1password2\"\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3002/change_password",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3002",
+									"path": [
+										"change_password"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "deleteAccount",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/delete_account",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"delete_account"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										},
+										{
+											"key": "scope",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:3002/delete_account",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "3002",
+									"path": [
+										"delete_account"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "register",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -24,7 +234,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"a_name\": \"user1\",\r\n  \"a_email\": \"user1@gmail.com\",\r\n  \"a_password\": \"1234\"\r\n}"
+							"raw": "{\r\n  \"a_name\": \"user1\",\r\n  \"a_email\": \"user1@email.com\",\r\n  \"a_password\": \"user1password\"\r\n}"
 						},
 						"url": {
 							"raw": "http://127.0.0.1:3002/register",
@@ -58,7 +268,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"a_name\": \"user1\",\r\n  \"a_email\": \"user1@gmail.com\",\r\n  \"a_password\": \"1234\"\r\n}"
+									"raw": "{\r\n  \"a_name\": \"user1\",\r\n  \"a_email\": \"user1@email.com\",\r\n  \"a_password\": \"user1password\"\r\n}"
 								},
 								"url": {
 									"raw": "http://127.0.0.1:3002/register",
@@ -99,7 +309,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"email\": \"user1@email.com\",\r\n  \"password\": \"user1password\"\r\n}"
+							"raw": "{\r\n  \"a_email\": \"user1@email.com\",\r\n  \"a_password\": \"user1password\"\r\n}"
 						},
 						"url": {
 							"raw": "http://127.0.0.1:3002/login",
@@ -133,7 +343,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"email\": \"user1@email.com\",\r\n  \"password\": \"user1password\"\r\n}"
+									"raw": "{\r\n  \"a_email\": \"user1@email.com\",\r\n  \"a_password\": \"user1password\"\r\n}"
 								},
 								"url": {
 									"raw": "http://127.0.0.1:3002/login",
@@ -162,14 +372,47 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Authorized",
+			"name": "Review",
 			"item": [
 				{
-					"name": "Review",
-					"item": [
+					"name": "addReview",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"a_desc\": \"BuEnArDoOo bREOoO\",\r\n  \"a_score\": 1\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/review/food/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"review",
+								"food",
+								"2"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "addReview",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "POST",
 								"header": [
 									{
@@ -202,53 +445,52 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"a_desc\": \"BuEnArDoOo bREOoO\",\r\n  \"a_score\": 1\r\n}"
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/review/food/2",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"review",
-												"food",
-												"2"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "delReview",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/review/4",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"review",
+								"4"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "delReview",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "DELETE",
 								"header": [
 									{
@@ -280,52 +522,48 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/review/4",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"review",
-												"4"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getReview",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/review/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"review",
+								"2"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getReview",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -353,48 +591,49 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/review/2",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"review",
-												"2"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getReviewsByFood",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/review/food/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"review",
+								"food",
+								"1"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getReviewsByFood",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -423,49 +662,49 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/review/food/1",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"review",
-												"food",
-												"1"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getReviewsByUser",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/review/user/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"review",
+								"user",
+								"2"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getReviewsByUser",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -494,56 +733,94 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/review/user/2",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"review",
-												"user",
-												"2"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{jwt}}",
+						"type": "string"
+					},
+					{
+						"key": "scope",
+						"value": "",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "3dd02f3c-7848-4cfb-87f6-eea587a39740",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				},
 				{
-					"name": "Restaurant chain",
-					"item": [
+					"listen": "test",
+					"script": {
+						"id": "8e1163a2-2294-4f35-9db6-136b0475c95a",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Restaurant chain",
+			"item": [
+				{
+					"name": "addRestChain",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"a_name\": \"Starbucks\",\r\n  \"a_score\": null,\r\n  \"a_img_url\": null\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/restaurant_chain",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"restaurant_chain"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "addRestChain",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "POST",
 								"header": [
 									{
@@ -574,51 +851,52 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"a_name\": \"Starbucks\",\r\n  \"a_score\": null,\r\n  \"a_img_url\": null\r\n}"
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/restaurant_chain",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"restaurant_chain"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "modifyRestChain",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/restaurant_chain/3",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"restaurant_chain",
+								"3"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "modifyRestChain",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "PUT",
 								"header": [
 									{
@@ -650,52 +928,52 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/restaurant_chain/3",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"restaurant_chain",
-												"3"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "delRestChain",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/restaurant_chain/3",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"restaurant_chain",
+								"3"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "delRestChain",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "DELETE",
 								"header": [
 									{
@@ -727,52 +1005,48 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/restaurant_chain/3",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"restaurant_chain",
-												"3"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getRestChain",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/restaurant_chain/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"restaurant_chain",
+								"2"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getRestChain",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -800,48 +1074,48 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/restaurant_chain/2",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"restaurant_chain",
-												"2"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getAllRestChain",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/restaurant_chain/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"restaurant_chain",
+								""
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getAllRestChain",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -869,55 +1143,96 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/restaurant_chain/",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"restaurant_chain",
-												""
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{jwt}}",
+						"type": "string"
+					},
+					{
+						"key": "scope",
+						"value": "",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "31cb41c5-060c-4d25-8ea6-bbf728a36434",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				},
 				{
-					"name": "Owns",
-					"item": [
+					"listen": "test",
+					"script": {
+						"id": "5aeb11c0-3485-43e0-a9b1-72240e9a76fb",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Owns",
+			"item": [
+				{
+					"name": "addOwns",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/owner/restaurant/9",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"owner",
+								"restaurant",
+								"9"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "addOwns",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "POST",
 								"header": [
 									{
@@ -950,53 +1265,53 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/owner/restaurant/9",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"owner",
-												"restaurant",
-												"9"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "deleteOwns",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/owner/restaurant/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"owner",
+								"restaurant",
+								"1"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "deleteOwns",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "DELETE",
 								"header": [
 									{
@@ -1029,53 +1344,49 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/owner/restaurant/1",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"owner",
-												"restaurant",
-												"1"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getOwns",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/owner/restaurant/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"owner",
+								"restaurant",
+								""
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getOwns",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -1104,49 +1415,49 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/owner/restaurant/",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"owner",
-												"restaurant",
-												""
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getOwnersByRestaurant",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/restaurant/1/owner",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"restaurant",
+								"1",
+								"owner"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getOwnersByRestaurant",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -1175,56 +1486,94 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/restaurant/1/owner",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"restaurant",
-												"1",
-												"owner"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{jwt}}",
+						"type": "string"
+					},
+					{
+						"key": "scope",
+						"value": "",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "562d3320-3e26-453d-9c8f-8710e45cfb31",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				},
 				{
-					"name": "Owner",
-					"item": [
+					"listen": "test",
+					"script": {
+						"id": "b4fd60d8-339a-49fb-86d5-bfc77af5f3c9",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Owner",
+			"item": [
+				{
+					"name": "makeOwner",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/owner",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"owner"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "makeOwner",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "POST",
 								"header": [
 									{
@@ -1255,51 +1604,51 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/owner",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"owner"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "updatePremium",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"a_premium_level\": 2\r\n}"
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/owner",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"owner"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "updatePremium",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "PUT",
 								"header": [
 									{
@@ -1330,51 +1679,51 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"a_premium_level\": 2\r\n}"
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/owner",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"owner"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "removeOwner",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/owner",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"owner"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "removeOwner",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "DELETE",
 								"header": [
 									{
@@ -1405,58 +1754,95 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/owner",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"owner"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{jwt}}",
+						"type": "string"
+					},
+					{
+						"key": "scope",
+						"value": "",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "cb1f1e61-eebb-4d46-971b-b82f7c0db3aa",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				},
 				{
-					"name": "User",
-					"item": [
+					"listen": "test",
+					"script": {
+						"id": "6f765008-b556-409e-8204-b0905cba0c28",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "ModifyUser",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"a_name\": \"roberto\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/user/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"user",
+								""
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "ModifyUser",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "PUT",
 								"header": [
 									{
@@ -1488,52 +1874,52 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"a_name\": \"roberto\"\r\n}"
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/user/",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"user",
-												""
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "deleteUser",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/user/4",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"user",
+								"4"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "deleteUser",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "DELETE",
 								"header": [
 									{
@@ -1565,52 +1951,43 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/user/4",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"user",
-												"4"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getUser",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/user",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"user"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getUser",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -1633,43 +2010,44 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/user",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"user"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getUsers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/user/all",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"user",
+								"all"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getUsers",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -1693,44 +2071,45 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/user/all",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"user",
-												"all"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getUsersByChar",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/characteristic/1/user",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"characteristic",
+								"1",
+								"user"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getUsersByChar",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -1755,52 +2134,94 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/characteristic/1/user",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"characteristic",
-												"1",
-												"user"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{jwt}}",
+						"type": "string"
+					},
+					{
+						"key": "scope",
+						"value": "",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "83380ce2-86b5-43eb-b2f7-13973f4e029b",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				},
 				{
-					"name": "Restaurants",
-					"item": [
+					"listen": "test",
+					"script": {
+						"id": "1616187e-a7af-426a-bb4c-a92503fdc4fd",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Restaurants",
+			"item": [
+				{
+					"name": "addRest",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"a_name\": \"Pizzería mi Casa\",\r\n  \"a_state\": \"alabama\",\r\n  \"a_city\": \"Mexico City\",\r\n  \"a_postal_code\": \"200\",\r\n  \"a_rest_chain_id\": 200,\r\n  \"a_address\": \"calle falsa 200\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/restaurant",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"restaurant"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "addRest",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "POST",
 								"header": [
 									{
@@ -1831,51 +2252,53 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"a_name\": \"Pizzería mi Casa\",\r\n  \"a_state\": \"alabama\",\r\n  \"a_city\": \"Mexico City\",\r\n  \"a_postal_code\": \"200\",\r\n  \"a_rest_chain_id\": 200,\r\n  \"a_address\": \"calle falsa 200\"\r\n}"
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/restaurant",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"restaurant"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "addRestImages",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"a_image_url\": \"https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Frestaurant_chains%2FKansas.png?alt=media&token=e7f29ba5-b6c5-4be1-8628-c85678125795\"\r\n}"
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/restaurant/1/image",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"restaurant",
+								"1",
+								"image"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "addRestImages",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "POST",
 								"header": [
 									{
@@ -1908,53 +2331,52 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"a_image_url\": \"https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Frestaurant_chains%2FKansas.png?alt=media&token=e7f29ba5-b6c5-4be1-8628-c85678125795\"\r\n}"
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/restaurant/1/image",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"restaurant",
-												"1",
-												"image"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "modifyRest",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"a_name\": \"Pizzería mi Casa\",\r\n  \"a_score\": 3,\r\n  \"a_rest_chain_id\": null\r\n}"
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/restaurant/9",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"restaurant",
+								"9"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "modifyRest",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "PUT",
 								"header": [
 									{
@@ -1986,52 +2408,54 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"a_name\": \"Pizzería mi Casa\",\r\n  \"a_score\": 3,\r\n  \"a_rest_chain_id\": null\r\n}"
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/restaurant/9",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"restaurant",
-												"9"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "modifyRestImage",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"a_image_url\": \"aaaaaaa\"\r\n}"
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/restaurant/2/image/3",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"restaurant",
+								"2",
+								"image",
+								"3"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "modifyRestImage",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "PUT",
 								"header": [
 									{
@@ -2065,54 +2489,54 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"a_image_url\": \"aaaaaaa\"\r\n}"
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/restaurant/2/image/3",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"restaurant",
-												"2",
-												"image",
-												"3"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "delRestImage",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/restaurant/9/image/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"restaurant",
+								"9",
+								"image",
+								"2"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "delRestImage",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "DELETE",
 								"header": [
 									{
@@ -2146,54 +2570,52 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/restaurant/9/image/2",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"restaurant",
-												"9",
-												"image",
-												"2"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "delRest",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/restaurant/5",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"restaurant",
+								"5"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "delRest",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "DELETE",
 								"header": [
 									{
@@ -2225,52 +2647,47 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/restaurant/5",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"restaurant",
-												"5"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getAllRests",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/restaurant",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"restaurant"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getAllRests",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -2297,47 +2714,48 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/restaurant",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"restaurant"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getRest",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/restaurant/9",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"restaurant",
+								"9"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getRest",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -2365,48 +2783,49 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/restaurant/9",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"restaurant",
-												"9"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getAllRestImages",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/restaurant/1/image",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"restaurant",
+								"1",
+								"image"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getAllRestImages",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -2435,49 +2854,50 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/restaurant/1/image",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"restaurant",
-												"1",
-												"image"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getRestImage",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/restaurant/9/image/3",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"restaurant",
+								"9",
+								"image",
+								"3"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getRestImage",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -2507,57 +2927,94 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/restaurant/9/image/3",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"restaurant",
-												"9",
-												"image",
-												"3"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{jwt}}",
+						"type": "string"
+					},
+					{
+						"key": "scope",
+						"value": "",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "3938da68-849e-4db3-a595-cf3bab4331fc",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				},
 				{
-					"name": "Food",
-					"item": [
+					"listen": "test",
+					"script": {
+						"id": "3ae9d2d9-cc2d-4b6a-912b-4c0c9b4cfa22",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Food",
+			"item": [
+				{
+					"name": "addFood",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"a_title\": \"Fideos a la crema\",\r\n  \"a_description\": 4,\r\n  \"a_score\": 3,\r\n  \"a_type_id\": 1,\r\n  \"a_rest_id\": 1,\r\n  \"a_image_url\": null\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/food",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"food"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "addFood",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "POST",
 								"header": [
 									{
@@ -2588,51 +3045,52 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"a_title\": \"Fideos a la crema\",\r\n  \"a_description\": 4,\r\n  \"a_score\": 3,\r\n  \"a_type_id\": 1,\r\n  \"a_rest_id\": 1,\r\n  \"a_image_url\": null\r\n}"
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/food",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"food"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "editFood",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"a_title\": \"Paloma al horno\",\r\n  \"a_description\": \"Fina comida peruana\",\r\n  \"a_score\": 5\r\n}"
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/food/23",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"food",
+								"23"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "editFood",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "PUT",
 								"header": [
 									{
@@ -2664,52 +3122,48 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"a_title\": \"Paloma al horno\",\r\n  \"a_description\": \"Fina comida peruana\",\r\n  \"a_score\": 5\r\n}"
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/food/23",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"food",
-												"23"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "deleteFood",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/food/5",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"food",
+								"5"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "deleteFood",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "DELETE",
 								"header": [
 									{
@@ -2737,48 +3191,43 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/food/5",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"food",
-												"5"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getAllFoods",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/food",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"food"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getAllFoods",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -2801,43 +3250,54 @@
 									]
 								}
 							},
-							"response": [
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getFood",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
 								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/food",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"food"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
 								}
 							]
 						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/food/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"food",
+								"1"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "getFood",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"auth": {
 									"type": "bearer",
 									"bearer": [
@@ -2871,54 +3331,49 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{jwt}}",
-													"type": "string"
-												}
-											]
-										},
-										"method": "GET",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/food/1",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"food",
-												"1"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getFoodByChar",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/characteristic/1/food",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"characteristic",
+								"1",
+								"food"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getFoodByChar",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -2947,49 +3402,49 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/characteristic/1/food",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"characteristic",
-												"1",
-												"food"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getFoodByIngr",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/ingredient/1/food",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"ingredient",
+								"1",
+								"food"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getFoodByIngr",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -3018,56 +3473,94 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/ingredient/1/food",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"ingredient",
-												"1",
-												"food"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{jwt}}",
+						"type": "string"
+					},
+					{
+						"key": "scope",
+						"value": "",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "54a72a63-5f81-4fc4-8c28-0b28c95d99ea",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				},
 				{
-					"name": "Characteristics",
-					"item": [
+					"listen": "test",
+					"script": {
+						"id": "be839a0f-b252-4756-8328-6251551eaa40",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Characteristics",
+			"item": [
+				{
+					"name": "addChar",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"vegano\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/characteristic",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"characteristic"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "addChar",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "POST",
 								"header": [
 									{
@@ -3098,51 +3591,54 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"vegano\"\r\n}"
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/characteristic",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"characteristic"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "linkCharToFood",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/food/1/characteristic/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"food",
+								"1",
+								"characteristic",
+								"2"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "linkCharToFood",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "POST",
 								"header": [
 									{
@@ -3176,54 +3672,54 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/food/1/characteristic/2",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"food",
-												"1",
-												"characteristic",
-												"2"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "linkCharToUser",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/user/1/characteristic/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"user",
+								"1",
+								"characteristic",
+								"2"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "linkCharToUser",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "POST",
 								"header": [
 									{
@@ -3257,54 +3753,52 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/user/1/characteristic/2",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"user",
-												"1",
-												"characteristic",
-												"2"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "editChar",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"celiaco\"\r\n}"
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/characteristic/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"characteristic",
+								"1"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "editChar",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "PUT",
 								"header": [
 									{
@@ -3336,52 +3830,48 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"celiaco\"\r\n}"
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/characteristic/1",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"characteristic",
-												"1"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "delChar",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/characteristic/4",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"characteristic",
+								"4"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "delChar",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "DELETE",
 								"header": [
 									{
@@ -3409,48 +3899,54 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/characteristic/4",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"characteristic",
-												"4"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "unlinkCharToFood",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/food/1/characteristic/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"food",
+								"1",
+								"characteristic",
+								"2"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "unlinkCharToFood",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "DELETE",
 								"header": [
 									{
@@ -3484,54 +3980,54 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/food/1/characteristic/2",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"food",
-												"1",
-												"characteristic",
-												"2"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "unlinkCharToUser",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/user/1/characteristic/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"user",
+								"1",
+								"characteristic",
+								"2"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "unlinkCharToUser",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "DELETE",
 								"header": [
 									{
@@ -3565,54 +4061,49 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/user/1/characteristic/2",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"user",
-												"1",
-												"characteristic",
-												"2"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getCharbyFood",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/food/1/characteristic",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"food",
+								"1",
+								"characteristic"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getCharbyFood",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -3641,49 +4132,44 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/food/1/characteristic",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"food",
-												"1",
-												"characteristic"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getChar",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/characteristic/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"characteristic",
+								"1"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getChar",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -3707,44 +4193,43 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/characteristic/1",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"characteristic",
-												"1"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getAllChars",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/characteristic",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"characteristic"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getAllChars",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -3767,43 +4252,45 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/characteristic",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"characteristic"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getCharsByUser",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/user/2/characteristic",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"user",
+								"2",
+								"characteristic"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getCharsByUser",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -3828,52 +4315,94 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/user/2/characteristic",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"user",
-												"2",
-												"characteristic"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{jwt}}",
+						"type": "string"
+					},
+					{
+						"key": "scope",
+						"value": "",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "dc87fb0a-537d-4f96-ae94-fe7648d8534e",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				},
 				{
-					"name": "Ingredient",
-					"item": [
+					"listen": "test",
+					"script": {
+						"id": "89c03a7f-203b-446a-815d-071a64dd1e56",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Ingredient",
+			"item": [
+				{
+					"name": "addIngredient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"ketchup\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/ingredient",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"ingredient"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "addIngredient",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "POST",
 								"header": [
 									{
@@ -3904,51 +4433,54 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"ketchup\"\r\n}"
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/ingredient",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"ingredient"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "linkIngrToFood",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/food/2/ingredient/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"food",
+								"2",
+								"ingredient",
+								"1"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "linkIngrToFood",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "POST",
 								"header": [
 									{
@@ -3982,54 +4514,52 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/food/2/ingredient/1",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"food",
-												"2",
-												"ingredient",
-												"1"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "editIngredient",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"pepino\"\r\n}"
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/ingredient/5",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"ingredient",
+								"5"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "editIngredient",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "PUT",
 								"header": [
 									{
@@ -4061,52 +4591,48 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"pepino\"\r\n}"
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/ingredient/5",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"ingredient",
-												"5"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "delIngredient",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/ingredient/5",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"ingredient",
+								"5"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "delIngredient",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "DELETE",
 								"header": [
 									{
@@ -4134,48 +4660,54 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/ingredient/5",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"ingredient",
-												"5"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "unlinkIngrToFood",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/food/2/ingredient/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"food",
+								"2",
+								"ingredient",
+								"1"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "unlinkIngrToFood",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "DELETE",
 								"header": [
 									{
@@ -4209,54 +4741,49 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/food/2/ingredient/1",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"food",
-												"2",
-												"ingredient",
-												"1"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getIngrByFood",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/food/2/ingredient",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"food",
+								"2",
+								"ingredient"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getIngrByFood",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -4285,49 +4812,44 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/food/2/ingredient",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"food",
-												"2",
-												"ingredient"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getIngredient",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/ingredient/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"ingredient",
+								"1"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getIngredient",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -4351,44 +4873,43 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/ingredient/1",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"ingredient",
-												"1"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getAllIngredients",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/ingredient",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"ingredient"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getAllIngredients",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -4411,50 +4932,94 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/ingredient",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"ingredient"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{jwt}}",
+						"type": "string"
+					},
+					{
+						"key": "scope",
+						"value": "",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c5c9fbb4-1287-49bd-8a00-6b36da5a4fa0",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				},
 				{
-					"name": "Type",
-					"item": [
+					"listen": "test",
+					"script": {
+						"id": "a7606673-fdaa-48d7-b58d-fcbdba97f2c3",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Type",
+			"item": [
+				{
+					"name": "addType",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"a_type_name\": \"sopita\",\r\n  \"a_image_url\": null\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/type",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"type"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "addType",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "POST",
 								"header": [
 									{
@@ -4485,51 +5050,52 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"a_type_name\": \"sopita\",\r\n  \"a_image_url\": null\r\n}"
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/type",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"type"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "modifyType",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"a_type_name\": \"sopita\",\r\n  \"a_image_url\": \"null\"\r\n}"
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/type/8",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"type",
+								"8"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "modifyType",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "PUT",
 								"header": [
 									{
@@ -4561,52 +5127,52 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"a_type_name\": \"sopita\",\r\n  \"a_image_url\": \"null\"\r\n}"
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/type/8",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"type",
-												"8"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "delType",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
+						"url": {
+							"raw": "http://127.0.0.1:3002/type/8",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"type",
+								"8"
+							]
+						}
+					},
+					"response": [
 						{
-							"name": "delType",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "DELETE",
 								"header": [
 									{
@@ -4638,52 +5204,48 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "http://127.0.0.1:3002/type/8",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"type",
-												"8"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getType",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/type/3",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"type",
+								"3"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getType",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -4711,48 +5273,47 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/type/3",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"type",
-												"3"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getAllTypes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:3002/type",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3002",
+							"path": [
+								"type"
 							]
-						},
+						}
+					},
+					"response": [
 						{
-							"name": "getAllTypes",
-							"request": {
+							"name": "Response_200",
+							"originalRequest": {
 								"method": "GET",
 								"header": [
 									{
@@ -4779,47 +5340,13 @@
 									]
 								}
 							},
-							"response": [
-								{
-									"name": "Response_200",
-									"originalRequest": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"url": {
-											"raw": "http://127.0.0.1:3002/type",
-											"protocol": "http",
-											"host": [
-												"127",
-												"0",
-												"0",
-												"1"
-											],
-											"port": "3002",
-											"path": [
-												"type"
-											]
-										}
-									},
-									"code": 200,
-									"_postman_previewlanguage": "Text",
-									"header": [],
-									"cookie": [],
-									"body": ""
-								}
-							]
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				}
 			],
 			"auth": {
@@ -4829,9 +5356,36 @@
 						"key": "token",
 						"value": "{{jwt}}",
 						"type": "string"
+					},
+					{
+						"key": "scope",
+						"value": "",
+						"type": "string"
 					}
 				]
 			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "68ecb78c-8207-49a5-9cb7-e67e93adcc80",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "84139994-22c5-4a0c-bbf0-71d6e3147603",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
 			"protocolProfileBehavior": {}
 		}
 	],
