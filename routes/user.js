@@ -37,7 +37,7 @@ module.exports = class UserRoute {
                 res.status(404).json(message.notFound('users', null));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -53,7 +53,7 @@ module.exports = class UserRoute {
                 res.status(404).json(message.notFound('user', id));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -107,7 +107,7 @@ module.exports = class UserRoute {
                 res.status(404).json(message.notFound('user', id));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -130,7 +130,7 @@ module.exports = class UserRoute {
                 res.status(404).json(message.notFound('user', id));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 };

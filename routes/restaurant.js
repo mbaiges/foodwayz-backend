@@ -35,7 +35,7 @@ module.exports = class RestaurantRoute {
             res.status(200).json(message.fetch('restaurant', restaurants));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -106,7 +106,7 @@ module.exports = class RestaurantRoute {
                 res.status(404).json(message.notFound('restaurant', id));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -141,7 +141,7 @@ module.exports = class RestaurantRoute {
             res.status(200).json(message.put('restaurant', rest));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -159,7 +159,7 @@ module.exports = class RestaurantRoute {
                 res.status(404).json(message.notFound('restaurant', id));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -210,7 +210,7 @@ module.exports = class RestaurantRoute {
                 res.status(404).json(message.notFound('images from the restaurant', id));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -284,7 +284,7 @@ module.exports = class RestaurantRoute {
                 res.status(404).json(message.notFound('restaurant image', imageId));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -310,15 +310,15 @@ module.exports = class RestaurantRoute {
             const del = await this.server.db('t_restaurant_images')
                         .where({a_rest_id: id, a_image_id: imageId})
                         .del();
-            
-            if(del.length == 0)
+            console.log(del);
+            if(del == 0)
                 res.status(404).json(message.notFound('restaurant image', imageId));
             else
-                res.status(200).json(message.delete('restaurant image', [del]));
+                res.status(200).json(message.delete('restaurant image', del));
                 
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -356,7 +356,7 @@ module.exports = class RestaurantRoute {
                 
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 

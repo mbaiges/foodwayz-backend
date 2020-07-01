@@ -33,7 +33,7 @@ module.exports = class FoodIngredientRoute {
             }
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -50,7 +50,7 @@ module.exports = class FoodIngredientRoute {
 
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -63,7 +63,7 @@ module.exports = class FoodIngredientRoute {
 
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
         
     }
@@ -86,7 +86,7 @@ module.exports = class FoodIngredientRoute {
             res.status(200).json(message.fetch(`food by ingredients id ${ingrId}`, foods));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 

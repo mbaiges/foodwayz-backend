@@ -30,14 +30,14 @@ module.exports = class ReviewRoute {
             let rev = await this.server.db('t_review').where({ 
                 a_review_id: id 
             });
-            if(rev) {
+            if(rev.length != 0) {
                 if (Array.isArray(rev))
                     rev = rev[0];
 
                 rev.a_user = (await this.userRoute.getUsersObjects({ filters: { a_user_id: rev.a_user_id } }))[0];
                 delete rev.a_user_id;
 
-                rev.a_food = (await this.userRoute.getUsersObjects({ filters: { a_food_id: rev.a_food_id } }))[0];
+                rev.a_food = (await this.foodRoute.getFoodsObjects({ filters: { a_food_id: rev.a_food_id } }))[0];
                 delete rev.a_food_id;
 
                 res.status(200).json(message.fetch('review', rev));
@@ -46,7 +46,7 @@ module.exports = class ReviewRoute {
                 res.status(404).json(message.notFound('review', id)); 
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -59,15 +59,14 @@ module.exports = class ReviewRoute {
                 a_review_id: id,
                 a_user_id: userId
             }).del();
-
-            if(rev) 
+            if(rev != 0) 
                 res.status(200).json(message.delete('review', rev));
             else
                 res.status(404).json(message.notFound('review', id));
 
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -76,7 +75,7 @@ module.exports = class ReviewRoute {
         const userId = req.user.a_user_id;
         const { a_desc, a_score } = req.body;
 
-        console.log(score);
+        console.log(a_score);
 
         const params = {
             a_desc: [a_desc, typeof(a_desc) === 'string'],
@@ -109,7 +108,7 @@ module.exports = class ReviewRoute {
         } catch (error) {
             console.log(error);
             if(error.detail == null || error.detail == undefined)
-                res.status(500).json({message: error});
+                res.status(500).json({message: error.message});
             else
                 res.status(409).json(message.conflict('review', error.detail, null));
         }
@@ -120,10 +119,12 @@ module.exports = class ReviewRoute {
 
         try {
             let revs = await this.server.db('t_review').where({a_food_id: foodId});
-            if (revs) {
-                for(r in revs) {
-                    r.a_user = (await this.userRoute.getUsersObjects({ filters: { a_user_id: r.a_user_id } }))[0];
-                    delete r.a_user_id;
+            console.log(revs);
+            if (revs.length != 0) {
+                
+                for (let idx = 0; idx < revs.length; idx++) {
+                    revs[idx].a_user = (await this.userRoute.getUsersObjects({ filters: { a_user_id: revs[idx].a_user_id } }))[0];
+                    delete revs[idx].a_user_id;
                 }
 
                 res.status(200).json(message.fetch('reviews by food', revs));
@@ -133,7 +134,7 @@ module.exports = class ReviewRoute {
             
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
         
     }
@@ -144,7 +145,7 @@ module.exports = class ReviewRoute {
         try {
             let revs = await this.server.db('t_review').where({a_user_id: userId});
         
-            if (revs) {
+            if (revs.length != 0) {
                 for (let i = 0; i < revs.length; i++) {
                     revs[i].a_food = (await this.foodRoute.getFoodsObjects({ filters: { a_food_id: revs[i].a_food_id } }))[0];
                     delete revs[i].a_food_id;
@@ -155,7 +156,7 @@ module.exports = class ReviewRoute {
                 res.status(404).json(message.notFound('reviews by user', userId))
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 

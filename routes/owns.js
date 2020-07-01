@@ -44,7 +44,7 @@ module.exports = class OwnsRoute {
             }
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -70,7 +70,7 @@ module.exports = class OwnsRoute {
                 res.status(404).json(message.notFound('ownership of the restaurant', restId));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -86,7 +86,7 @@ module.exports = class OwnsRoute {
 
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
         
     }
@@ -102,7 +102,7 @@ module.exports = class OwnsRoute {
             res.status(200).json(message.fetch(`owners by restaurant id ${restId}`, owners));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 

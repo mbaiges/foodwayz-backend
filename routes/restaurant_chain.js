@@ -18,11 +18,11 @@ module.exports = class RestaurantChainRoute {
 
     async getAll(req, res) {
         try {
-            const chain = this.getRestaurantChainsObjects();
+            const chain = await this.getRestaurantChainsObjects();
             res.status(200).json(message.fetch('restaurant chain', chain));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -61,7 +61,7 @@ module.exports = class RestaurantChainRoute {
         } catch (error) {
             console.log(error);
             if(error.detail == null || error.detail == undefined)
-                res.status(500).json({message: error});
+                res.status(500).json({message: error.message});
             else
                 res.status(409).json(message.conflict('restaurant chain', error.detail, null));
         }
@@ -99,11 +99,14 @@ module.exports = class RestaurantChainRoute {
                 a_image_url: a_image_url
             }).where({ a_rest_chain_id: id }).returning('*');
 
-            res.status(200).json(message.put('restaurant chain', chain));
+            if(chain.length == 0)
+                res.status(404).json(message.notFound('restaurant chain', id));
+            else
+                res.status(200).json(message.put('restaurant chain', chain));
         } catch (error) {
             console.log(error);
             if(error.detail == null || error.detail == undefined)
-                res.status(500).json({message: error});
+                res.status(500).json({message: error.message});
             else
                 res.status(409).json(message.conflict('restaurant chain', error.detail, null));
                 
@@ -115,15 +118,15 @@ module.exports = class RestaurantChainRoute {
         const { id } = req.params;
 
         try {
-            const restChain = this.getRestaurantChainsObjects({ filters: {a_rest_chain_id: id} });
-            if(!restChain)
+            const restChain = await this.getRestaurantChainsObjects({ filters: {a_rest_chain_id: id} });
+            if(restChain.length == 0)
                 res.status(404).json(message.notFound('t_restaurant_chain', id));
             else 
                 res.status(200).json(message.fetch('t_restaurant_chain', restChain));
             
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
@@ -134,7 +137,7 @@ module.exports = class RestaurantChainRoute {
         let restChains;
         if (!filters)
             restChains = await this.server.db('t_restaurant_chain');
-        if (Array.isArray(filters.a_rest_chain_id)) {
+        else if (Array.isArray(filters.a_rest_chain_id)) {
             let ids = [...filters.a_rest_chain_id];
             delete filters.a_rest_chain_id;
             restChains = await this.server.db('t_restaurant_chain').whereIn('a_rest_chain_id', ids).where(filters);
@@ -160,7 +163,7 @@ module.exports = class RestaurantChainRoute {
                 res.status(404).json(message.notFound('restaurant chain', id));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({message: error.message});
         }
     }
 
