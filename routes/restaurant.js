@@ -309,10 +309,11 @@ module.exports = class RestaurantRoute {
                 a_rest_id: id,
                 a_image_id: imageId
             });
-            if (rest_image.length != 0)
-                res.status(200).json(message.fetch('restaurant image', rest_image));
-            else
-                res.status(404).json(message.notFound('restaurant image', imageId));
+
+            if (!Array.isArray(rest_image)) {
+                rest_image = [rest_image];
+            }
+            res.status(200).json(message.fetch('restaurant image', rest_image));
         } catch (error) {
             console.log(error);
             res.status(500).json({message: error.message});
