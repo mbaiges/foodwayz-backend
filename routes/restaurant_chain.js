@@ -22,6 +22,7 @@ module.exports = class RestaurantChainRoute {
             res.status(200).json(message.fetch('restaurant chain', chain));
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -59,7 +60,10 @@ module.exports = class RestaurantChainRoute {
             res.status(200).json(message.post('restaurant chain', chain));
         } catch (error) {
             console.log(error);
-            res.status(409).json(message.conflict('restaurant chain', error.detail, null));
+            if(error.detail == null || error.detail == undefined)
+                res.status(500).json({message: error});
+            else
+                res.status(409).json(message.conflict('restaurant chain', error.detail, null));
         }
     }
 
@@ -98,7 +102,11 @@ module.exports = class RestaurantChainRoute {
             res.status(200).json(message.put('restaurant chain', chain));
         } catch (error) {
             console.log(error);
-            res.status(409).json(message.conflict('restaurant chain', error.detail, null));
+            if(error.detail == null || error.detail == undefined)
+                res.status(500).json({message: error});
+            else
+                res.status(409).json(message.conflict('restaurant chain', error.detail, null));
+                
         }
 
     }
@@ -115,6 +123,7 @@ module.exports = class RestaurantChainRoute {
             
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -151,6 +160,7 @@ module.exports = class RestaurantChainRoute {
                 res.status(404).json(message.notFound('restaurant chain', id));
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 

@@ -35,6 +35,7 @@ module.exports = class RestaurantRoute {
             res.status(200).json(message.fetch('restaurant', restaurants));
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -54,14 +55,14 @@ module.exports = class RestaurantRoute {
 
             const owner = await this.server.db('t_owner').where({
                 a_user_id: req.user.a_user_id
-            }).first();
+            });
             if (owner.length === 0) return res.status(401).json(message.unauth('add restaurant', 'Not registered as owner'));
 
             if (a_rest_chain_id) {
                 const rest_chain = await this.server.db('t_restaurant_chain').where({
                     a_rest_chain_id: a_rest_chain_id
                 }).first();
-                if (rest_chain) return res.status(404).json(message.notFound('restaurant chain', a_rest_chain_id));
+                if (!rest_chain) return res.status(404).json(message.notFound('restaurant chain', a_rest_chain_id));
             }
 
             const exists = await this.server.db('t_restaurant').where({
@@ -100,11 +101,12 @@ module.exports = class RestaurantRoute {
             } = req.params;
             const response = await this.server.db('t_restaurant').where('a_rest_id', '=', id).del();
             if (response != 0)
-                res.status(200).json(message.delete('restaurant', [response]));
+                res.status(200).json(message.delete('restaurant', response));
             else
                 res.status(404).json(message.notFound('restaurant', id));
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -139,6 +141,7 @@ module.exports = class RestaurantRoute {
             res.status(200).json(message.put('restaurant', rest));
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -148,7 +151,7 @@ module.exports = class RestaurantRoute {
                 id
             } = req.params;
             let rest = await this.getRestaurantsObjects({ filters: {a_rest_id: id} });
-            if (rest) {
+            if (rest.length != 0) {
                 rest = rest[0];
                 res.status(200).json(message.fetch('restaurant', rest));
             }
@@ -156,6 +159,7 @@ module.exports = class RestaurantRoute {
                 res.status(404).json(message.notFound('restaurant', id));
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -200,12 +204,13 @@ module.exports = class RestaurantRoute {
             const rest_images = await this.server.db('t_restaurant_images').select('a_image_id', 'a_image_url').where({
                 a_rest_id: id
             });
-            if (rest_images.length == 1)
-                res.status(200).json(message.fetch('restaurant images', rest_images));
+            if (rest_images.length != 0)
+                res.status(200).json(message.fetch('images from the restaurant', rest_images));
             else
-                res.status(404).json(message.notFound('restaurant', id));
+                res.status(404).json(message.notFound('images from the restaurant', id));
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -251,7 +256,7 @@ module.exports = class RestaurantRoute {
             console.error('Failed to add restaurant image:');
             console.error(error);
             return res.status(500).json({
-                message: 'Failed to add restaurant image'
+                message: error
             });
         }
     }
@@ -268,23 +273,18 @@ module.exports = class RestaurantRoute {
                 res.status(404).json(message.notFound('restaurant', id))
                 return;
             }
-
-            const owns = await this.server.db('t_owns').where({a_user_id: req.user.a_user_id, a_rest_id: id});
-            if (!owns || owns.length == 0) {
-                res.status(401).json(message.unauth('restaurant image add', 'not an owner'));
-                return;
-            }
             
             const rest_image = await this.server.db('t_restaurant_images').select('a_image_id', 'a_image_url').where({
                 a_rest_id: id,
                 a_image_id: imageId
             });
-            if (rest.length == 1)
-                res.status(200).json(message.fetch('restaurant image', rest));
+            if (rest_image.length != 0)
+                res.status(200).json(message.fetch('restaurant image', rest_image));
             else
                 res.status(404).json(message.notFound('restaurant image', imageId));
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -318,12 +318,13 @@ module.exports = class RestaurantRoute {
                 
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
     async modifyImage(req, res) {
         const { id, imageId } = req.params;
-        const { image_url } = req.body;
+        const { a_image_url } = req.body;
         
         try {
             const exists = await this.server.db('t_restaurant').where({
@@ -343,16 +344,19 @@ module.exports = class RestaurantRoute {
     
             const mod = await this.server.db('t_restaurant_images')
                         .where({a_rest_id: id, a_image_id: imageId})
-                        .update({a_image_url: image_url})
-                        .returning("a_image_id", "a_image_url");
+                        .update({a_image_url: a_image_url})
+                        .returning('*');
             
+            
+            console.log(mod);
             if(mod.length == 0)
                 res.status(404).json(message.notFound('restaurant image', imageId));
             else
-                res.status(200).json(message.update('restaurant image', mod));
+                res.status(200).json(message.put('restaurant image', mod));
                 
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 

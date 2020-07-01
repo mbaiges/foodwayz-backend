@@ -20,6 +20,7 @@ module.exports = class FoodTypeRoute {
             res.status(200).json(message.fetch(`food by type id ${typeId}`, foods));
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 

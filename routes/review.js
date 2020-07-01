@@ -46,6 +46,7 @@ module.exports = class ReviewRoute {
                 res.status(404).json(message.notFound('review', id)); 
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -66,6 +67,7 @@ module.exports = class ReviewRoute {
 
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -106,7 +108,10 @@ module.exports = class ReviewRoute {
             res.status(200).json(message.post('review', rev));            
         } catch (error) {
             console.log(error);
-            res.status(409).json(message.conflict('review', error.detail, null));
+            if(error.detail == null || error.detail == undefined)
+                res.status(500).json({message: error});
+            else
+                res.status(409).json(message.conflict('review', error.detail, null));
         }
     }
     
@@ -128,6 +133,7 @@ module.exports = class ReviewRoute {
             
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
         
     }
@@ -149,6 +155,7 @@ module.exports = class ReviewRoute {
                 res.status(404).json(message.notFound('reviews by user', userId))
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 

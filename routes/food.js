@@ -26,6 +26,7 @@ module.exports = class FoodRoute {
             res.status(200).json(message.fetch('foods', foods));
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -74,7 +75,10 @@ module.exports = class FoodRoute {
             res.status(200).json(message.post('food', food));
         } catch (error) {
             console.log(error);
-            res.status(409).json(message.conflict('food', error.detail, null));
+            if(error.detail == null || error.detail == undefined)
+                res.status(500).json({message: error});
+            else
+                res.status(409).json(message.conflict('food', error.detail, null));
         }
     }
 
@@ -140,7 +144,10 @@ module.exports = class FoodRoute {
                 res.status(404).json(message.notFound('food', id));
         } catch (error) {
             console.log(error);
-            res.status(409).json(message.conflict('food', error.detail, null));
+            if(error.detail == null || error.detail == undefined)
+                res.status(500).json({message: error});
+            else
+                res.status(409).json(message.conflict('food', error.detail, null));
         }
     }
 
@@ -157,6 +164,7 @@ module.exports = class FoodRoute {
             }
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -233,6 +241,7 @@ module.exports = class FoodRoute {
                 res.status(404).json(message.notFound('food', id));
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 };

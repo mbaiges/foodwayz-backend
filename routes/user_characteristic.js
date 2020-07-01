@@ -34,6 +34,7 @@ module.exports = class UserCharacteristicRoute {
             }
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -50,6 +51,7 @@ module.exports = class UserCharacteristicRoute {
 
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -61,6 +63,7 @@ module.exports = class UserCharacteristicRoute {
             res.status(200).json(message.fetch(`characteristics by user id ${userId}`, chars));
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
         
     }
@@ -84,6 +87,7 @@ module.exports = class UserCharacteristicRoute {
 
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 

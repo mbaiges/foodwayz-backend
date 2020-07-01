@@ -23,6 +23,7 @@ module.exports = class TypeRoute {
             res.status(200).json(message.fetch('types', types)); 
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -53,6 +54,7 @@ module.exports = class TypeRoute {
             res.status(200).json(message.post('type', type));
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -88,6 +90,7 @@ module.exports = class TypeRoute {
 
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -104,6 +107,7 @@ module.exports = class TypeRoute {
                 res.status(404).json(message.notFound('type', id)); 
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -144,6 +148,7 @@ module.exports = class TypeRoute {
 
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 };

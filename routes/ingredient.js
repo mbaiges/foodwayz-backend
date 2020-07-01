@@ -23,6 +23,7 @@ module.exports = class IngredientRoute {
             res.status(200).json(message.fetch('ingredients', ingr))
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -50,6 +51,7 @@ module.exports = class IngredientRoute {
             
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -80,6 +82,7 @@ module.exports = class IngredientRoute {
 
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -95,6 +98,7 @@ module.exports = class IngredientRoute {
                 res.status(404).json(message.notFound('ingredient', id));
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
@@ -132,6 +136,7 @@ module.exports = class IngredientRoute {
 
         } catch (error) {
             console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
