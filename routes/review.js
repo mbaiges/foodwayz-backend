@@ -124,6 +124,10 @@ module.exports = class ReviewRoute {
             const UserRoute = require('./user');
             this.userRoute = new UserRoute(this.server);
         }
+        if (!this.foodRoute) {
+            const FoodRoute = require('./food');
+            this.foodRoute = new FoodRoute(this.server);
+        }
 
         const { foodId } = req.params;
 
@@ -135,6 +139,8 @@ module.exports = class ReviewRoute {
                 for (let idx = 0; idx < revs.length; idx++) {
                     revs[idx].a_user = (await this.userRoute.getUsersObjects({ filters: { a_user_id: revs[idx].a_user_id } }))[0];
                     delete revs[idx].a_user_id;
+                    revs[idx].a_food = (await this.foodRoute.getFoodsObjects({ filters: { a_food_id: rev.a_food_id } }))[0];
+                    delete rev.a_food_id;
                 }
 
                 res.status(200).json(message.fetch('reviews by food', revs));
@@ -150,6 +156,10 @@ module.exports = class ReviewRoute {
     }
 
     async getRevsByUser(req, res) {
+        if (!this.userRoute) {
+            const UserRoute = require('./user');
+            this.userRoute = new UserRoute(this.server);
+        }
         if (!this.foodRoute) {
             const FoodRoute = require('./food');
             this.foodRoute = new FoodRoute(this.server);
@@ -162,8 +172,10 @@ module.exports = class ReviewRoute {
         
             if (revs.length != 0) {
                 for (let i = 0; i < revs.length; i++) {
-                    revs[i].a_food = (await this.foodRoute.getFoodsObjects({ filters: { a_food_id: revs[i].a_food_id } }))[0];
-                    delete revs[i].a_food_id;
+                    revs[idx].a_user = (await this.userRoute.getUsersObjects({ filters: { a_user_id: revs[idx].a_user_id } }))[0];
+                    delete revs[idx].a_user_id;
+                    revs[idx].a_food = (await this.foodRoute.getFoodsObjects({ filters: { a_food_id: rev.a_food_id } }))[0];
+                    delete rev.a_food_id;
                 }
                 res.status(200).json(message.fetch('reviews by user', revs));
             }
