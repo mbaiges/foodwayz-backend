@@ -69,7 +69,7 @@ module.exports = class FoodIngredientRoute {
     async getIngrsByFoodObjects(foodId) {
         if (!this.ingrRoute) {
             const IngredientRoute = require('./ingredient');
-            this.ingrRoute = new FoodRoute(this.server);
+            this.ingrRoute = new IngredientRoute(this.server);
         }
 
         let ingrs_ids = await this.server.db('t_food_has_ingredient').select("a_ingr_id").where({a_food_id: foodId});
