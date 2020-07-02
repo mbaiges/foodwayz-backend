@@ -138,7 +138,7 @@ module.exports = class ReviewRoute {
         try {
             let revs = await this.server.db('t_review').where({a_food_id: foodId});
             
-            if (revs && revs.length != 0) {
+            if (revs.length != 0) {
                 
                 for (let idx = 0; idx < revs.length; idx++) {
                     revs[idx].a_user = (await this.userRoute.getUsersObjects({ filters: { a_user_id: revs[idx].a_user_id } }))[0];
@@ -174,20 +174,18 @@ module.exports = class ReviewRoute {
         try {
             let revs = await this.server.db('t_review').where({a_user_id: userId});
 
-            if (revs && revs.length != 0) {
-
+            if (revs.length != 0) {
                 for (let idx = 0; idx < revs.length; idx++) {
                     revs[idx].a_user = (await this.userRoute.getUsersObjects({ filters: { a_user_id: revs[idx].a_user_id } }))[0];
                     delete revs[idx].a_user_id;
                     revs[idx].a_food = (await this.foodRoute.getFoodsObjects({ filters: { a_food_id: revs[idx].a_food_id }, detailed: true }))[0];
                     delete revs[idx].a_food_id;
                 }
-
             }
             else
                 revs = [];
 
-            res.status(404).json(message.notFound('reviews by user', revs))
+            res.status(200).json(message.fetch('reviews by user', revs));
         } catch (error) {
             console.log(error);
             res.status(500).json({message: error.message});
