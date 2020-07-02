@@ -264,7 +264,7 @@ module.exports = class RestaurantRoute {
             const {
                 id
             } = req.params;
-            const rest_images = await this.server.db('t_restaurant_images').select('a_image_id', 'a_image_url').where({
+            const rest_images = await this.server.db('t_restaurant_images').select('*').where({
                 a_rest_id: id
             });
 
@@ -280,15 +280,14 @@ module.exports = class RestaurantRoute {
 
     async addImages(req, res) {
 
-        const {
-            id
-        } = req.params;
-
-        const {
-            a_images
-        } = req.body;
-
         try {
+            const {
+                id
+            } = req.params;
+    
+            const {
+                a_images
+            } = req.body;
             const exists = await this.server.db('t_restaurant').where({
                 a_rest_id: id
             });
@@ -305,17 +304,21 @@ module.exports = class RestaurantRoute {
             }
 
             if (Array.isArray(a_images)) {
+                a_images.forEach(img => img.a_rest_id = id);
                 const insert = await this.server.db('t_restaurant_images')
-                    .insert(a_images.map(image => Object.create({a_rest_id: id, a_image_url: image.a_image_id, a_image_extra: image.a_image_extra})))
-                    .returning('a_image_id','a_image_url');
+                    .insert(a_images)
+                    .returning('*');
                 res.status(200).json(message.post('restaurant image', insert));
+            }
+            else {
+                throw {message: '"a_images" is not an array of objects'};
             }
 
         } catch (error) {
             console.error('Failed to add restaurant image:');
             console.error(error);
             return res.status(500).json({
-                message: error
+                message: error.message
             });
         }
     }
@@ -333,12 +336,12 @@ module.exports = class RestaurantRoute {
                 return;
             }
             
-            const rest_image = await this.server.db('t_restaurant_images').select('a_image_id', 'a_image_url').where({
+            const rest_image = await this.server.db('t_restaurant_images').select('*').where({
                 a_rest_id: id,
                 a_image_id: imageId
             });
 
-            if (rest_images.length != 0)
+            if (rest_image.length != 0)
                 res.status(200).json(message.fetch('images from the restaurant', rest_image));
             else
                 res.status(404).json(message.notFound('images from the restaurant', id));

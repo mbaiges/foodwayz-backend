@@ -25,11 +25,6 @@ module.exports = class OwnsRoute {
         const { ownerId, restId } = req.params;
 
         try {
-            const owner = await this.server.db('t_owner').where({
-                a_user_id: ownerId
-            });
-            if (owner.length === 0) return res.status(401).json(message.unauth('give restaurant ownership', 'Not registered as owner'));
-
             const link = await this.server.db('t_owns').where({a_user_id: ownerId, a_rest_id: restId});
             if (link.length != 0) {
                 res.status(409).json(message.conflict('giving ownership to user', 'already exists', link));
@@ -53,10 +48,6 @@ module.exports = class OwnsRoute {
         const { ownerId, restId } = req.params;
 
         try {
-            const owner = await this.server.db('t_owner').where({
-                a_user_id: ownerId
-            });
-            if (owner.length === 0) return res.status(401).json(message.unauth('give restaurant ownership', 'Not registered as owner'));
 
             const unliked = await this.server.db('t_owns').where({a_user_id: ownerId, a_rest_id: restId}).del();
 
@@ -104,10 +95,11 @@ module.exports = class OwnsRoute {
         const { restId } = req.params;
 
         try {
-            let users_ids = await this.server.db('t_owns').select("a_rest_id").where({a_rest_id: restId});
+            let users_ids = await this.server.db('t_owns').select("a_user_id").where({a_rest_id: restId});
+            console.log(users_ids);
             if (users_ids && !Array.isArray(users_ids))
                 users_ids = [users_ids];
-            if (users_ids) {
+            if (users_ids.length != 0) {
                 users_ids = users_ids.map(u => u.a_user_id);
             }
             const owners = await this.userRoute.getUsersObjects({ filters: { a_user_id: users_ids } });
