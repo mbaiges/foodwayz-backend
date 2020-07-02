@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const jetpack = require('fs-jetpack');
+//const sgMail = require('@sendgrid/mail');
 
 const AuthMiddleware = require('./middleware/auth');
 
@@ -29,6 +30,17 @@ module.exports = class Server {
 
 		// RegisterRoutes
 		this.registerRoutes();
+
+		/*
+		this.sendEmail = (mailOptions) => {
+			return new Promise((resolve, reject) => {
+				sgMail.send(mailOptions, (error, result) => {
+					if (error) return reject(error);
+					return resolve(result);
+				});
+			});
+		}
+		*/
 
 		this.app.listen(process.env.PORT, () => {
 			console.log(`Server listening is listening on port: ${process.env.PORT}`)
