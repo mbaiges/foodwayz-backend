@@ -96,7 +96,6 @@ module.exports = class OwnsRoute {
 
         try {
             let users_ids = await this.server.db('t_owns').select("a_user_id").where({a_rest_id: restId});
-            console.log(users_ids);
             if (users_ids && !Array.isArray(users_ids))
                 users_ids = [users_ids];
             if (users_ids.length != 0) {

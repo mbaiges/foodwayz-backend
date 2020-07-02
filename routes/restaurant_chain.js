@@ -167,4 +167,16 @@ module.exports = class RestaurantChainRoute {
         }
     }
 
+    async updateChainScore(chainId) {
+        try {
+            const rests = (await this.server.db('t_restaurant').select('a_score').where({a_rest_chain_id: chainId})).map(r => r.a_score);
+            if(rests.length != 0) {
+                let sum = 0;
+                rests.forEach(v => sum += Number.parseFloat(v));
+                await this.server.db('t_restaurant_chain').update({a_score: sum/rests.length}).where({a_rest_chain_id: chainId});
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
 };

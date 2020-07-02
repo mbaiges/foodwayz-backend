@@ -80,8 +80,6 @@ module.exports = class ReviewRoute {
         const userId = req.user.a_user_id;
         const { a_desc, a_score } = req.body;
 
-        console.log(a_score);
-
         const params = {
             a_desc: [a_desc, typeof(a_desc) === 'string'],
             a_score: [a_score, (Number(a_score) === a_score && a_score >= 0 && a_score <= 5)],
@@ -109,7 +107,13 @@ module.exports = class ReviewRoute {
                 a_desc: a_desc
             }).returning('*');
 
-            res.status(200).json(message.post('review', rev));            
+            res.status(200).json(message.post('review', rev));
+
+            if (!this.foodRoute) {
+                const FoodRoute = require('./food');
+                this.foodRoute = new FoodRoute(this.server);
+            }
+            this.foodRoute.updateFoodScore(foodId);
         } catch (error) {
             console.log(error);
             if(error.detail == null || error.detail == undefined)

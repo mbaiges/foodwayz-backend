@@ -390,7 +390,6 @@ module.exports = class RestaurantRoute {
             const del = await this.server.db('t_restaurant_images')
                         .where({a_rest_id: id, a_image_id: imageId})
                         .del();
-            console.log(del);
             if(del == 0)
                 res.status(404).json(message.notFound('restaurant image', imageId));
             else
@@ -436,6 +435,24 @@ module.exports = class RestaurantRoute {
         } catch (error) {
             console.log(error);
             res.status(500).json({message: error.message});
+        }
+    }
+
+    async updateRestScore(restId) {
+        try {
+            const foods = (await this.server.db('t_food').select('a_score').where({a_rest_id: restId})).map(r => r.a_score);
+            if(foods.length != 0) {
+                let sum = 0;
+                foods.forEach(v => sum += Number.parseFloat(v));
+                await this.server.db('t_restaurant').update({a_score: sum/foods.length}).where({a_rest_id: restId});
+                const chainId = (await this.server.db('t_restaurant').select('a_rest_chain_id').where({a_rest_id: restId}))[0].a_rest_chain_id;
+                if(chainId != null && chainId != undefined) {
+                    const chainRoute = require('./restaurant_chain');
+                    new chainRoute(this.server).updateChainScore(chainId);
+                }
+            }
+        } catch (error) {
+            console.log(error.message);
         }
     }
 

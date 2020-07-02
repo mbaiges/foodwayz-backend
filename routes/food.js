@@ -249,4 +249,20 @@ module.exports = class FoodRoute {
             res.status(500).json({message: error.message});
         }
     }
+
+    async updateFoodScore(foodId) {
+        try {
+            const revs = (await this.server.db('t_review').select('a_score').where({a_food_id: foodId})).map(r => r.a_score);
+            if(revs.length != 0) {
+                let sum = 0;
+                revs.forEach(v => sum += Number.parseFloat(v));
+                await this.server.db('t_food').update({a_score: sum/revs.length}).where({a_food_id: foodId});
+                const restId = (await this.server.db('t_food').select('a_rest_id').where({a_food_id: foodId}))[0].a_rest_id;
+                const restRoute = require('./restaurant');
+                new restRoute(this.server).updateRestScore(restId);
+            }           
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
 };
