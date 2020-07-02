@@ -45,6 +45,10 @@ module.exports = class RestaurantRoute {
     async addRestaurant(req, res) {
 
         const {
+            a_user_id
+        } = req.user;
+
+        const {
             a_name,
             a_state,
             a_postal_code,
@@ -70,7 +74,7 @@ module.exports = class RestaurantRoute {
             }).first();
             if (exists) return res.status(409).json(message.conflict('restaurant', 'already exists', exists));
 
-            const insert = await this.server.db('t_restaurant')
+            let insert = await this.server.db('t_restaurant')
                 .insert({
                     a_name: a_name,
                     a_city: a_city,
@@ -82,7 +86,18 @@ module.exports = class RestaurantRoute {
                 })
                 .returning('*');
 
-            res.status(200).json(message.post('restaurant', insert));
+            if (insert) {
+                if (Array.isArray(insert)) {
+                    insert = insert[0];
+                }
+                
+                const owns = await this.server.db('t_owns').insert({
+                    a_user_id,
+                    a_rest_id: insert.a_rest_id
+                }).returning('*');
+
+                res.status(200).json(message.post('restaurant', insert));
+            }
         } catch (error) {
             console.error('Failed to add restaurant:');
             console.error(error);
