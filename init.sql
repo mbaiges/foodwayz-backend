@@ -1,7 +1,7 @@
 CREATE TABLE t_restaurant_chain (
   a_rest_chain_id SERIAL PRIMARY KEY,
   a_name varchar(256) NOT NULL UNIQUE,
-  a_score int,
+  a_score decimal(10,2),
   a_image_url varchar(512)
 );
 
