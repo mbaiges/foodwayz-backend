@@ -106,7 +106,7 @@ module.exports = class FoodCharacteristicRoute {
         if (foods_ids) {
             foods_ids = foods_ids.map(f => f.a_food_id);
         }
-        return await this.foodRoute.getFoodsObjects({ filters: {a_food_id: foods_ids} });
+        return await this.foodRoute.getFoodsObjects({ filters: {a_food_id: foods_ids}, detailed: true });
     }
 
 };

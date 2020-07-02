@@ -40,14 +40,14 @@ insert into t_restaurant_chain values(DEFAULT, 'Kansas', 4.5, 'https://firebases
 select * from t_restaurant_chain;
 
 
-insert into t_restaurant values(DEFAULT, 'McDonalds del obelisco', 1.2, 'BSAS', 'CABA', '1234', 'el obelisco 69', 1);
-insert into t_restaurant values(DEFAULT, 'McDonalds del libertador', 1.2, 'BSAS', 'CABA', '5678', 'libertador 420', 1);
-insert into t_restaurant values(DEFAULT, 'Kansas de libertador', 1.2, 'BSAS', 'CABA', '1313', 'libertador 1221', 2);
-insert into t_restaurant values(DEFAULT, 'Kansas de pilar', 1.2, 'BSAS', 'AMBA', '1323', 'pilar 1221', 2);
-insert into t_restaurant values(DEFAULT, 'sushi pop', 3, 'BSAS', 'AMBA', '5677', 'calle falsa 1234', null);
-insert into t_restaurant values(DEFAULT, 'tacos locos', 4, 'BSAS', 'CABA', '1323', 'pilar 1221', null);
-insert into t_restaurant values(DEFAULT, 'morelia', 2, 'BSAS', 'CABA', '5378', 'asdf 1221', null);
-insert into t_restaurant values(DEFAULT, 'Crustacio Cascarudo', 2, 'Fondo De Bikini', '-', '1234', 'psherman calle wallaby 42', null);
+insert into t_restaurant values(DEFAULT, 'McDonalds del obelisco', 1.2, 'BSAS', 'CABA', '1234', 'el obelisco 69', 1, 0, DEFAULT);
+insert into t_restaurant values(DEFAULT, 'McDonalds del libertador', 1.2, 'BSAS', 'CABA', '5678', 'libertador 420', 1, 0, DEFAULT);
+insert into t_restaurant values(DEFAULT, 'Kansas de libertador', 1.2, 'BSAS', 'CABA', '1313', 'libertador 1221', 2, 0, DEFAULT);
+insert into t_restaurant values(DEFAULT, 'Kansas de pilar', 1.2, 'BSAS', 'AMBA', '1323', 'pilar 1221', 2, 0, DEFAULT);
+insert into t_restaurant values(DEFAULT, 'sushi pop', 3, 'BSAS', 'AMBA', '5677', 'calle falsa 1234', null, 0, DEFAULT);
+insert into t_restaurant values(DEFAULT, 'tacos locos', 4, 'BSAS', 'CABA', '1323', 'pilar 1221', null, 0, DEFAULT);
+insert into t_restaurant values(DEFAULT, 'morelia', 2, 'BSAS', 'CABA', '5378', 'asdf 1221', null, 0, DEFAULT);
+insert into t_restaurant values(DEFAULT, 'Crustacio Cascarudo', 2, 'Fondo De Bikini', '-', '1234', 'psherman calle wallaby 42', null, 0, DEFAULT);
 select * from t_restaurant;
 
 
@@ -162,12 +162,6 @@ INSERT INTO t_food_has_ingredient VALUES(13, 11);
 INSERT INTO t_food_has_ingredient VALUES(13, 12);
 INSERT INTO t_food_has_ingredient VALUES(13, 13);
 select * from t_food_has_ingredient;
-
-
-INSERT INTO t_owner VALUES(2,1);
-INSERT INTO t_owner VALUES(3,2);
-INSERT INTO t_owner VALUES(4,0);
-select * from t_owner;
 
 
 INSERT INTO t_owns VALUES(2,1);

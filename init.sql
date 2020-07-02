@@ -14,6 +14,7 @@ CREATE TABLE t_restaurant (
   a_postal_code varchar(256) NOT NULL,
   a_address varchar(256) NOT NULL,
   a_rest_chain_id int,
+  a_premium_level int NOT NULL,
   a_created_at timestamp NOT NULL DEFAULT NOW(),
   UNIQUE(a_state, a_city, a_postal_code, a_address),
   FOREIGN KEY (a_rest_chain_id) REFERENCES t_restaurant_chain(a_rest_chain_id)
@@ -23,6 +24,7 @@ CREATE TABLE t_restaurant_images (
   a_rest_id int,
   a_image_id SERIAL,
   a_image_url varchar(512),
+  a_image_extra varchar(128),
   PRIMARY KEY (a_rest_id, a_image_id),
   FOREIGN KEY (a_rest_id) REFERENCES t_restaurant(a_rest_id) ON DELETE CASCADE
 );
@@ -102,17 +104,11 @@ CREATE TABLE t_review (
   FOREIGN KEY (a_food_id) REFERENCES t_food(a_food_id) ON DELETE CASCADE
 );
 
-CREATE TABLE t_owner (
-  a_user_id int PRIMARY KEY,
-  a_premium_level int NOT NULL,
-  FOREIGN KEY (a_user_id) REFERENCES t_user(a_user_id) ON DELETE CASCADE
-);
-
 CREATE TABLE t_owns (
   a_user_id int,
   a_rest_id int,
   PRIMARY KEY(a_rest_id, a_user_id),
-  FOREIGN KEY (a_user_id) REFERENCES t_owner(a_user_id) ON DELETE CASCADE,
+  FOREIGN KEY (a_user_id) REFERENCES t_user(a_user_id) ON DELETE CASCADE,
   FOREIGN KEY (a_rest_id) REFERENCES t_restaurant(a_rest_id) ON DELETE CASCADE
 );
 
