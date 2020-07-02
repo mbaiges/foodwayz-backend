@@ -14,6 +14,8 @@ module.exports = class RestaurantRoute {
             .get(this.getRestaurant.bind(this))
             .delete(this.removeRestaurant.bind(this))
             .put(this.modifyRestaurant.bind(this))
+
+        app.route('/restaurant/:id/premium')
             .put(this.updatePremiumStatus.bind(this));
 
         app.route('/restaurant/:id/food')
@@ -90,7 +92,7 @@ module.exports = class RestaurantRoute {
                 if (Array.isArray(insert)) {
                     insert = insert[0];
                 }
-                
+
                 const owns = await this.server.db('t_owns').insert({
                     a_user_id,
                     a_rest_id: insert.a_rest_id
