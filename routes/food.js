@@ -81,15 +81,15 @@ module.exports = class FoodRoute {
 
     async editFood(req, res) {
         const { id } = req.params;
-        const {a_title, a_description, a_score = null, a_type_id = null, a_image_url = null} = req.body
+        const {a_title = null, a_description = null, a_score = null, a_type_id = null, a_image_url = null} = req.body;
         
         const params = {
-            a_title: [a_title, typeof(a_title) === 'string'],
-            a_description: [a_description, typeof(a_description) === 'string'],
+            a_title: [a_title, (a_title == null || typeof(a_title) === 'string')],
+            a_description: [a_description, (a_description == null || typeof(a_description) === 'string')],
             a_score: [a_score, (a_score == null || Number.isInteger(a_score))],
             a_type_id: [a_type_id, (a_type_id == null || Number.isInteger(a_type_id))],
             a_image_url: [a_image_url, (a_image_url == null || typeof(a_image_url) === 'string')]
-        }
+        };
         let errors = {};
         Object.entries(params).forEach(prop => {
             if(!prop[1][1]) {
@@ -105,9 +105,12 @@ module.exports = class FoodRoute {
         }
 
         try {
-            let update = {
-                a_title: a_title,
-                a_description: a_description
+            let update = {};
+            if(a_title != null) {
+                update.a_title = a_title;
+            }
+            if(a_description != null) {
+                update.a_description = a_description;
             }
             if(a_type_id != null) {
                 update.a_type_id = a_type_id;
@@ -117,6 +120,11 @@ module.exports = class FoodRoute {
             }
             if(a_image_url != null) {
                 update.a_image_url = a_image_url;
+            }
+            
+            if(Object.keys(update).length == 0) {
+                res.status(400).json(message.badRequest('food', id, 'Nothing to be modified'));
+                return;
             }
 
             const food_rest = await this.server.db('t_food').select('a_rest_id').where({a_food_id: id});
