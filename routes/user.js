@@ -15,7 +15,7 @@ module.exports = class UserRoute {
             .get(this.getUsers.bind(this));
         
         app.route('/user/find')
-            .get(this.findUsers.bind(this));
+            .post(this.findUsers.bind(this));
 
         app.route('/user/:id')
             .get(this.getUser.bind(this));
@@ -84,6 +84,7 @@ module.exports = class UserRoute {
 
     async findUsers(req, res) {
         const {a_name = null, a_gender = null, a_birthdate = null, a_email = null, a_is_verified = null} = req.body;
+
 
         const params = {
             a_name: [a_name, (a_name == null || typeof(a_name) === 'string')],
