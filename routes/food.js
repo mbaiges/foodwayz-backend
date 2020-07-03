@@ -288,11 +288,14 @@ module.exports = class FoodRoute {
                 }
             }
 
-            if (sorted) {
+            if (detailed && detailed === true && sorted) {
                 const { reviews_amount } = sorted;
 
-                if (reviews_amount) {
-                    foods = foods.sort((a, b) => a.reviews_info.total - b.reviews_info.total);
+                if (reviews_amount && reviews_amount === true) {
+                    foods = foods.sort((a, b) => b.a_reviews_info.total - a.a_reviews_info.total);
+                }
+                else if (reviews_amount === false) {
+                    foods = foods.sort((a, b) => a.a_reviews_info.total - b.a_reviews_info.total);
                 }
             }
 
