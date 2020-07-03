@@ -237,7 +237,7 @@ module.exports = class AuthRoutes {
       
       if (!user) {
         console.log("User not found");
-        res.status(404).json({message : "User not found"});
+        return res.status(404).json({message : "User not found"});
       }
       else {
         console.log("User found");
@@ -250,7 +250,7 @@ module.exports = class AuthRoutes {
 
     }else{
         console.log("Link is expired");
-        res.status(400).json({error : "Link is expired"});
+        return res.status(400).json({error : "Link is expired"});
     }
   }
 
