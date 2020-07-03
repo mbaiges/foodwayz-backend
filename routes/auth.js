@@ -186,6 +186,7 @@ module.exports = class AuthRoutes {
 
   async removeUser(req, res) {
     const {
+      a_user_id,
       a_password: real_password,
     } = req.user;
 
@@ -207,7 +208,7 @@ module.exports = class AuthRoutes {
       const del = await this.server
         .db("t_user")
         .where({
-          a_email: a_email
+          a_user_id
         })
         .first()
         .del();
