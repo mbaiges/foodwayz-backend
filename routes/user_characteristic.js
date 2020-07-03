@@ -13,8 +13,33 @@ module.exports = class UserCharacteristicRoute {
             .post(this.linkUserAndChar.bind(this))
             .delete(this.unLinkUserAndChar.bind(this));
 
-        app.get('/user/:userId/characteristic', this.getCharsByUser.bind(this));
+        app.route('/user/:userId/characteristic')
+            .post(this.addCharacteristicsToUser.bind(this))
+            .get(this.getCharsByUser.bind(this));
+
         app.get('/characteristic/:charId/user', this.getUsersByChar.bind(this));
+    }
+
+    async addCharacteristicsToUser(req, res) {
+        const { userId } = req.params;
+
+        const { a_chars } = req.body;
+
+        try {
+            for (char in a_chars) {
+                const link = await this.server.db('t_user_has_characteristic').where({a_user_id: userId, a_char_id: char.a_char_id});
+                if (link.length != 0) {
+                    return res.status(409).json(message.conflict('userHasCharacteristic', 'already exists', link));
+                }
+            }    
+
+        const added_links = await this.server.db('t_user_has_characteristic').insert(a_chars.map(c => Object.create({a_user_id: userId, a_char_id: c.a_char_id}))).returning('*');
+        res.status(200).json(message.post('user has charactersitic', added_links));  
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message: error.message});
+        }
     }
 
     async linkUserAndChar(req, res) {
