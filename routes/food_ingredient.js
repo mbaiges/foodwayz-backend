@@ -24,17 +24,20 @@ module.exports = class FoodIngredientRoute {
         const { foodId } = req.params;
 
         const { a_ingrs } = req.body;
-
+        if(!Array.isArray(a_ingrs)) {
+            res.status(400).json(message.badRequest('food has ingredient', 'a_ingrs', 'not an array'));
+            return;
+        }
         try {
-            for (ingr in a_ingrs) {
-                const link = await this.server.db('t_food_has_ingredient').where({a_food_id: foodId, a_ingr_id: ingr.a_ingr_id});
+            for (let i = 0; i < a_ingrs.length; i++) {
+                const link = await this.server.db('t_food_has_ingredient').select('*').where({a_food_id: foodId, a_ingr_id: a_ingrs[i].a_ingr_id});
                 if (link.length != 0) {
-                    return res.status(409).json(message.conflict('foodHasIngredient', 'already exists', link));
+                    return res.status(409).json(message.conflict('food has ingredient', 'already exists', link));
                 }
-            }    
-
-        const added_links = await this.server.db('t_food_has_ingredient').insert(a_ingrs.map(i => Object.create({a_food_id: foodId, a_ingr_id: i.a_ingr_id}))).returning('*');
-        res.status(200).json(message.post('food has ingredient', added_links));  
+            }
+            
+            const added_links = await this.server.db('t_food_has_ingredient').insert(a_ingrs.map(i => Object.assign({a_food_id: parseInt(foodId), a_ingr_id: i.a_ingr_id}))).returning('*');
+            res.status(200).json(message.post('food has ingredient', added_links));  
 
         } catch (error) {
             console.log(error);

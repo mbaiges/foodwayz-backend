@@ -24,17 +24,21 @@ module.exports = class FoodCharacteristicRoute {
         const { foodId } = req.params;
 
         const { a_chars } = req.body;
+        if(!Array.isArray(a_chars)) {
+            res.status(400).json(message.badRequest('food has characteristic', 'a_chars', 'not an array'));
+            return;
+        }
 
         try {
-            for (char in a_chars) {
-                const link = await this.server.db('t_food_has_characteristic').where({a_food_id: foodId, a_char_id: char.a_char_id});
+            for (let i = 0; i < a_chars.length; i++) {
+                const link = await this.server.db('t_food_has_characteristic').where({a_food_id: foodId, a_char_id: a_chars[i].a_char_id});
                 if (link.length != 0) {
-                    return res.status(409).json(message.conflict('foodHasCharacteristic', 'already exists', link));
-                }
-            }    
+                    return res.status(409).json(message.conflict('food has characteristic', 'already exists', link));
+                }      
+            }
 
-        const added_links = await this.server.db('t_food_has_characteristic').insert(a_chars.map(c => Object.create({a_food_id: foodId, a_char_id: c.a_char_id}))).returning('*');
-        res.status(200).json(message.post('food has characteristic', added_links));  
+            const added_links = await this.server.db('t_food_has_characteristic').insert(a_chars.map(c => Object.assign({a_food_id: parseInt(foodId), a_char_id: c.a_char_id}))).returning('*');
+            res.status(200).json(message.post('food has characteristic', added_links));  
 
         } catch (error) {
             console.log(error);

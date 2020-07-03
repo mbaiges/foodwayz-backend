@@ -12,6 +12,10 @@ module.exports = class OwnsRoute {
         app.route('/owner/restaurant/:restId')
             .post(this.linkRest.bind(this))
             .delete(this.unLinkRest.bind(this));
+
+        app.route('/owner/:userId/restaurant/:restId')
+            .post(this.linkUserToRest.bind(this))
+            .delete(this.unLinkUserToRest.bind(this));
         
         app.get('/restaurant/:restId/owner', this.getOwnersByRest.bind(this));
     }
@@ -19,6 +23,24 @@ module.exports = class OwnsRoute {
     async linkRest(req, res) {
         req.params.ownerId = req.user.a_user_id;
         return this.linkUserAndRest(req, res);
+    }
+
+    async linkUserToRest(req, res) {
+        const { a_user_id } = req.user;
+        const { restId } = req.params;
+
+        try {
+            const owns = await this.server.db('t_owns').where({a_user_id: a_user_id, a_rest_id: restId});
+            if(owns.length == 0) {
+                res.status(401).json(message.unauth(`adding new owner to restaurant with id ${restId}`, 'You are not an owner'));
+                return;
+            }
+            req.params.ownerId = req.params.userId;
+            return this.linkUserAndRest(req, res);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message: error.message});
+        }
     }
 
     async linkUserAndRest(req, res) {
@@ -42,6 +64,24 @@ module.exports = class OwnsRoute {
     async unLinkRest(req, res) {
         req.params.ownerId = req.user.a_user_id;
         return this.unLinkUserAndRest(req, res);
+    }
+
+    async unLinkUserToRest(req, res) {
+        const { a_user_id } = req.user;
+        const { restId } = req.params;
+
+        try {
+            const owns = await this.server.db('t_owns').where({a_user_id: a_user_id, a_rest_id: restId});
+            if(owns.length == 0) {
+                res.status(401).json(message.unauth(`deleting owner from restaurant with id ${restId}`, 'You are not an owner'));
+                return;
+            }
+            req.params.ownerId = req.params.userId;
+            return this.unLinkUserAndRest(req, res);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message: error.message});
+        }
     }
 
     async unLinkUserAndRest(req, res) {
