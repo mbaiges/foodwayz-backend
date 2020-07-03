@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const jetpack = require('fs-jetpack');
-//const sgMail = require('@sendgrid/mail');
+const nodemailer = require('nodemailer');
 
 const AuthMiddleware = require('./middleware/auth');
 
@@ -31,16 +31,13 @@ module.exports = class Server {
 		// RegisterRoutes
 		this.registerRoutes();
 
-		/*
-		this.sendEmail = (mailOptions) => {
-			return new Promise((resolve, reject) => {
-				sgMail.send(mailOptions, (error, result) => {
-					if (error) return reject(error);
-					return resolve(result);
-				});
-			});
-		}
-		*/
+		this.transporter = nodemailer.createTransport({
+			service: 'gmail',
+			auth: {
+			  user: 'dychromatic.foodwayz@gmail.com',
+			  pass: 'foodwayz.itba.edu.ar'
+			}
+		});
 
 		this.app.listen(process.env.PORT, () => {
 			console.log(`Server listening is listening on port: ${process.env.PORT}`)

@@ -9,6 +9,7 @@ module.exports = class AuthRoutes {
 
   async initialize(app) {
     // route.get(this.getBooks.bind(this));
+    app.get("/verify_email/:token", this.verifyEmail.bind(this));
     app.post("/login", this.loginUser.bind(this));
     app.post("/register", this.registerUser.bind(this));
     app.delete("/delete_account", this.removeUser.bind(this));
@@ -34,31 +35,33 @@ module.exports = class AuthRoutes {
       const exists = await this.server
         .db("t_user")
         .where({
-          a_name: a_name
+          a_email: a_email
         })
         .first();
       if (exists)
         return res
           .status(400)
           .json({
-            code: "user-exists",
-            message: "Username already exists"
+            code: "email-exists",
+            message: "Email already associated"
           });
 
       const hash = await bcrypt.hash(a_password, 10);
 
-      console.log("asdasdasd");
-
-      await this.server.db.table("t_user").insert({
+      let user = await this.server.db.table("t_user").insert({
         a_name: a_name,
         a_email: a_email,
         a_password: hash,
-      });
+        a_is_verified: false,
+      }).returning('*');
 
-      return res.json({
-        code: "user-reg",
-        message: "Successfully Registered"
-      });
+      if (Array.isArray(user)) {
+        user = user[0];
+      }
+
+      this.sendVerificationEmail(user);
+      return res.status(200).json({result : true});
+      
     } catch (error) {
       console.error("Failed to register user:");
       console.error(error);
@@ -87,13 +90,22 @@ module.exports = class AuthRoutes {
           message: "A user with that mail address was not found.",
         });
 
+      if (!user.a_is_verified) {
+        return res
+          .status(401)
+          .json({
+            code: "not-verified",
+            message: "Invalid authorization - Missing email verification."
+          });
+      }
+
       const comparePassword = await bcrypt.compare(a_password, user.a_password);
       if (!comparePassword)
         return res
           .status(401)
           .json({
             code: "invalid-auth",
-            message: "Invalid authorization."
+            message: "Invalid authorization - Incorrect password."
           });
 
       const jwt = JWT.sign({
@@ -209,4 +221,65 @@ module.exports = class AuthRoutes {
       });
     }
   }
-};
+
+  async verifyEmail(req, res) {
+    const token = req.params.token;
+    const decoded = JWT.verify(token, process.env.JWT_SECRET);
+
+    const id = decoded ? decoded.sub : '';
+    const exp_date = decoded ? decoded.expiration_date : '';
+
+    if(new Date(exp_date) > new Date()){
+      let user = await this.server.db('t_user').where({a_user_id: id});
+      
+      if (!user) {
+        console.log("User not found");
+        res.status(404).json({message : "User not found"});
+      }
+      else {
+        console.log("User found");
+        //user.a_is_verified = true;
+        await this.server.db('t_user').where({a_user_id: id}).update({a_is_verified: true});
+
+        console.log("Email is verified of user "+id);
+        return res.status(200).json({result : true});
+      }
+
+    }else{
+        console.log("Link is expired");
+        res.status(400).json({error : "Link is expired"});
+    }
+  }
+
+  async sendVerificationEmail(user, req, res) {
+      
+    const token = JWT.sign({
+        iss: "dahwdwuadhawuidha",
+        sub: user.a_user_id,
+        expiration_date: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+        iat: moment.utc().valueOf(),
+      },
+      process.env.JWT_SECRET, {
+        expiresIn: "1d"
+      }
+    );
+    console.log("http://localhost:3000/verify_email/" + token);
+
+    const mailOptions = {
+        from : "TEST<noreply@vysly.com>",
+        to : user.a_email,
+        subject : "Email Confirmation",
+        text : 'Visit this http://localhost:3000/verify_email/'+token,
+        html : '<a href="http://localhost:3000/verify_email/'+token+'"><H2>Click on this</H2></a>'
+    }
+
+    this.server.transporter.sendMail(mailOptions, (err, data) => {
+        if(err){
+            console.log(err);
+        }else{
+            console.log("Email is Sent");
+        }
+    });
+  }
+
+}

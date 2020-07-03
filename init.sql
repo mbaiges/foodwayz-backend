@@ -48,7 +48,8 @@ CREATE TABLE t_user (
   a_email varchar(256) NOT NULL UNIQUE,
   a_password varchar(256) NOT NULL,
   a_created_at timestamp NOT NULL DEFAULT NOW(),
-  a_image_url varchar(512)
+  a_image_url varchar(512),
+  a_is_verified boolean
 );
 
 CREATE TABLE t_characteristic (

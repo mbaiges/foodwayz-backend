@@ -68,7 +68,8 @@ module.exports = class FoodRoute {
                 a_image_url: a_image_url
             }).returning("*");
 
-            res.status(200).json(message.post('food', food));
+            res.status(200).json(message.post('food', food[0]));
+
         } catch (error) {
             console.log(error);
             if(error.detail == null || error.detail == undefined)

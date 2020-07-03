@@ -8,8 +8,13 @@ module.exports = class AuthMiddleware {
 	}
 
 	async doMiddleware(req, res, next) {
-		const publicRoutes = [ '/login', '/register' ];
-		if (publicRoutes.includes(req.originalUrl)) return next();
+		const publicRoutes = [ '/login', '/register', 'verify_email' ];
+		
+		for (let i = 0; i < publicRoutes.length; i++) {
+			if (req.originalUrl.includes(publicRoutes[i])) {
+				return next();
+			}
+		}
 
 		// Check Header
 		if (!req.headers.authorization) return res.status(401).json({ message: 'No authorization header provided' });
