@@ -13,8 +13,33 @@ module.exports = class FoodCharacteristicRoute {
             .post(this.linkFoodAndChar.bind(this))
             .delete(this.unLinkfoodAndChar.bind(this));
 
-        app.get('/food/:foodId/characteristic', this.getCharsByFood.bind(this));
+        app.route('/food/:foodId/characteristic')
+            .post(this.addCharacteristicsToFood.bind(this))
+            .get(this.getCharsByFood.bind(this));
+
         app.get('/characteristic/:charId/food', this.getFoodsByChar.bind(this));
+    }
+
+    async addCharacteristicsToFood(req, res) {
+        const { foodId } = req.params;
+
+        const { a_chars } = req.body;
+
+        try {
+            for (char in a_chars) {
+                const link = await this.server.db('t_food_has_characteristic').where({a_food_id: foodId, a_char_id: char.a_char_id});
+                if (link.length != 0) {
+                    return res.status(409).json(message.conflict('foodHasCharacteristic', 'already exists', link));
+                }
+            }    
+
+        const added_links = await this.server.db('t_food_has_characteristic').insert(a_chars.map(c => Object.create({a_food_id: foodId, a_char_id: c.a_char_id}))).returning('*');
+        res.status(200).json(message.post('food has characteristic', added_links));  
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message: error.message});
+        }
     }
 
     async linkFoodAndChar(req, res) {

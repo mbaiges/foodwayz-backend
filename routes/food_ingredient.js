@@ -34,7 +34,7 @@ module.exports = class FoodIngredientRoute {
             }    
 
         const added_links = await this.server.db('t_food_has_ingredient').insert(a_ingrs.map(i => Object.create({a_food_id: foodId, a_ingr_id: i.a_ingr_id}))).returning('*');
-        res.status(200).json(message.post('food has ingredient', added_link));  
+        res.status(200).json(message.post('food has ingredient', added_links));  
 
         } catch (error) {
             console.log(error);
