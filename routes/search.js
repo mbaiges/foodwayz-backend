@@ -56,7 +56,8 @@ module.exports = class SearchRoute {
 
         const {
             raw_input,
-            filters
+            filters,
+            sorted
         } = req.body;
 
         const {
@@ -142,7 +143,7 @@ module.exports = class SearchRoute {
                 && (!a_char_ids || !Array.isArray(a_char_ids) || a_char_ids.length == 0 || a_char_ids.every(v => foodsMap[food_id].a_char_ids.includes(v))))
             .map(key => parseInt(key));
 
-        foods = await this.foodRoute.getFoodsObjects({ filters: {a_food_id: foods}, detailed: true });
+        foods = await this.foodRoute.getFoodsObjects({ filters: {a_food_id: foods}, sorted, detailed: true });
 
         return res.status(200).json({result: foods});
     }
