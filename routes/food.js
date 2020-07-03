@@ -264,31 +264,36 @@ module.exports = class FoodRoute {
                         FROM t_review WHERE a_food_id = ${foods[i].a_food_id};
                     `);
 
-                if (reviews_info) {
-                    const info = reviews_info.rows[0];
+                    if (reviews_info) {
+                        const info = reviews_info.rows[0];
 
-                    reviews_info = {
-                        quantified: [
-                            parseInt(info.star1), 
-                            parseInt(info.star2), 
-                            parseInt(info.star3), 
-                            parseInt(info.star4), 
-                            parseInt(info.star5)
-                        ], 
-                        qualified: {
-                            bad: parseInt(info.bad), 
-                            regular: parseInt(info.regular), 
-                            good: parseInt(info.good) 
-                        }
-                    };
+                        reviews_info = {
+                            quantified: [
+                                parseInt(info.star1), 
+                                parseInt(info.star2), 
+                                parseInt(info.star3), 
+                                parseInt(info.star4), 
+                                parseInt(info.star5)
+                            ], 
+                            qualified: {
+                                bad: parseInt(info.bad), 
+                                regular: parseInt(info.regular), 
+                                good: parseInt(info.good) 
+                            },
+                            total: parseInt(info.bad) + parseInt(info.regular) + parseInt(info.good)
+                        };
 
-                    foods[i].a_reviews_info = reviews_info;
-                }
+                        foods[i].a_reviews_info = reviews_info;
+                    }
                 }
             }
 
             if (sorted) {
+                const { reviews_amount } = sorted;
 
+                if (reviews_amount) {
+                    foods = foods.sort((a, b) => a.reviews_info.total - b.reviews_info.total);
+                }
             }
 
             return foods;

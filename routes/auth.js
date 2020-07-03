@@ -268,11 +268,20 @@ module.exports = class AuthRoutes {
       
     if (!user) {
       return res
-        .status(400)
+        .status(404)
         .json({
           code: "user-not-registered",
           message: "Email not registered"
         });
+    }
+
+    if (user.a_is_verified) {
+      return res
+        .status(200)
+        .json({
+          code: "already-verified",
+          message: "Email already verified"
+        })
     }
 
     this.sendVerificationEmail(user);
@@ -295,10 +304,9 @@ module.exports = class AuthRoutes {
     console.log("http://localhost:3000/verify_email/" + token);
 
     const mailOptions = {
-        from : "TEST<noreply@vysly.com>",
+        from : "Dychromatic <noreply@vysly.com>",
         to : user.a_email,
         subject : "Email Confirmation",
-        text : 'Visit this http://localhost:3000/verify_email/'+token,
         html : '<a href="http://localhost:3000/verify_email/'+token+'"><H2>Click on this</H2></a>'
     }
 
