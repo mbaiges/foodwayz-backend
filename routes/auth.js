@@ -219,7 +219,7 @@ module.exports = class AuthRoutes {
     } catch (error) {
       console.error(error);
       return res.status(500).json({
-        message: "Failed to delete user"
+        message: error.message
       });
     }
   }
