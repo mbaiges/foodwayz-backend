@@ -25,14 +25,14 @@ module.exports = class FoodIngredientRoute {
 
         const { a_ingrs } = req.body;
         if(!Array.isArray(a_ingrs)) {
-            res.status(400).json(message.badRequest('ingredient', 'a_ingrs', 'not an array'));
+            res.status(400).json(message.badRequest('food has ingredient', 'a_ingrs', 'not an array'));
             return;
         }
         try {
             for (let i = 0; i < a_ingrs.length; i++) {
                 const link = await this.server.db('t_food_has_ingredient').select('*').where({a_food_id: foodId, a_ingr_id: a_ingrs[i].a_ingr_id});
                 if (link.length != 0) {
-                    return res.status(409).json(message.conflict('foodHasIngredient', 'already exists', link));
+                    return res.status(409).json(message.conflict('food has ingredient', 'already exists', link));
                 }
             }
             
