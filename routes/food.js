@@ -188,7 +188,7 @@ module.exports = class FoodRoute {
         }    
         else
             foods = await this.server.db('t_food').where(filters);
-        let rest, type, ingrs, chars;
+        let rest, type, ingrs, chars, reviews_info;
         if (foods) {
             if (!Array.isArray(foods))
                 foods = [foods];
@@ -205,6 +205,7 @@ module.exports = class FoodRoute {
                     delete foods[i].a_type_id;
                     foods[i].a_type = type;
                 }
+
                 if (detailed && detailed === true) {
                     if (!this.foodIngrRoute || !this.foodCharRoute) {
                         const FoodIngredientRoute = require('./food_ingredient');
@@ -216,6 +217,63 @@ module.exports = class FoodRoute {
                     foods[i].a_ingredients = ingrs;
                     chars = await this.foodCharRoute.getCharsByFoodObjects(foods[i].a_food_id);
                     foods[i].a_characteristics = chars;
+
+                    reviews_info = await this.server.db.raw(`select 
+                    COALESCE(SUM(CASE 
+                        WHEN a_score <= 1 THEN 1
+                        ELSE 0
+                        END),0) as star1,
+                    COALESCE(SUM(CASE 
+                        WHEN a_score > 1 and a_score <= 2 THEN 1
+                        ELSE 0
+                        END),0) as star2,
+                    COALESCE(SUM(CASE 
+                        WHEN a_score > 2 and a_score <= 3 THEN 1
+                        ELSE 0
+                        END),0) as star3,
+                    COALESCE(SUM(CASE 
+                        WHEN a_score > 3 and a_score <= 4 THEN 1
+                        ELSE 0
+                        END),0) as star4,
+                    COALESCE(SUM(CASE 
+                        WHEN a_score > 4 and a_score <= 5 THEN 1
+                        ELSE 0
+                        END),0) as star5,
+                    COALESCE(SUM(CASE 
+                        WHEN a_score <= 1.66 THEN 1
+                        ELSE 0
+                        END),0) as bad,
+                    COALESCE(SUM(CASE 
+                        WHEN a_score > 1.66 and a_score <= 3.33 THEN 1
+                        ELSE 0
+                        END),0) as regular,
+                    COALESCE(SUM(CASE 
+                        WHEN a_score > 3.33 THEN 1
+                        ELSE 0
+                        END),0) as good
+                    FROM t_review WHERE a_food_id = ${foods[i].a_food_id};
+                `);
+
+                if (reviews_info) {
+                    const info = reviews_info.rows[0];
+
+                    reviews_info = {
+                        quantified: [
+                            parseInt(info.star1), 
+                            parseInt(info.star2), 
+                            parseInt(info.star3), 
+                            parseInt(info.star4), 
+                            parseInt(info.star5)
+                        ], 
+                        qualified: {
+                            bad: parseInt(info.bad), 
+                            regular: parseInt(info.regular), 
+                            good: parseInt(info.good) 
+                        }
+                    };
+
+                    foods[i].a_reviews_info = reviews_info;
+                }
                 }
             }
             return foods;
