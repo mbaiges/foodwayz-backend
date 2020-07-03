@@ -186,7 +186,8 @@ module.exports = class FoodRoute {
 
         if (!cfg)
             cfg = {};
-        const { filters, detailed } = cfg;
+
+        const { filters, detailed, sorted } = cfg;
         let foods;
         if (!filters)
             foods = await this.server.db('t_food');
@@ -228,40 +229,40 @@ module.exports = class FoodRoute {
                     foods[i].a_characteristics = chars;
 
                     reviews_info = await this.server.db.raw(`select 
-                    COALESCE(SUM(CASE 
-                        WHEN a_score <= 1 THEN 1
-                        ELSE 0
-                        END),0) as star1,
-                    COALESCE(SUM(CASE 
-                        WHEN a_score > 1 and a_score <= 2 THEN 1
-                        ELSE 0
-                        END),0) as star2,
-                    COALESCE(SUM(CASE 
-                        WHEN a_score > 2 and a_score <= 3 THEN 1
-                        ELSE 0
-                        END),0) as star3,
-                    COALESCE(SUM(CASE 
-                        WHEN a_score > 3 and a_score <= 4 THEN 1
-                        ELSE 0
-                        END),0) as star4,
-                    COALESCE(SUM(CASE 
-                        WHEN a_score > 4 and a_score <= 5 THEN 1
-                        ELSE 0
-                        END),0) as star5,
-                    COALESCE(SUM(CASE 
-                        WHEN a_score <= 1.66 THEN 1
-                        ELSE 0
-                        END),0) as bad,
-                    COALESCE(SUM(CASE 
-                        WHEN a_score > 1.66 and a_score <= 3.33 THEN 1
-                        ELSE 0
-                        END),0) as regular,
-                    COALESCE(SUM(CASE 
-                        WHEN a_score > 3.33 THEN 1
-                        ELSE 0
-                        END),0) as good
-                    FROM t_review WHERE a_food_id = ${foods[i].a_food_id};
-                `);
+                        COALESCE(SUM(CASE 
+                            WHEN a_score <= 1 THEN 1
+                            ELSE 0
+                            END),0) as star1,
+                        COALESCE(SUM(CASE 
+                            WHEN a_score > 1 and a_score <= 2 THEN 1
+                            ELSE 0
+                            END),0) as star2,
+                        COALESCE(SUM(CASE 
+                            WHEN a_score > 2 and a_score <= 3 THEN 1
+                            ELSE 0
+                            END),0) as star3,
+                        COALESCE(SUM(CASE 
+                            WHEN a_score > 3 and a_score <= 4 THEN 1
+                            ELSE 0
+                            END),0) as star4,
+                        COALESCE(SUM(CASE 
+                            WHEN a_score > 4 and a_score <= 5 THEN 1
+                            ELSE 0
+                            END),0) as star5,
+                        COALESCE(SUM(CASE 
+                            WHEN a_score <= 1.66 THEN 1
+                            ELSE 0
+                            END),0) as bad,
+                        COALESCE(SUM(CASE 
+                            WHEN a_score > 1.66 and a_score <= 3.33 THEN 1
+                            ELSE 0
+                            END),0) as regular,
+                        COALESCE(SUM(CASE 
+                            WHEN a_score > 3.33 THEN 1
+                            ELSE 0
+                            END),0) as good
+                        FROM t_review WHERE a_food_id = ${foods[i].a_food_id};
+                    `);
 
                 if (reviews_info) {
                     const info = reviews_info.rows[0];
@@ -285,6 +286,11 @@ module.exports = class FoodRoute {
                 }
                 }
             }
+
+            if (sorted) {
+
+            }
+
             return foods;
         }
         return null;
