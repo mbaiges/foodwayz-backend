@@ -10,6 +10,7 @@ module.exports = class AuthRoutes {
   async initialize(app) {
     // route.get(this.getBooks.bind(this));
     app.get("/verify_email/:token", this.verifyEmail.bind(this));
+    app.post("/resend_email", this.resendEmail.bind(this));
     app.post("/login", this.loginUser.bind(this));
     app.post("/register", this.registerUser.bind(this));
     app.delete("/delete_account", this.removeUser.bind(this));
@@ -38,6 +39,7 @@ module.exports = class AuthRoutes {
           a_email: a_email
         })
         .first();
+
       if (exists)
         return res
           .status(400)
@@ -249,6 +251,33 @@ module.exports = class AuthRoutes {
         console.log("Link is expired");
         res.status(400).json({error : "Link is expired"});
     }
+  }
+
+  async resendEmail(req, res) {
+
+    const {
+      a_email
+    } = req.body;
+
+    const user = await this.server
+      .db("t_user")
+      .where({
+        a_email: a_email
+      })
+      .first();
+      
+    if (!user) {
+      return res
+        .status(400)
+        .json({
+          code: "user-not-registered",
+          message: "Email not registered"
+        });
+    }
+
+    this.sendVerificationEmail(user);
+    return res.status(200).json({result : true});
+
   }
 
   async sendVerificationEmail(user, req, res) {
