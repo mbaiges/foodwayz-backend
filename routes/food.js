@@ -120,12 +120,13 @@ module.exports = class FoodRoute {
             }
 
             const food_rest = await this.server.db('t_food').select('a_rest_id').where({a_food_id: id});
-            if (!food_rest) {
-                // res.status
+            console.log(food_rest);
+            if (food_rest.length == 0) {
+                res.status(404).json(message.notFound('food', id));
                 return;
             }
 
-            const owns = await this.server.db('t_owns').where({a_user_id: req.user.a_user_id, a_rest_id: food_rest.a_rest_id});
+            const owns = await this.server.db('t_owns').where({a_user_id: req.user.a_user_id, a_rest_id: food_rest[0].a_rest_id});
             if (owns.length == 0) {
                 res.status(401).json(message.unauth('restaurant food modify', 'not an owner'));
                 return;
