@@ -233,7 +233,7 @@ module.exports = class AuthRoutes {
     const exp_date = decoded ? decoded.expiration_date : '';
 
     if(new Date(exp_date) > new Date()){
-      let user = await this.server.db('t_user').where({a_user_id: id});
+      let user = await this.server.db('t_user').where({a_user_id: id}).first();
       
       if (!user) {
         console.log("User not found");
