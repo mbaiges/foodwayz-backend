@@ -13,8 +13,33 @@ module.exports = class FoodIngredientRoute {
             .post(this.linkFoodAndIngr.bind(this))
             .delete(this.unLinkfoodAndIngr.bind(this));
 
-        app.get('/food/:foodId/ingredient', this.getIngrsByFood.bind(this));
+        app.route('/food/:foodId/ingredient')
+            .post(this.addIngredientsToFood.bind(this))
+            .get(this.getIngrsByFood.bind(this));
+
         app.get('/ingredient/:ingrId/food', this.getFoodsByIngr.bind(this));
+    }
+
+    async addIngredientsToFood(req, res) {
+        const { foodId } = req.params;
+
+        const { a_ingrs } = req.body;
+
+        try {
+            for (ingr in a_ingrs) {
+                const link = await this.server.db('t_food_has_ingredient').where({a_food_id: foodId, a_ingr_id: ingr.a_ingr_id});
+                if (link.length != 0) {
+                    return res.status(409).json(message.conflict('foodHasIngredient', 'already exists', link));
+                }
+            }    
+
+        const added_links = await this.server.db('t_food_has_ingredient').insert(a_ingrs.map(i => Object.create({a_food_id: foodId, a_ingr_id: i.a_ingr_id}))).returning('*');
+        res.status(200).json(message.post('food has ingredient', added_link));  
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message: error.message});
+        }
     }
 
     async linkFoodAndIngr(req, res) {
