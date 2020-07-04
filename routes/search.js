@@ -104,7 +104,7 @@ module.exports = class SearchRoute {
 
     async searchCharacteristics(req, res) {
         if (!this.charRoute) {
-            const CharacteristicRoute = require('./type');
+            const CharacteristicRoute = require('./characteristic');
             this.charRoute = new CharacteristicRoute(this.server);
         }
 
