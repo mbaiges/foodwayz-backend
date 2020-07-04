@@ -23,7 +23,7 @@ insert into t_ingredient values(DEFAULT, 'carne');
 insert into t_ingredient values(DEFAULT, 'lentejas');
 insert into t_ingredient values(DEFAULT, 'pan');
 insert into t_ingredient values(DEFAULT, 'lechuga');
-insert into t_ingredient values(DEFAULT, 'zanahorai');
+insert into t_ingredient values(DEFAULT, 'zanahoria');
 insert into t_ingredient values(DEFAULT, 'cebolla');
 insert into t_ingredient values(DEFAULT, 'ketchup');
 insert into t_ingredient values(DEFAULT, 'tortilla');

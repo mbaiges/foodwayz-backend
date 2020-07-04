@@ -304,14 +304,16 @@ module.exports = class AuthRoutes {
         expiresIn: "1d"
       }
     );
-    console.log("exp://localhost:19000/verify_email/" + token);
+    console.log("http://www.foodwayz.dychromatic.itba.edu.ar/verify_email/" + token);
 
     const mailOptions = {
         from : "Dychromatic <noreply@vysly.com>",
         to : user.a_email,
         subject : "Email Confirmation",
-        html : '<a href="exp://localhost:19000/verify_email/'+token+'"><H2>Click on this</H2></a>'
+        html : `<a href="http://www.foodwayz.dychromatic.itba.edu.ar"><H2>Click on this</H2></a>`
     }
+
+    console.log(mailOptions);
 
     this.server.transporter.sendMail(mailOptions, (err, data) => {
         if(err){
