@@ -94,15 +94,6 @@ module.exports = class AuthRoutes {
 
       user = user[0];
 
-      if (!user.a_is_verified) {
-        return res
-          .status(401)
-          .json({
-            code: "not-verified",
-            message: "Invalid authorization - Missing email verification."
-          });
-      }
-
       const comparePassword = await bcrypt.compare(a_password, user.a_password);
       if (!comparePassword)
         return res
@@ -111,6 +102,15 @@ module.exports = class AuthRoutes {
             code: "invalid-auth",
             message: "Invalid authorization - Incorrect password."
           });
+
+      if (!user.a_is_verified) {
+        return res
+          .status(401)
+          .json({
+            code: "not-verified",
+            message: "Invalid authorization - Missing email verification."
+          });
+      }
 
       const jwt = JWT.sign({
           iss: "dahwdwuadhawuidha",
@@ -304,13 +304,13 @@ module.exports = class AuthRoutes {
         expiresIn: "1d"
       }
     );
-    console.log("http://localhost:3000/verify_email/" + token);
+    console.log("exp://localhost:19000/verify_email/" + token);
 
     const mailOptions = {
         from : "Dychromatic <noreply@vysly.com>",
         to : user.a_email,
         subject : "Email Confirmation",
-        html : '<a href="http://localhost:3000/verify_email/'+token+'"><H2>Click on this</H2></a>'
+        html : '<a href="exp://localhost:19000/verify_email/'+token+'"><H2>Click on this</H2></a>'
     }
 
     this.server.transporter.sendMail(mailOptions, (err, data) => {
