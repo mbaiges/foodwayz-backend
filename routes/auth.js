@@ -37,16 +37,16 @@ module.exports = class AuthRoutes {
         .db("t_user")
         .where({
           a_email: a_email
-        })
-        .first();
+        });
 
-      if (exists)
+      if (exists && exists.length > 0) {
         return res
-          .status(400)
-          .json({
-            code: "email-exists",
-            message: "Email already associated"
-          });
+        .status(400)
+        .json({
+          code: "email-exists",
+          message: "Email already associated"
+        });
+      }
 
       const hash = await bcrypt.hash(a_password, 10);
 
@@ -80,17 +80,19 @@ module.exports = class AuthRoutes {
     } = req.body;
 
     try {
-      const user = await this.server
+      let user = await this.server
         .db("t_user")
         .where({
           a_email: a_email
-        })
-        .first();
-      if (!user)
+        });
+
+      if (!user || user.length == 0)
         return res.status(400).json({
           code: "user-not-exists",
           message: "A user with that mail address was not found.",
         });
+
+      user = user[0];
 
       if (!user.a_is_verified) {
         return res
@@ -210,7 +212,6 @@ module.exports = class AuthRoutes {
         .where({
           a_user_id
         })
-        .first()
         .del();
 
       return res.status(200).json({
@@ -233,9 +234,9 @@ module.exports = class AuthRoutes {
     const exp_date = decoded ? decoded.expiration_date : '';
 
     if(new Date(exp_date) > new Date()){
-      let user = await this.server.db('t_user').where({a_user_id: id}).first();
+      let user = await this.server.db('t_user').where({a_user_id: id});
       
-      if (!user) {
+      if (!user || user.length == 0) {
         console.log("User not found");
         return res.status(404).json({message : "User not found"});
       }
@@ -260,14 +261,13 @@ module.exports = class AuthRoutes {
       a_email
     } = req.body;
 
-    const user = await this.server
+    let user = await this.server
       .db("t_user")
       .where({
         a_email: a_email
-      })
-      .first();
+      });
       
-    if (!user) {
+    if (!user || user.length == 0) {
       return res
         .status(404)
         .json({
@@ -275,6 +275,8 @@ module.exports = class AuthRoutes {
           message: "Email not registered"
         });
     }
+
+    user = user[0];
 
     if (user.a_is_verified) {
       return res
