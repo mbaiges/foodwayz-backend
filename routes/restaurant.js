@@ -122,9 +122,16 @@ module.exports = class RestaurantRoute {
                 return;
             }
 
+            const chainId = await this.server.db('t_restaurant').select('a_rest_chain_id').where('a_rest_id', '=', id);
+            console.log(chainId);
             const response = await this.server.db('t_restaurant').where('a_rest_id', '=', id).del();
-            if (response != 0)
+            if (response != 0) {
                 res.status(200).json(message.delete('restaurant', response));
+                if(chainId[0].a_rest_chain_id != null) {
+                    const chainRoute = require('./restaurant_chain');
+                    new chainRoute(this.server).updateChainScore(chainId[0].a_rest_chain_id);
+                }
+            }
             else
                 res.status(404).json(message.notFound('restaurant', id));
         } catch (error) {

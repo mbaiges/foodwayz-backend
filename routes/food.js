@@ -319,11 +319,15 @@ module.exports = class FoodRoute {
                 res.status(401).json(message.unauth('restaurant food modify', 'not an owner'));
                 return;
             }
-
+            
+            const restId = await this.server.db('t_food').select('a_rest_id').where({a_food_id: id});
             const ret = await this.server.db('t_food').where({a_food_id: id}).del();
 
-            if(ret)
+            if(ret) {
                 res.status(200).json(message.delete('food', ret));
+                const restRoute = require('./restaurant');
+                new restRoute(this.server).updateRestScore(restId[0].a_rest_id);
+            }
             else
                 res.status(404).json(message.notFound('food', id));
         } catch (error) {
