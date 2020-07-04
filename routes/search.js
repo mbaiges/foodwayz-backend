@@ -131,7 +131,7 @@ module.exports = class SearchRoute {
             chars = chars.map(r => r.a_char_id);
             chars = chars.filter((value, index) => chars.indexOf(value) === index);
 
-            chars = await this.charRoute.getCharsObjects({ filters: {a_char_id: chars} });
+            chars = await this.charRoute.getCharacteristicsObjects({ filters: {a_char_id: chars} });
 
             return res.status(200).json({result: chars});
 
