@@ -6,6 +6,15 @@ module.exports = class SearchRoute {
     }
 
     async initialize(app) {
+        app.route('/search/type')
+            .post(this.searchTypes.bind(this));
+
+        app.route('/search/ingredient')
+            .post(this.searchIngredients.bind(this));
+
+        app.route('/search/characteristic')
+            .post(this.searchCharacteristics.bind(this));
+
         app.route('/search/food')
             .post(this.searchFoods.bind(this));
 
@@ -13,44 +22,124 @@ module.exports = class SearchRoute {
             .post(this.searchRestaurants.bind(this));
     }
 
-    async searchRestaurants(req, res) {
-        if (!this.restaurantRoute) {
-            const RestaurantRoute = require('./restaurant');
-            this.restaurantRoute = new RestaurantRoute(this.server);
+    async searchTypes(req, res) {
+        if (!this.typeRoute) {
+            const TypeRoute = require('./type');
+            this.typeRoute = new TypeRoute(this.server);
         }
 
         const {
             raw_input
         } = req.body;
 
-        let rests;
+        let types;
 
         let input_pg_regex = "%" + raw_input.replace(/ /g,"%") + "%";
 
         try {
-            rests = await this.server.db.select('a_rest_id').from('t_restaurant')
-            .join('t_restaurant_chain', 't_restaurant.a_rest_chain_id', '=', 't_restaurant_chain.a_rest_chain_id')
-            .where('t_restaurant.a_name', 'ilike', input_pg_regex)
-            .orWhere('t_restaurant_chain.a_name', 'ilike', input_pg_regex);
+            types = await this.server.db.select('a_type_id').from('t_type')
+            .where('a_type_name', 'ilike', input_pg_regex);
 
-            if (!Array.isArray(rests)) {
-                rests = [rests];
+            if (!Array.isArray(types)) {
+                types = [types];
             }
 
-            if (!rests) {
-                rests = [];
+            if (!types) {
+                types = [];
             }
 
-            rests = rests.map(r => r.a_rest_id);
-            rests = rests.filter((value, index) => rests.indexOf(value) === index);
+            types = types.map(r => r.a_type_id);
+            types = types.filter((value, index) => types.indexOf(value) === index);
 
-            rests = await this.restaurantRoute.getRestaurantsObjects({ filters: {a_rest_id: rests} });
+            types = await this.typeRoute.getTypesObjects({ filters: {a_type_id: types} });
 
-            return res.status(200).json({result: rests});
+            return res.status(200).json({result: types});
+
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error.message});
+            res.status(500).json({message: error});
         }
+
+    }
+
+    async searchIngredients(req, res) {
+        if (!this.ingrRoute) {
+            const IngredientRoute = require('./ingredient');
+            this.ingrRoute = new IngredientRoute(this.server);
+        }
+
+        const {
+            raw_input
+        } = req.body;
+
+        let ingrs;
+
+        let input_pg_regex = "%" + raw_input.replace(/ /g,"%") + "%";
+
+        try {
+            ingrs = await this.server.db.select('a_ingr_id').from('t_ingredient')
+            .where('a_ingr_name', 'ilike', input_pg_regex);
+
+            if (!Array.isArray(ingrs)) {
+                ingrs = [ingrs];
+            }
+
+            if (!ingrs) {
+                ingrs = [];
+            }
+
+            ingrs = ingrs.map(r => r.a_ingr_id);
+            ingrs = ingrs.filter((value, index) => ingrs.indexOf(value) === index);
+
+            ingrs = await this.ingrRoute.getIngredientsObjects({ filters: {a_ingr_id: ingrs} });
+
+            return res.status(200).json({result: ingrs});
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message: error});
+        }
+        
+    }
+
+    async searchCharacteristics(req, res) {
+        if (!this.charRoute) {
+            const CharacteristicRoute = require('./type');
+            this.charRoute = new CharacteristicRoute(this.server);
+        }
+
+        const {
+            raw_input
+        } = req.body;
+
+        let chars;
+
+        let input_pg_regex = "%" + raw_input.replace(/ /g,"%") + "%";
+
+        try {
+            chars = await this.server.db.select('a_char_id').from('t_characteristic')
+            .where('a_char_name', 'ilike', input_pg_regex);
+
+            if (!Array.isArray(chars)) {
+                chars = [chars];
+            }
+
+            if (!chars) {
+                chars = [];
+            }
+
+            chars = chars.map(r => r.a_char_id);
+            chars = chars.filter((value, index) => chars.indexOf(value) === index);
+
+            chars = await this.charRoute.getCharsObjects({ filters: {a_char_id: chars} });
+
+            return res.status(200).json({result: chars});
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message: error});
+        }
+        
     }
 
     async searchFoods(req, res) {
@@ -154,7 +243,47 @@ module.exports = class SearchRoute {
             return res.status(200).json({result: foods});
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error.message});
+            res.status(500).json({message: error});
+        }
+    }
+
+    async searchRestaurants(req, res) {
+        if (!this.restaurantRoute) {
+            const RestaurantRoute = require('./restaurant');
+            this.restaurantRoute = new RestaurantRoute(this.server);
+        }
+
+        const {
+            raw_input
+        } = req.body;
+
+        let rests;
+
+        let input_pg_regex = "%" + raw_input.replace(/ /g,"%") + "%";
+
+        try {
+            rests = await this.server.db.select('a_rest_id').from('t_restaurant')
+            .join('t_restaurant_chain', 't_restaurant.a_rest_chain_id', '=', 't_restaurant_chain.a_rest_chain_id')
+            .where('t_restaurant.a_name', 'ilike', input_pg_regex)
+            .orWhere('t_restaurant_chain.a_name', 'ilike', input_pg_regex);
+
+            if (!Array.isArray(rests)) {
+                rests = [rests];
+            }
+
+            if (!rests) {
+                rests = [];
+            }
+
+            rests = rests.map(r => r.a_rest_id);
+            rests = rests.filter((value, index) => rests.indexOf(value) === index);
+
+            rests = await this.restaurantRoute.getRestaurantsObjects({ filters: {a_rest_id: rests} });
+
+            return res.status(200).json({result: rests});
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message: error});
         }
     }
 
