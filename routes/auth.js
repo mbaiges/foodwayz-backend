@@ -9,7 +9,6 @@ module.exports = class AuthRoutes {
   }
 
   async initialize(app) {
-    // route.get(this.getBooks.bind(this));
     app.post("/verify_email", this.verifyEmail.bind(this));
     app.post("/reset_password", this.resetPassword.bind(this));
     app.post("/reset_password/confirm", this.resetPasswordConfirmation.bind(this));
@@ -210,12 +209,20 @@ module.exports = class AuthRoutes {
         });
       }
 
-      const del = await this.server
-        .db("t_user")
-        .where({
-          a_user_id
-        })
-        .del();
+      const foodRevs = await this.server.db('t_review').select('a_food_id').where({a_user_id: a_user_id}).distinct();
+
+      await this.server.db("t_user").where({a_user_id}).del();
+
+      if(foodRevs.length != 0) {
+        if (!this.foodRoute) {
+          const FoodRoute = require('./food');
+          this.foodRoute = new FoodRoute(this.server);
+        }
+
+        for (const idx in foodRevs) {
+          this.foodRoute.updateFoodScore(foodRevs[idx].a_food_id);
+        }
+      }
 
       return res.status(200).json({
         code: "user-deleted",

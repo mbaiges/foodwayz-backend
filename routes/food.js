@@ -357,9 +357,12 @@ module.exports = class FoodRoute {
                 let sum = 0;
                 revs.forEach(v => sum += Number.parseFloat(v));
                 await this.server.db('t_food').update({a_score: sum/revs.length}).where({a_food_id: foodId});
-                const restId = (await this.server.db('t_food').select('a_rest_id').where({a_food_id: foodId}))[0].a_rest_id;
-                this.restRoute.updateRestScore(restId);
-            }           
+            } else {
+                await this.server.db('t_food').update({a_score: 0}).where({a_food_id: foodId});
+            }
+            const restId = (await this.server.db('t_food').select('a_rest_id').where({a_food_id: foodId}))[0].a_rest_id;
+            this.restRoute.updateRestScore(restId);
+                       
         } catch (error) {
             console.log(error.message);
         }
