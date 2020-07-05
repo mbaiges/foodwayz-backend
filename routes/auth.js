@@ -251,7 +251,7 @@ module.exports = class AuthRoutes {
         if(new Date(userVerify.a_valid_until) > new Date()){
           if (userVerify.a_code.toUpperCase() === a_code) {
             user.a_is_verified = true;
-            this.server.db('t_user').where({a_user_id: user.a_user_id}).update(user);
+            await this.server.db('t_user').where({a_user_id: user.a_user_id}).update(user);
             this.server.db('t_user_verify').where({a_user_id: user.a_user_id}).del();
             return res.status(200).json({result: true, code: "verified"});
           }
@@ -346,7 +346,7 @@ module.exports = class AuthRoutes {
       await this.server.db('t_user_verify').where({a_user_id: user.a_user_id}).update(userVerify);
     }
     else {
-      await this.server.db('t_user_verify').where({a_user_id: user.a_user_id}).insert(userVerify);
+      await this.server.db('t_user_verify').insert(userVerify);
     }
 
     const mailOptions = {
@@ -422,7 +422,7 @@ module.exports = class AuthRoutes {
       await this.server.db('t_user_verify').where({a_user_id: user.a_user_id}).update(userVerify);
     }
     else {
-      await this.server.db('t_user_verify').where({a_user_id: user.a_user_id}).insert(userVerify);
+      await this.server.db('t_user_verify').insert(userVerify);
     }
 
     const mailOptions = {
@@ -477,7 +477,7 @@ module.exports = class AuthRoutes {
           if(new Date(userVerify.a_valid_until) > new Date()){
             if (userVerify.a_code.toUpperCase() === a_code) {
               user.a_password = await bcrypt.hash(a_password_new, 10);
-              this.server.db('t_user').where({a_user_id: user.a_user_id}).update(user);
+              await this.server.db('t_user').where({a_user_id: user.a_user_id}).update(user);
               this.server.db('t_user_verify').where({a_user_id: user.a_user_id}).del();
               return res.status(200).json({result: true, code: "verified"});
             }

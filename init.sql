@@ -105,6 +105,9 @@ CREATE TABLE t_review (
   a_user_id int,
   a_food_id int,
   a_desc varchar(256),
+  a_food_quality_score decimal(10,2) NOT NULL,
+  a_presentation_score decimal(10,2) NOT NULL,
+  a_price_quality_score decimal(10,2) NOT NULL,
   a_score decimal(10,2) NOT NULL,
   a_created_at timestamp NOT NULL DEFAULT NOW(),
   PRIMARY KEY(a_review_id, a_user_id, a_food_id),
@@ -123,19 +126,19 @@ CREATE TABLE t_owns (
 CREATE TABLE t_food_views (
   a_user_id int,
   a_food_id int,
-  a_start_ts timestamp,
-  a_finish_ts timestamp,
-  PRIMARY KEY(a_user_id, a_food_id, a_start_ts),
-  UNIQUE(a_user_id, a_food_id, a_finish_ts)
+  a_time timestamp NOT NULL DEFAULT NOW(),
+  PRIMARY KEY(a_user_id, a_food_id, a_time),
+  FOREIGN KEY(a_user_id) REFERENCES t_user(a_user_id) ON DELETE CASCADE,
+  FOREIGN KEY(a_food_id) REFERENCES t_food(a_food_id) ON DELETE CASCADE,
 );
 
 CREATE TABLE t_restaurant_views (
   a_user_id int,
-  a_food_id int,
-  a_start_ts timestamp,
-  a_finish_ts timestamp,
-  PRIMARY KEY(a_user_id, a_food_id, a_start_ts),
-  UNIQUE(a_user_id, a_food_id, a_finish_ts)
+  a_rest_id int,
+  a_time timestamp NOT NULL DEFAULT NOW(),
+  PRIMARY KEY(a_user_id, a_food_id, a_time),
+  FOREIGN KEY(a_user_id) REFERENCES t_user(a_user_id) ON DELETE CASCADE,
+  FOREIGN KEY(a_rest_id) REFERENCES t_restaurant(a_rest_id) ON DELETE CASCADE,
 );
 
 

@@ -13,7 +13,10 @@ module.exports = class RestaurantRoute {
         app.route('/restaurant/:id')
             .get(this.getRestaurant.bind(this))
             .delete(this.removeRestaurant.bind(this))
-            .put(this.modifyRestaurant.bind(this))
+            .put(this.modifyRestaurant.bind(this));
+
+        app.route('/restaurant/:id/stats')
+            .get(this.getStatistics.bind(this));
 
         app.route('/restaurant/:id/premium')
             .put(this.updatePremiumStatus.bind(this));
@@ -110,6 +113,11 @@ module.exports = class RestaurantRoute {
     }
 
     async removeRestaurant(req, res) {
+        if (!this.restaurantChainRoute) {
+            const RestaurantChainRoute = require('./restaurant_chain');
+            this.restaurantChainRoute = new RestaurantChainRoute(this.server);
+        }
+
         try {
 
             const {
@@ -128,8 +136,7 @@ module.exports = class RestaurantRoute {
             if (response != 0) {
                 res.status(200).json(message.delete('restaurant', response));
                 if(chainId[0].a_rest_chain_id != null) {
-                    const chainRoute = require('./restaurant_chain');
-                    new chainRoute(this.server).updateChainScore(chainId[0].a_rest_chain_id);
+                    this.restaurantChainRoute.updateChainScore(chainId[0].a_rest_chain_id);
                 }
             }
             else
@@ -233,6 +240,20 @@ module.exports = class RestaurantRoute {
             return rests;
         }
         return null;
+    }
+
+    async getStatistics(req, res) {
+        const {
+            id
+        } = req.params;
+
+        /*
+            - Cantidad de vistas en el ultimo día
+            - Cantidad de vistas (Por días de la semana, por hora)
+            - Cantidad de usuarios por genero
+            - Cantidad de usuarios por edad
+            - Cantidad de usuarios por características
+        */
     }
 
     async updatePremiumStatus(req, res) {
@@ -446,6 +467,11 @@ module.exports = class RestaurantRoute {
     }
 
     async updateRestScore(restId) {
+        if (!this.restaurantChainRoute) {
+            const RestaurantChainRoute = require('./restaurant_chain');
+            this.restaurantChainRoute = new RestaurantChainRoute(this.server);
+        }
+
         try {
             const foods = (await this.server.db('t_food').select('a_score').where({a_rest_id: restId})).map(r => r.a_score);
             if(foods.length != 0) {
@@ -454,8 +480,7 @@ module.exports = class RestaurantRoute {
                 await this.server.db('t_restaurant').update({a_score: sum/foods.length}).where({a_rest_id: restId});
                 const chainId = (await this.server.db('t_restaurant').select('a_rest_chain_id').where({a_rest_id: restId}))[0].a_rest_chain_id;
                 if(chainId != null && chainId != undefined) {
-                    const chainRoute = require('./restaurant_chain');
-                    new chainRoute(this.server).updateChainScore(chainId);
+                    this.restaurantChainRoute.updateChainScore(chainId);
                 }
             }
         } catch (error) {

@@ -78,11 +78,13 @@ module.exports = class ReviewRoute {
     async addRev(req, res) {
         const { foodId } = req.params;
         const userId = req.user.a_user_id;
-        const { a_desc, a_score } = req.body;
+        const { a_desc, a_food_quality_score, a_presentation_score, a_price_quality_score } = req.body;
 
         const params = {
             a_desc: [a_desc, typeof(a_desc) === 'string'],
-            a_score: [a_score, (Number(a_score) === a_score && a_score >= 0 && a_score <= 5)],
+            a_food_quality_score: [a_food_quality_score, (Number(a_food_quality_score) === a_food_quality_score && a_food_quality_score >= 0 && a_food_quality_score <= 5)],
+            a_presentation_score: [a_presentation_score, (Number(a_presentation_score) === a_presentation_score && a_presentation_score >= 0 && a_presentation_score <= 5)],
+            a_price_quality_score: [a_price_quality_score, (Number(a_price_quality_score) === a_price_quality_score && a_price_quality_score >= 0 && a_price_quality_score <= 5)],
         }
 
         let errors = {};
@@ -103,8 +105,11 @@ module.exports = class ReviewRoute {
             const rev = await this.server.db('t_review').insert({
                 a_user_id: userId,
                 a_food_id: foodId,
-                a_score: a_score,
-                a_desc: a_desc
+                a_desc: a_desc,
+                a_food_quality_score: a_food_quality_score,
+                a_presentation_score: a_presentation_score,
+                a_price_quality_score: a_price_quality_score,
+                a_score: (a_food_quality_score + a_presentation_score + a_price_quality_score)/3
             }).returning('*');
 
             res.status(200).json(message.post('review', rev));

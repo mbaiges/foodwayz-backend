@@ -217,12 +217,15 @@ module.exports = class FoodRoute {
                 }
 
                 if (detailed && detailed === true) {
-                    if (!this.foodIngrRoute || !this.foodCharRoute) {
+                    if (!this.foodIngrRoute) {
                         const FoodIngredientRoute = require('./food_ingredient');
                         this.foodIngrRoute = new FoodIngredientRoute(this.server);
+                    }
+                    if (!this.foodCharRoute) {
                         const FoodCharacteristicRoute = require('./food_characteristic');
                         this.foodCharRoute = new FoodCharacteristicRoute(this.server);
                     }
+                    
                     ingrs = await this.foodIngrRoute.getIngrsByFoodObjects(foods[i].a_food_id);
                     foods[i].a_ingredients = ingrs;
                     chars = await this.foodCharRoute.getCharsByFoodObjects(foods[i].a_food_id);
@@ -288,14 +291,16 @@ module.exports = class FoodRoute {
                 }
             }
 
-            if (detailed && detailed === true && sorted) {
-                const { reviews_amount } = sorted;
-
-                if (reviews_amount && reviews_amount === true) {
+            if (detailed && detailed === true && sort_by) {
+                
+                if (sort_by === "most_reviews") {
                     foods = foods.sort((a, b) => b.a_reviews_info.total - a.a_reviews_info.total);
                 }
-                else if (reviews_amount === false) {
-                    foods = foods.sort((a, b) => a.a_reviews_info.total - b.a_reviews_info.total);
+                else if (sort_by === "best_rated") {
+                    foods = foods.sort((a, b) => a.a_score - b.a_score);
+                }
+                else if (sort_by === "most_views") {
+
                 }
             }
 
@@ -305,6 +310,11 @@ module.exports = class FoodRoute {
     }
 
     async delFood(req, res) {
+        if (!this.restRoute) {
+            const RestaurantRoute = require('./restaurant');
+            this.restRoute = new RestaurantRoute(this.server);
+        }
+
         try {
             const { id } = req.params;
 
@@ -325,8 +335,7 @@ module.exports = class FoodRoute {
 
             if(ret) {
                 res.status(200).json(message.delete('food', ret));
-                const restRoute = require('./restaurant');
-                new restRoute(this.server).updateRestScore(restId[0].a_rest_id);
+                this.restRoute.updateRestScore(restId[0].a_rest_id);
             }
             else
                 res.status(404).json(message.notFound('food', id));
@@ -337,6 +346,11 @@ module.exports = class FoodRoute {
     }
 
     async updateFoodScore(foodId) {
+        if (!this.restRoute) {
+            const RestaurantRoute = require('./restaurant');
+            this.restRoute = new RestaurantRoute(this.server);
+        }
+
         try {
             const revs = (await this.server.db('t_review').select('a_score').where({a_food_id: foodId})).map(r => r.a_score);
             if(revs.length != 0) {
@@ -344,8 +358,7 @@ module.exports = class FoodRoute {
                 revs.forEach(v => sum += Number.parseFloat(v));
                 await this.server.db('t_food').update({a_score: sum/revs.length}).where({a_food_id: foodId});
                 const restId = (await this.server.db('t_food').select('a_rest_id').where({a_food_id: foodId}))[0].a_rest_id;
-                const restRoute = require('./restaurant');
-                new restRoute(this.server).updateRestScore(restId);
+                this.restRoute.updateRestScore(restId);
             }           
         } catch (error) {
             console.log(error.message);

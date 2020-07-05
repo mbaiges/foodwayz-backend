@@ -74,14 +74,14 @@ INSERT INTO t_user VALUES(DEFAULT, 'user4', null, null, 'user4@email.com', '$2b$
 INSERT INTO t_user VALUES(DEFAULT, 'user5', null, null, 'user5@email.com' ,'$2b$10$tu1t7imPJ.afB.BOFP140uVEHUMKMlqOwKYnUgPGmV3BN8GaA7.Xa', DEFAULT, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser5%40email_com.jpg?alt=media&token=9cfe6b05-ff65-448b-b089-8f93109a89ae', true);
 select * from t_user;
 
-INSERT INTO t_review VALUES(DEFAULT, 1, 1, 'moito ustoso', 4.5, DEFAULT);
-INSERT INTO t_review VALUES(DEFAULT, 1, 2, 'meh', 2.5, DEFAULT);
-INSERT INTO t_review VALUES(DEFAULT, 1, 3, 're piolin', 5, DEFAULT);
-INSERT INTO t_review VALUES(DEFAULT, 1, 4, 'bastante ben', 4.5, DEFAULT);
-INSERT INTO t_review VALUES(DEFAULT, 2, 3, 'no tan rico', 3.5, DEFAULT);
-INSERT INTO t_review VALUES(DEFAULT, 3, 4, 'yay', 5, DEFAULT);
-INSERT INTO t_review VALUES(DEFAULT, 4, 5, 'seeee', 4.5, DEFAULT);
-INSERT INTO t_review VALUES(DEFAULT, 5, 5, 'hmmm', 1.5, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 1, 1, 'moito ustoso', 1, 2, 3, 2, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 1, 2, 'meh', 4, 5, 5, 4.66, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 1, 3, 're piolin', 3, 1, 3, 2.33, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 1, 4, 'bastante ben', 2, 2, 2, 2, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 2, 3, 'no tan rico', 1, 5, 5, 3.66, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 3, 4, 'yay', 5, 5, 5, 5, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 4, 5, 'seeee', 5, 5, 3.5, 4.5, DEFAULT);
+INSERT INTO t_review VALUES(DEFAULT, 5, 5, 'hmmm', 0, 4.5, 0, 1.5, DEFAULT);
 select * from t_review;
 
 INSERT INTO t_food_has_characteristic VALUES(1, 4);
