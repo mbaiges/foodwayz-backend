@@ -56,7 +56,7 @@ CREATE TABLE t_user_verify (
   a_user_id int PRIMARY KEY,
   a_code varchar(8) NOT NULL,
   a_valid_until date,
-  FOREIGN KEY(a_user_id) REFERENCES t_user(a_user_id) ON DELETE CASCADE,
+  FOREIGN KEY(a_user_id) REFERENCES t_user(a_user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE t_characteristic (
@@ -129,16 +129,16 @@ CREATE TABLE t_food_views (
   a_time timestamp NOT NULL DEFAULT NOW(),
   PRIMARY KEY(a_user_id, a_food_id, a_time),
   FOREIGN KEY(a_user_id) REFERENCES t_user(a_user_id) ON DELETE CASCADE,
-  FOREIGN KEY(a_food_id) REFERENCES t_food(a_food_id) ON DELETE CASCADE,
+  FOREIGN KEY(a_food_id) REFERENCES t_food(a_food_id) ON DELETE CASCADE
 );
 
 CREATE TABLE t_restaurant_views (
   a_user_id int,
   a_rest_id int,
   a_time timestamp NOT NULL DEFAULT NOW(),
-  PRIMARY KEY(a_user_id, a_food_id, a_time),
+  PRIMARY KEY(a_user_id, a_rest_id, a_time),
   FOREIGN KEY(a_user_id) REFERENCES t_user(a_user_id) ON DELETE CASCADE,
-  FOREIGN KEY(a_rest_id) REFERENCES t_restaurant(a_rest_id) ON DELETE CASCADE,
+  FOREIGN KEY(a_rest_id) REFERENCES t_restaurant(a_rest_id) ON DELETE CASCADE
 );
 
 
