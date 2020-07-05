@@ -42,7 +42,7 @@ module.exports = class ViewsRoute {
         } = req.params;
         
         try {
-            await this.server.db('t_food_view').insert({a_user_id, a_rest_id: restId});
+            await this.server.db('t_restaurant_view').insert({a_user_id, a_rest_id: restId});
             return res.status(200).json(message.post("restaurant view registered", true));
         } catch (error) {
             console.log(error);
