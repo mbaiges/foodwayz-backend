@@ -292,7 +292,9 @@ module.exports = class FoodRoute {
                     views_info = await this.server.db('t_food_view').where({a_food_id: foods[i].a_food_id});
 
                     if (views_info) {
-                        console.log(views_info);
+                        for (let j = 0; j < views_info.length; j++) {
+                            console.log(views_info[j].a_time.getMinutes());
+                        }
                     }
                 }
             }

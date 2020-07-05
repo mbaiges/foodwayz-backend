@@ -8,7 +8,7 @@ module.exports = class AuthMiddleware {
 	}
 
 	async doMiddleware(req, res, next) {
-		const publicRoutes = [ '/login', '/register', 'verify_email', 'resend_email' ];
+		const publicRoutes = [ '/login', '/register', 'verify_email', 'reset_password' ];
 		
 		for (let i = 0; i < publicRoutes.length; i++) {
 			if (req.originalUrl.includes(publicRoutes[i])) {
