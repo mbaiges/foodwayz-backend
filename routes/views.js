@@ -27,7 +27,7 @@ module.exports = class ViewsRoute {
             return res.status(200).json(message.post("food view registered", true));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error.message});
+            return res.status(500).json({message: error.message});
         }
 
     }
@@ -46,7 +46,7 @@ module.exports = class ViewsRoute {
             return res.status(200).json(message.post("restaurant view registered", true));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error.message});
+            return res.status(500).json({message: error.message});
         }
 
     }
