@@ -6,7 +6,7 @@ module.exports = class ViewsRoute {
     }
 
     async initialize(app) {
-        app.route('/views/food/:foodId')
+        app.route('/view/food/:foodId')
             .post(this.registerFoodView.bind(this));
 
         app.route('/view/restaurant/:restId')
@@ -23,8 +23,8 @@ module.exports = class ViewsRoute {
         } = req.params;
 
         try {
-            await this.server.db('t_food_view').insert({a_user_id, foodId});
-            return res.status(200).json(message.post("food view registered", true));
+            await this.server.db('t_food_view').insert({a_user_id, a_food_id: foodId});
+            return res.status(200).json(message.post("food view", true));
         } catch (error) {
             console.log(error);
             res.status(500).json({message: error.message});
@@ -42,8 +42,8 @@ module.exports = class ViewsRoute {
         } = req.params;
         
         try {
-            await this.server.db('t_food_view').insert({a_user_id, restId});
-            return res.status(200).json(message.post("restaurant view registered", true));
+            await this.server.db('t_restaurant_view').insert({a_user_id, a_rest_id:restId});
+            return res.status(200).json(message.post("restaurant view", true));
         } catch (error) {
             console.log(error);
             res.status(500).json({message: error.message});
