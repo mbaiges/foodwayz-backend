@@ -251,7 +251,8 @@ module.exports = class AuthRoutes {
         if(new Date(userVerify.a_valid_until) > new Date()){
           if (userVerify.a_code.toUpperCase() === a_code) {
             user.a_is_verified = true;
-            const updatedUser = await this.server.db('t_user').where({a_user_id: user.a_user_id}).update(user);
+            this.server.db('t_user').where({a_user_id: user.a_user_id}).update(user);
+            this.server.db('t_user_verify').where({a_user_id: user.a_user_id}).del();
             return res.status(200).json({result: true, code: "verified"});
           }
           else {
