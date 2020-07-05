@@ -291,11 +291,39 @@ module.exports = class FoodRoute {
 
                     views_info = await this.server.db('t_food_view').where({a_food_id: foods[i].a_food_id});
 
-                    if (views_info) {
+                    if (views_info && views_info.length > 1) {
+                        let viewsByUser = {};
+                        let user, time;
+
                         for (let j = 0; j < views_info.length; j++) {
-                            console.log(views_info[j].a_time.getMinutes());
+                            user = views_info[j].a_user_id;
+                            time = views_info[j].a_time;
+
+                            console.log(time.getMinutes());
+                            
+                            if (!viewsByUser[user]) {
+                                viewsByUser[user] = [];
+                            }
+
+                            if (viewsByUser[user].length === 0) {
+                                viewsByUser[user].push(time);
+                            }
+                            else {
+                                if ( (time - (viewsByUser[user])[viewsByUser[user].length - 1]) > 10 * 60 * 1000) {
+                                    viewsByUser[user].push(time);
+                                }
+                            }
                         }
+
+                        views_info = {};
+                        views_info.total = Object.values(viewsByUser).reduce((a, b) => a += b.length, 0);
                     }
+                    else {
+                        views_info = {};
+                        views_info.total = 0;
+                    }
+
+                    foods[i].a_views_info = views_info;
                 }
             }
 
@@ -305,10 +333,10 @@ module.exports = class FoodRoute {
                     foods = foods.sort((a, b) => b.a_reviews_info.total - a.a_reviews_info.total);
                 }
                 else if (sort_by === "best_rated") {
-                    foods = foods.sort((a, b) => a.a_score - b.a_score);
+                    foods = foods.sort((a, b) => b.a_score - a.a_score);
                 }
                 else if (sort_by === "most_views") {
-
+                    foods = foods.sort((a, b) => b.a_views_info.total - a.a_views_info.total);
                 }
             }
 
