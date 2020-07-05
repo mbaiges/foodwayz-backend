@@ -478,10 +478,12 @@ module.exports = class RestaurantRoute {
                 let sum = 0;
                 foods.forEach(v => sum += Number.parseFloat(v));
                 await this.server.db('t_restaurant').update({a_score: sum/foods.length}).where({a_rest_id: restId});
-                const chainId = (await this.server.db('t_restaurant').select('a_rest_chain_id').where({a_rest_id: restId}))[0].a_rest_chain_id;
-                if(chainId != null && chainId != undefined) {
-                    this.restaurantChainRoute.updateChainScore(chainId);
-                }
+            } else {
+                await this.server.db('t_restaurant').update({a_score: 0}).where({a_rest_id: restId});
+            }
+            const chainId = (await this.server.db('t_restaurant').select('a_rest_chain_id').where({a_rest_id: restId}))[0].a_rest_chain_id;
+            if(chainId != null && chainId != undefined) {
+                this.restaurantChainRoute.updateChainScore(chainId);
             }
         } catch (error) {
             console.log(error.message);

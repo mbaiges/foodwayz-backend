@@ -175,6 +175,9 @@ module.exports = class RestaurantChainRoute {
                 rests.forEach(v => sum += Number.parseFloat(v));
                 await this.server.db('t_restaurant_chain').update({a_score: sum/rests.length}).where({a_rest_chain_id: chainId});
             }
+            else {
+                await this.server.db('t_restaurant_chain').update({a_score: 0}).where({a_rest_chain_id: chainId});
+            }
         } catch (error) {
             console.log(error.message);
         }
