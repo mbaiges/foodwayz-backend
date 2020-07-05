@@ -6,7 +6,7 @@ module.exports = class ViewsRoute {
     }
 
     async initialize(app) {
-        app.route('/view/food/:foodId')
+        app.route('/views/food/:foodId')
             .post(this.registerFoodView.bind(this));
 
         app.route('/views/restaurant/:restId')
