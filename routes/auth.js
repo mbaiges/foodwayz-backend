@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const JWT = require("jsonwebtoken");
 const moment = require("moment");
+const crypto = require("crypto");
 
 module.exports = class AuthRoutes {
   constructor(server) {
@@ -9,8 +10,10 @@ module.exports = class AuthRoutes {
 
   async initialize(app) {
     // route.get(this.getBooks.bind(this));
-    app.get("/verify_email/:token", this.verifyEmail.bind(this));
-    app.post("/resend_email", this.resendEmail.bind(this));
+    app.post("/verify_email", this.verifyEmail.bind(this));
+    app.post("/reset_password", this.resetPassword.bind(this));
+    app.post("/reset_password/confirm", this.resetPasswordConfirmation.bind(this));
+    app.post("/resend_email", this.resendVerificationEmail.bind(this));
     app.post("/login", this.loginUser.bind(this));
     app.post("/register", this.registerUser.bind(this));
     app.delete("/delete_account", this.removeUser.bind(this));
@@ -227,11 +230,45 @@ module.exports = class AuthRoutes {
   }
 
   async verifyEmail(req, res) {
-    const token = req.params.token;
-    const decoded = JWT.verify(token, process.env.JWT_SECRET);
 
-    const id = decoded ? decoded.sub : '';
-    const exp_date = decoded ? decoded.expiration_date : '';
+    const {
+      a_email,
+      a_code
+    } = req.body;
+
+    let user = await this.server.db('t_user').where({a_email});
+
+    if (user && user.length > 0) {
+      user = user[0];
+      if (user.a_is_verified) {
+        return res.status(200).json({result: true, code: "already-verified"});
+      }
+
+      let userVerify = await this.server.db('t_user_verify').where({a_user_id: user.a_user_id});
+      
+      if (userVerify && userVerify.length > 0) {
+        userVerify = userVerify[0];
+        if(new Date(userVerify.a_valid_until) > new Date()){
+          if (userVerify.a_code.toUpperCase() === a_code) {
+            user.a_is_verified = true;
+            const updatedUser = await this.server.db('t_user').where({a_user_id: user.a_user_id}).update(user);
+            return res.status(200).json({result: true, code: "verified"});
+          }
+          else {
+            return res.status(200).json({result: false, code: "invalid-code"});
+          }
+        }
+        else {
+          return res.status(200).json({result: false, code: "expired-code"})
+        }
+      }
+      else {
+        // Should never happen
+      }
+    }
+    else {
+      return res.status(404).json({result: false, code: "email-not-registered"});
+    }
 
     if(new Date(exp_date) > new Date()){
       let user = await this.server.db('t_user').where({a_user_id: id});
@@ -255,7 +292,7 @@ module.exports = class AuthRoutes {
     }
   }
 
-  async resendEmail(req, res) {
+  async resendVerificationEmail(req, res) {
 
     const {
       a_email
@@ -292,25 +329,44 @@ module.exports = class AuthRoutes {
 
   }
 
-  async sendVerificationEmail(user, req, res) {
-      
-    const token = JWT.sign({
-        iss: "dahwdwuadhawuidha",
-        sub: user.a_user_id,
-        expiration_date: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
-        iat: moment.utc().valueOf(),
-      },
-      process.env.JWT_SECRET, {
-        expiresIn: "1d"
-      }
-    );
-    console.log("http://www.foodwayz.dychromatic.itba.edu.ar/verify_email/" + token);
+  async sendVerificationEmail(user) {
+
+    const code = crypto.randomBytes(3).toString('hex').toUpperCase();
+
+    const exists = await this.server.db('t_user_verify').where({a_user_id: user.a_user_id});
+
+    const userVerify = {
+      a_user_id: user.a_user_id,
+      a_code: code,
+      a_valid_until: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+    }
+
+    if (exists && exists.length > 0) {
+      await this.server.db('t_user_verify').where({a_user_id: user.a_user_id}).update(userVerify);
+    }
+    else {
+      await this.server.db('t_user_verify').where({a_user_id: user.a_user_id}).insert(userVerify);
+    }
 
     const mailOptions = {
         from : "Dychromatic <noreply@vysly.com>",
         to : user.a_email,
         subject : "Email Confirmation",
-        html : `<a href="http://www.foodwayz.dychromatic.itba.edu.ar"><H2>Click on this</H2></a>`
+        html : `<div>
+                  <h1 style="text-align: center;">
+                    <strong>Welcome to <span style="color: #fc987e;">FoodWayz</span></strong>
+                  </h1>
+                  <p>
+                    <strong>
+                      <span style="color: #fc987e;">
+                        <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200705/email.png" alt="Meeting New Members" width="500" height="500" />
+                      </span>
+                    </strong>
+                  </p>
+                  <h1 style="text-align: center;">
+                    <strong>Your code is <span style="color: #fc987e;">${code}</span></strong>
+                  </h1>
+               </div>` 
     }
 
     console.log(mailOptions);
@@ -322,6 +378,148 @@ module.exports = class AuthRoutes {
             console.log("Email is Sent");
         }
     });
+
+  }
+
+  async resetPassword(req, res) {
+
+    const {
+      a_email
+    } = req.body;
+
+    let user = await this.server.db('t_user').where({a_email});
+
+    if (user && user.length > 0) {
+      user = user[0];
+
+      if (user.a_is_verified) {
+        this.sendResetPasswordEmail(user)
+        return res.status(200).json({result: true, code: "email-sent"});
+      }
+      else {
+        return res.status(200).json({result: false, code: "not-verified"});
+      }
+    }
+    else {
+      return res.status(404).json({result: false, code: "email-not-registered"});
+    }
+
+  }
+
+  async sendResetPasswordEmail(user) {
+    const code = crypto.randomBytes(3).toString('hex').toUpperCase();
+
+    const exists = await this.server.db('t_user_verify').where({a_user_id: user.a_user_id});
+
+    const userVerify = {
+      a_user_id: user.a_user_id,
+      a_code: code,
+      a_valid_until: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+    }
+
+    if (exists && exists.length > 0) {
+      await this.server.db('t_user_verify').where({a_user_id: user.a_user_id}).update(userVerify);
+    }
+    else {
+      await this.server.db('t_user_verify').where({a_user_id: user.a_user_id}).insert(userVerify);
+    }
+
+    const mailOptions = {
+        from : "Dychromatic <noreply@vysly.com>",
+        to : user.a_email,
+        subject : "Email Confirmation",
+        html : `<div>
+                  <h1 style="text-align: center;">
+                    <strong>Have you forgotten your password?</strong>
+                  </h1>
+                  <p>
+                    <strong>
+                      <span style="color: #fc987e;">
+                        <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200705/reset-password.png" alt="Meeting New Members" width="340" height="500" />
+                      </span>
+                    </strong>
+                  </p>
+                  <h1 style="text-align: center;">
+                    <strong>Your code is <span style="color: #fc987e;">${code}</span></strong>
+                  </h1>
+               </div>` 
+    }
+
+    console.log(mailOptions);
+
+    this.server.transporter.sendMail(mailOptions, (err, data) => {
+        if(err){
+            console.log(err);
+        }else{
+            console.log("Email is Sent");
+        }
+    });
+  }
+
+  async resetPasswordConfirmation(req, res) {
+
+    const {
+      a_email,
+      a_code,
+      a_password_new
+    } = req.body;
+
+    let user = await this.server.db('t_user').where({a_email});
+
+    if (user && user.length > 0) {
+      user = user[0];
+      if (user.a_is_verified) {
+        let userVerify = await this.server.db('t_user_verify').where({a_user_id: user.a_user_id});
+        
+        if (userVerify && userVerify.length > 0) {
+          userVerify = userVerify[0];
+          if(new Date(userVerify.a_valid_until) > new Date()){
+            if (userVerify.a_code.toUpperCase() === a_code) {
+              user.a_password = await bcrypt.hash(a_password_new, 10);
+              this.server.db('t_user').where({a_user_id: user.a_user_id}).update(user);
+              this.server.db('t_user_verify').where({a_user_id: user.a_user_id}).del();
+              return res.status(200).json({result: true, code: "verified"});
+            }
+            else {
+              return res.status(200).json({result: false, code: "invalid-code"});
+            }
+          }
+          else {
+            return res.status(200).json({result: false, code: "expired-code"})
+          }
+        }
+        else {
+          // Should never happen
+        }
+      }
+      else {
+        return res.status(200).json({result: false, code: "not-verified"});
+      }
+    }
+    else {
+      return res.status(404).json({result: false, code: "email-not-registered"});
+    }
+
+    if(new Date(exp_date) > new Date()){
+      let user = await this.server.db('t_user').where({a_user_id: id});
+      
+      if (!user || user.length == 0) {
+        console.log("User not found");
+        return res.status(404).json({message : "User not found"});
+      }
+      else {
+        console.log("User found");
+        //user.a_is_verified = true;
+        await this.server.db('t_user').where({a_user_id: id}).update({a_is_verified: true});
+
+        console.log("Email is verified of user "+id);
+        return res.status(200).json({result : true});
+      }
+
+    }else{
+        console.log("Link is expired");
+        return res.status(400).json({error : "Link is expired"});
+    }
   }
 
 }

@@ -8,6 +8,7 @@ drop table t_review cascade;
 drop table t_food cascade;
 drop table t_type cascade;
 drop table t_user cascade;
+drop table t_user_verify cascade;
 drop table t_owns cascade;
 drop table t_restaurant cascade;
 drop table t_restaurant_chain cascade;

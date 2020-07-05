@@ -52,6 +52,13 @@ CREATE TABLE t_user (
   a_is_verified boolean
 );
 
+CREATE TABLE t_user_verify (
+  a_user_id int PRIMARY KEY,
+  a_code varchar(8) NOT NULL,
+  a_valid_until date,
+  FOREIGN KEY(a_user_id) REFERENCES t_user(a_user_id) ON DELETE CASCADE,
+);
+
 CREATE TABLE t_characteristic (
   a_char_id SERIAL PRIMARY KEY,
   a_char_name varchar(256) UNIQUE
