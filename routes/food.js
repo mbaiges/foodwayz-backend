@@ -187,7 +187,7 @@ module.exports = class FoodRoute {
         if (!cfg)
             cfg = {};
 
-        const { filters, detailed, sorted } = cfg;
+        const { filters, detailed, sort_by } = cfg;
         let foods;
         if (!filters)
             foods = await this.server.db('t_food');
@@ -198,7 +198,7 @@ module.exports = class FoodRoute {
         }    
         else
             foods = await this.server.db('t_food').where(filters);
-        let rest, type, ingrs, chars, reviews_info;
+        let rest, type, ingrs, chars, reviews_info, views_info;
         if (foods) {
             if (!Array.isArray(foods))
                 foods = [foods];
@@ -287,6 +287,12 @@ module.exports = class FoodRoute {
                         };
 
                         foods[i].a_reviews_info = reviews_info;
+                    }
+
+                    views_info = await this.server.db('t_food_view').where({a_food_id: foods[i].a_food_id});
+
+                    if (views_info) {
+                        console.log(views_info);
                     }
                 }
             }

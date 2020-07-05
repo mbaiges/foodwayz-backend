@@ -123,7 +123,7 @@ CREATE TABLE t_owns (
   FOREIGN KEY (a_rest_id) REFERENCES t_restaurant(a_rest_id) ON DELETE CASCADE
 );
 
-CREATE TABLE t_food_views (
+CREATE TABLE t_food_view (
   a_user_id int,
   a_food_id int,
   a_time timestamp NOT NULL DEFAULT NOW(),
@@ -132,7 +132,7 @@ CREATE TABLE t_food_views (
   FOREIGN KEY(a_food_id) REFERENCES t_food(a_food_id) ON DELETE CASCADE
 );
 
-CREATE TABLE t_restaurant_views (
+CREATE TABLE t_restaurant_view (
   a_user_id int,
   a_rest_id int,
   a_time timestamp NOT NULL DEFAULT NOW(),

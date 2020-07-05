@@ -12,5 +12,5 @@ drop table t_user_verify cascade;
 drop table t_owns cascade;
 drop table t_restaurant cascade;
 drop table t_restaurant_chain cascade;
-drop table t_food_views cascade;
-drop table t_restaurant_views cascade;
+drop table t_food_view cascade;
+drop table t_restaurant_view cascade;

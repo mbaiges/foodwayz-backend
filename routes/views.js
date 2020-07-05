@@ -6,10 +6,10 @@ module.exports = class ViewsRoute {
     }
 
     async initialize(app) {
-        app.route('/views/food')
+        app.route('/views/food/:foodId')
             .post(this.registerFoodView.bind(this));
 
-        app.route('/view/restaurant')
+        app.route('/view/restaurant/:restId')
             .post(this.registerRestaurantView.bind(this));
     }
 
@@ -19,15 +19,11 @@ module.exports = class ViewsRoute {
         } = req.user;
 
         const {
-            a_food_id
-        } = req.body;
+            foodId
+        } = req.params;
 
         try {
-            if (!a_food_id) {
-                return res.status(400).json(message.badRequest("a_food_id", a_food_id, undefined));
-            }
-
-            await this.server.db('t_food_views').insert({a_user_id, a_food_id});
+            await this.server.db('t_food_view').insert({a_user_id, foodId});
             return res.status(200).json(message.post("food view registered", true));
         } catch (error) {
             console.log(error);
@@ -42,15 +38,11 @@ module.exports = class ViewsRoute {
         } = req.user;
 
         const {
-            a_rest_id
-        } = req.body;
+            restId
+        } = req.params;
         
         try {
-            if(!a_rest_id) {
-                return res.status(400).json(message.badRequest('a_rest_id', a_rest_id, undefined));
-            }
-
-            await this.server.db('t_food_views').insert({a_user_id, a_rest_id});
+            await this.server.db('t_food_view').insert({a_user_id, restId});
             return res.status(200).json(message.post("restaurant view registered", true));
         } catch (error) {
             console.log(error);
