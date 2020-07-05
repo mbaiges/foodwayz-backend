@@ -9,7 +9,7 @@ module.exports = class ViewsRoute {
         app.route('/view/food/:foodId')
             .post(this.registerFoodView.bind(this));
 
-        app.route('/view/restaurant/:restId')
+        app.route('/views/restaurant/:restId')
             .post(this.registerRestaurantView.bind(this));
     }
 
@@ -27,7 +27,7 @@ module.exports = class ViewsRoute {
             return res.status(200).json(message.post("food view", true));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error.message});
+            return res.status(500).json({message: error.message});
         }
 
     }
@@ -46,7 +46,7 @@ module.exports = class ViewsRoute {
             return res.status(200).json(message.post("restaurant view", true));
         } catch (error) {
             console.log(error);
-            res.status(500).json({message: error.message});
+            return res.status(500).json({message: error.message});
         }
 
     }
