@@ -9,7 +9,7 @@ module.exports = class ViewsRoute {
         app.route('/views/food/:foodId')
             .post(this.registerFoodView.bind(this));
 
-        app.route('/view/restaurant/:restId')
+        app.route('/views/restaurant/:restId')
             .post(this.registerRestaurantView.bind(this));
     }
 
