@@ -15,9 +15,6 @@ module.exports = class RestaurantRoute {
             .delete(this.removeRestaurant.bind(this))
             .put(this.modifyRestaurant.bind(this));
 
-        app.route('/restaurant/:id/stats')
-            .get(this.getStatistics.bind(this));
-
         app.route('/restaurant/:id/premium')
             .put(this.updatePremiumStatus.bind(this));
 
@@ -240,25 +237,6 @@ module.exports = class RestaurantRoute {
             return rests;
         }
         return null;
-    }
-
-    async getStatistics(req, res) {
-        const {
-            id
-        } = req.params;
-
-        /*
-            - Cantidad de vistas en el ultimo día (restaurant y comidas)
-            - Cantidad de vistas (Por días de la semana, por hora) (restaurant y comidas)
-            - Cantidad de usuarios por genero (restaurant y comidas)
-            - Cantidad de usuarios por edad (restaurant y comidas)
-            - Cantidad de usuarios por características (restaurant y comidas)
-            - Mejores 10 comidas (por presentacion, calidad y precio-calidad)
-            - Peores 10 comidas (por presentacion, calidad y precio-calidad)
-        */
-
-        let info = await this.server.db('t_restaurant')
-
     }
 
     async updatePremiumStatus(req, res) {
