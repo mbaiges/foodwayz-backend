@@ -34,10 +34,26 @@ module.exports = class Server {
 		this.transporter = nodemailer.createTransport({
 			service: 'gmail',
 			auth: {
-			  user: 'dychromatic.foodwayz@gmail.com',
-			  pass: 'foodwayz.itba.edu.ar'
+			  user: process.env.EMAIL_ACCOUNT,
+			  pass: process.env.EMAIL_PASSWORD
 			}
 		});
+
+		this.emailSend = (mailOptions) => {
+			return new Promise((resolve, reject) => {
+				this.transporter.sendMail(mailOptions, (err, data) => {
+					if(err){
+						console.log(err);
+						reject(err);
+					}else{
+						//console.log("Email is Sent");
+						//console.log(data);
+						resolve(data);
+					}
+				});
+			});
+		}
+		
 
 		this.app.listen(process.env.PORT, () => {
 			console.log(`Server listening is listening on port: ${process.env.PORT}`)

@@ -1,6 +1,9 @@
 CREATE TABLE t_restaurant_chain (
   a_rest_chain_id SERIAL PRIMARY KEY,
   a_name varchar(256) NOT NULL UNIQUE,
+  a_food_quality_score decimal(10,2) NOT NULL,
+  a_presentation_score decimal(10,2) NOT NULL,
+  a_price_quality_score decimal(10,2) NOT NULL,
   a_score decimal(10,2),
   a_image_url varchar(512)
 );
@@ -8,6 +11,9 @@ CREATE TABLE t_restaurant_chain (
 CREATE TABLE t_restaurant (
   a_rest_id SERIAL PRIMARY KEY,
   a_name varchar(256) NOT NULL,
+  a_food_quality_score decimal(10,2) NOT NULL,
+  a_presentation_score decimal(10,2) NOT NULL,
+  a_price_quality_score decimal(10,2) NOT NULL,
   a_score decimal(10,2),
   a_state varchar(256) NOT NULL,
   a_city varchar(256) NOT NULL,
@@ -76,6 +82,9 @@ CREATE TABLE t_food (
   a_food_id SERIAL PRIMARY KEY,
   a_title varchar(128) NOT NULL,
   a_description varchar(256),
+  a_food_quality_score decimal(10,2) NOT NULL,
+  a_presentation_score decimal(10,2) NOT NULL,
+  a_price_quality_score decimal(10,2) NOT NULL,
   a_score decimal(10,2),
   a_type_id int NOT NULL,
   a_rest_id int NOT NULL,

@@ -248,12 +248,17 @@ module.exports = class RestaurantRoute {
         } = req.params;
 
         /*
-            - Cantidad de vistas en el ultimo día
-            - Cantidad de vistas (Por días de la semana, por hora)
-            - Cantidad de usuarios por genero
-            - Cantidad de usuarios por edad
-            - Cantidad de usuarios por características
+            - Cantidad de vistas en el ultimo día (restaurant y comidas)
+            - Cantidad de vistas (Por días de la semana, por hora) (restaurant y comidas)
+            - Cantidad de usuarios por genero (restaurant y comidas)
+            - Cantidad de usuarios por edad (restaurant y comidas)
+            - Cantidad de usuarios por características (restaurant y comidas)
+            - Mejores 10 comidas (por presentacion, calidad y precio-calidad)
+            - Peores 10 comidas (por presentacion, calidad y precio-calidad)
         */
+
+        let info = await this.server.db('t_restaurant')
+
     }
 
     async updatePremiumStatus(req, res) {

@@ -377,15 +377,13 @@ module.exports = class AuthRoutes {
                </div>` 
     }
 
-    console.log(mailOptions);
+    //console.log(mailOptions);
 
-    this.server.transporter.sendMail(mailOptions, (err, data) => {
-        if(err){
-            console.log(err);
-        }else{
-            console.log("Email is Sent");
-        }
-    });
+    try {
+      await this.server.emailSend(mailOptions);
+    } catch (error) {
+      console.log(error);
+    }
 
   }
 
@@ -453,15 +451,13 @@ module.exports = class AuthRoutes {
                </div>` 
     }
 
-    console.log(mailOptions);
+    //console.log(mailOptions);
 
-    this.server.transporter.sendMail(mailOptions, (err, data) => {
-        if(err){
-            console.log(err);
-        }else{
-            console.log("Email is Sent");
-        }
-    });
+    try {
+      await this.server.emailSend(mailOptions);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async resetPasswordConfirmation(req, res) {
