@@ -3,6 +3,7 @@ const premiumLevels = {
     getRestaurantViewsByDay: 2,
     getFoodViewsByDay: 2,
 }
+const MINUTES_SPACED_VIEW = 10;
 
 module.exports = class StatisticRoute {
     constructor(server) {
@@ -326,7 +327,7 @@ module.exports = class StatisticRoute {
                 viewsInfo = [];
             }
 
-            console.log(viewsInfo);
+            const viewsByUser = this.getSpacedViewsByUser()
             
             
             let a_reviews_info = {};
@@ -359,7 +360,7 @@ module.exports = class StatisticRoute {
                         viewsByUser[user].push(info[j]);
                     }
                     else {
-                        if ( (time - (viewsByUser[user])[viewsByUser[user].length - 1]) > 10 * 60 * 1000) {
+                        if ( (time - (viewsByUser[user])[viewsByUser[user].length - 1]) > MINUTES_SPACED_VIEW * 60 * 1000) {
                             viewsByUser[user].push(info[j]);
                         }
                     }
