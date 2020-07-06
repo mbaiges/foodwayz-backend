@@ -1,9 +1,12 @@
 const message = require('../interface').message;
 const premiumLevels = {
-    getBestWorstFood: 2,
-    getRestaurantViewsByDay: 2,
-    getFoodViewsByDay: 2,
-    getViewsByHour: 2
+    getBestWorstFood: 0,
+    getRestaurantViewsByDay: 1,
+    getRestaurantViewsByHour: 1,
+    getFoodViewsByDay: 1,
+    getFoodViewsByHour: 1,
+    getRestaurantUserStatistics: 2,
+    getFoodUserStatistics: 3,
 }
 const MINUTES_SPACED_VIEW = 10;
 
@@ -214,7 +217,6 @@ module.exports = class StatisticRoute {
             // Do Stuff
             if (a_last_date == null || a_last_date === "") {
                 a_last_date = new Date().toISOString();
-                console.log(a_last_date);
             }
             let info = await this.server.db(table_name).where(prop_name, '=', prop_value).where('a_time', '>=', a_first_date).where('a_time', '<=', a_last_date);
 
@@ -254,13 +256,33 @@ module.exports = class StatisticRoute {
 
     async getRestaurantViewsByHour(req, res) {
         const {
+            a_user_id
+        } = req.user;
+
+        const {
             restId
         } = req.params;
 
-        return this.getViewsByHour('t_restaurant_view', 'a_rest_id', restId, restId, req, res);
+        const a_rest_id = restId;
+
+        const owns = await this.checkOwnership(a_user_id, a_rest_id);
+        if (!owns) {
+            return res.status(401).json(message.unauth('restaurant statistics', 'not an owner'));
+        }
+
+        const isAllowed = await this.checkPremiumLevel(a_rest_id, premiumLevels.getViewsByHour);
+        if (!isAllowed) {
+            return res.status(401).json(message.unauth('restaurant statistics', 'not enough premium level'));
+        }
+
+        return this.getViewsByHour('t_restaurant_view', 'a_rest_id', restId, req, res);
     }
 
     async getFoodViewsByHour(req, res) {
+        const {
+            a_user_id
+        } = req.user;
+
         const {
             foodId
         } = req.params;
@@ -269,8 +291,19 @@ module.exports = class StatisticRoute {
 
         if (food && food.length > 0) {
             food = food[0];
-            const restId = food.a_rest_id;
-            return this.getViewsByHour('t_food_view', 'a_food_id', foodId, restId, req, res);
+            const a_rest_id = food.a_rest_id;
+            
+            const owns = await this.checkOwnership(a_user_id, a_rest_id);
+            if (!owns) {
+                return res.status(401).json(message.unauth('food statistics', 'not an owner'));
+            }
+
+            const isAllowed = await this.checkPremiumLevel(a_rest_id, premiumLevels.getViewsByHour);
+            if (!isAllowed) {
+                return res.status(401).json(message.unauth('food statistics', 'not enough premium level'));
+            }
+
+            return this.getViewsByHour('t_food_view', 'a_food_id', foodId, req, res);
         }
         else {
             return res.status(404).json(message.notFound('food statistics', foodId));
@@ -278,11 +311,7 @@ module.exports = class StatisticRoute {
 
     }
 
-    async getViewsByHour(table_name, prop_name, prop_value, a_rest_id, req, res) {
-        const {
-            a_user_id
-        } = req.user;
-        
+    async getViewsByHour(table_name, prop_name, prop_value, req, res) {
         let {
             a_date
         } = req.body;
@@ -298,19 +327,7 @@ module.exports = class StatisticRoute {
         a_last_date = new Date(a_date);
         a_last_date.setHours(23,59,59,999);
 
-        console.log(a_first_date, a_last_date);
-
         try {
-            const owns = await this.checkOwnership(a_user_id, a_rest_id);
-            if (!owns) {
-                return res.status(401).json(message.unauth('restaurant statistics', 'not an owner'));
-            }
-
-            const isAllowed = await this.checkPremiumLevel(a_rest_id, premiumLevels.getViewsByHour);
-            if (!isAllowed) {
-                return res.status(401).json(message.unauth('restaurant statistics', 'not enough premium level'));
-            }
-
             // Do Stuff
 
             let info = await this.server.db(table_name).where(prop_name, '=', prop_value).where('a_time', '>=', a_first_date).where('a_time', '<=', a_last_date);
@@ -329,8 +346,6 @@ module.exports = class StatisticRoute {
 
             let viewsByHour = new Array(24).fill(0);
 
-            console.log(viewsByHour);
-
             allViews.forEach(curr => {
                 viewsByHour[curr.getHours()] += 1;
             });
@@ -346,6 +361,10 @@ module.exports = class StatisticRoute {
 
     async getRestaurantUserStatistics(req, res) {
         const {
+            a_user_id
+        } = req.user;
+        
+        const {
             restId
         } = req.params;
 
@@ -359,6 +378,18 @@ module.exports = class StatisticRoute {
         }
 
         try {
+
+            const a_rest_id = restId;
+
+            const owns = await this.checkOwnership(a_user_id, a_rest_id);
+            if (!owns) {
+                return res.status(401).json(message.unauth('restaurant statistics', 'not an owner'));
+            }
+
+            const isAllowed = await this.checkPremiumLevel(a_rest_id, premiumLevels.getRestaurantUserStatistics);
+            if (!isAllowed) {
+                return res.status(401).json(message.unauth('restaurant statistics', 'not enough premium level'));
+            }
 
             let a_users_info = {};
 
@@ -478,8 +509,6 @@ module.exports = class StatisticRoute {
                     .where('t_food.a_rest_id', '=', restId)
                     .where('t_review.a_created_at', '<=', a_last_date);
             }
-
-            console.log(reviewsInfo);
 
             let a_reviews_info = {
                 a_gender: {},
@@ -552,6 +581,10 @@ module.exports = class StatisticRoute {
 
     async getFoodUserStatistics(req, res) {
         const {
+            a_user_id
+        } = req.user;
+
+        const {
             foodId
         } = req.params;
 
@@ -566,184 +599,205 @@ module.exports = class StatisticRoute {
 
         try {
 
-            let a_users_info = {};
+            let food = await this.server.db('t_food').where({a_food_id: foodId});
 
-            // Views
+            if (food && food.length > 0) {
+                
+                food = food[0];
+                const a_rest_id = food.a_rest_id;
 
-            let viewsInfo;
-            
-            if (a_first_date) {
-                viewsInfo = await this.server.db
-                    .select(
-                        't_user.a_user_id as a_user_id', 
-                        't_user.a_gender as a_gender',
-                        't_food_view.a_time as a_time'
-                    )
-                    .select(this.server.db.raw("DATE_PART('year', AGE(NOW(), t_user.a_birthdate)) as a_age"))
-                    .from('t_food_view')
-                    .join('t_user', 't_food_view.a_user_id', '=', 't_user.a_user_id')
-                    .where({a_food_id: foodId})
-                    .where('a_time', '>=', a_first_date)
-                    .where('a_time', '<=', a_last_date);
-            } else {
-                viewsInfo = await this.server.db
-                    .select(
-                        't_user.a_user_id as a_user_id', 
-                        't_user.a_gender as a_gender',
-                        't_food_view.a_time as a_time'
-                    )
-                    .select(this.server.db.raw("DATE_PART('year', AGE(NOW(), t_user.a_birthdate)) as a_age"))
-                    .from('t_food_view')
-                    .join('t_user', 't_food_view.a_user_id', '=', 't_user.a_user_id')
-                    .where({a_food_id: foodId})
-                    .where('a_time', '<=', a_last_date);
-            }
+                const owns = await this.checkOwnership(a_user_id, a_rest_id);
+                if (!owns) {
+                    return res.status(401).json(message.unauth('food statistics', 'not an owner'));
+                }
 
-            let a_views_info = {
-                a_gender: {},
-                a_age: {},
-                a_characteristic: {}
-            };
+                const isAllowed = await this.checkPremiumLevel(a_rest_id, premiumLevels.getFoodUserStatistics);
+                if (!isAllowed) {
+                    return res.status(401).json(message.unauth('food statistics', 'not enough premium level'));
+                }
 
-            if (!Array.isArray(viewsInfo)) {
-                viewsInfo = [];
-            }
+                let a_users_info = {};
 
-            const viewsByUser = this.getSpacedViewsByUser(viewsInfo);
+                // Views
 
-            if (!this.userHasCharRoute) {
-                const UserHasCharacteristic = require('./user_characteristic');
-                this.userHasCharRoute = new UserHasCharacteristic(this.server);
-            }
+                let viewsInfo;
+                
+                if (a_first_date) {
+                    viewsInfo = await this.server.db
+                        .select(
+                            't_user.a_user_id as a_user_id', 
+                            't_user.a_gender as a_gender',
+                            't_food_view.a_time as a_time'
+                        )
+                        .select(this.server.db.raw("DATE_PART('year', AGE(NOW(), t_user.a_birthdate)) as a_age"))
+                        .from('t_food_view')
+                        .join('t_user', 't_food_view.a_user_id', '=', 't_user.a_user_id')
+                        .where({a_food_id: foodId})
+                        .where('a_time', '>=', a_first_date)
+                        .where('a_time', '<=', a_last_date);
+                } else {
+                    viewsInfo = await this.server.db
+                        .select(
+                            't_user.a_user_id as a_user_id', 
+                            't_user.a_gender as a_gender',
+                            't_food_view.a_time as a_time'
+                        )
+                        .select(this.server.db.raw("DATE_PART('year', AGE(NOW(), t_user.a_birthdate)) as a_age"))
+                        .from('t_food_view')
+                        .join('t_user', 't_food_view.a_user_id', '=', 't_user.a_user_id')
+                        .where({a_food_id: foodId})
+                        .where('a_time', '<=', a_last_date);
+                }
 
-            const charsByUser1 = {};
+                let a_views_info = {
+                    a_gender: {},
+                    a_age: {},
+                    a_characteristic: {}
+                };
 
-            const userIds1 = Object.keys(viewsByUser);
-            for (let k = 0; k < userIds1.length; k++) {
-                charsByUser1[userIds1[k]] = (await this.userHasCharRoute.getCharsByUserObjects(userIds1[k])).map(c => c.a_char_name);
-            }
+                if (!Array.isArray(viewsInfo)) {
+                    viewsInfo = [];
+                }
 
-            Object.values(viewsByUser).reduce((acum, curr) => [...acum, ...curr], []).forEach(info => {
-                if (info.a_gender != null) {
-                    if (!a_views_info.a_gender) {
-                        if (!a_views_info.a_gender[info.a_gender]) {
-                            a_views_info.a_gender[info.a_gender] = 0;
+                const viewsByUser = this.getSpacedViewsByUser(viewsInfo);
+
+                if (!this.userHasCharRoute) {
+                    const UserHasCharacteristic = require('./user_characteristic');
+                    this.userHasCharRoute = new UserHasCharacteristic(this.server);
+                }
+
+                const charsByUser1 = {};
+
+                const userIds1 = Object.keys(viewsByUser);
+                for (let k = 0; k < userIds1.length; k++) {
+                    charsByUser1[userIds1[k]] = (await this.userHasCharRoute.getCharsByUserObjects(userIds1[k])).map(c => c.a_char_name);
+                }
+
+                Object.values(viewsByUser).reduce((acum, curr) => [...acum, ...curr], []).forEach(info => {
+                    if (info.a_gender != null) {
+                        if (!a_views_info.a_gender) {
+                            if (!a_views_info.a_gender[info.a_gender]) {
+                                a_views_info.a_gender[info.a_gender] = 0;
+                            }
+                            a_views_info.a_gender[info.a_gender] += 1;
                         }
-                        a_views_info.a_gender[info.a_gender] += 1;
                     }
-                }
 
-                if (info.a_age != null) {
-                    if (!a_views_info.a_age) {
-                        if (!a_views_info.a_age[info.a_age]) {
-                            a_views_info.a_age[info.a_age] = 0;
+                    if (info.a_age != null) {
+                        if (!a_views_info.a_age) {
+                            if (!a_views_info.a_age[info.a_age]) {
+                                a_views_info.a_age[info.a_age] = 0;
+                            }
+                            a_views_info.a_age[info.a_age] += 1;
                         }
-                        a_views_info.a_age[info.a_age] += 1;
                     }
+
+                    if (Array.isArray(charsByUser1[info.a_user_id])) {
+                        charsByUser1[info.a_user_id].forEach(char => {
+                            if (!a_views_info.a_characteristic[char]) {
+                                a_views_info.a_characteristic[char] = 0;
+                            }
+                            a_views_info.a_characteristic[char] += 1;
+                        });
+                    }
+                });
+
+                // Reviews
+
+                let reviewsInfo;
+                
+                if (a_first_date) {
+                    reviewsInfo = await this.server.db
+                        .select(
+                            't_user.a_user_id as a_user_id', 
+                            't_user.a_gender as a_gender',
+                            't_review.a_score as a_score'
+                        )
+                        .select(this.server.db.raw("DATE_PART('year', AGE(NOW(), t_user.a_birthdate)) as a_age"))
+                        .from('t_review')
+                        .join('t_user', 't_review.a_user_id', '=', 't_user.a_user_id')
+                        .where('t_review.a_food_id', '=', foodId)
+                        .where('t_review.a_created_at', '>=', a_first_date)
+                        .where('t_review.a_created_at', '<=', a_last_date);
+                } else {
+                    reviewsInfo = await this.server.db
+                        .select(
+                            't_user.a_user_id as a_user_id', 
+                            't_user.a_gender as a_gender',
+                            't_review.a_score as a_score'
+                        )
+                        .select(this.server.db.raw("DATE_PART('year', AGE(NOW(), t_user.a_birthdate)) as a_age"))
+                        .from('t_review')
+                        .join('t_user', 't_review.a_user_id', '=', 't_user.a_user_id')
+                        .where('t_review.a_food_id', '=', foodId)
+                        .where('t_review.a_created_at', '<=', a_last_date);
                 }
 
-                if (Array.isArray(charsByUser1[info.a_user_id])) {
-                    charsByUser1[info.a_user_id].forEach(char => {
-                        if (!a_views_info.a_characteristic[char]) {
-                            a_views_info.a_characteristic[char] = 0;
+                let a_reviews_info = {
+                    a_gender: {},
+                    a_age: {},
+                    a_characteristic: {}
+                };
+
+                const charsByUser2 = {};
+
+                const userIds2 = reviewsInfo.map(i => i.a_user_id);
+                for (let k = 0; k < userIds2.length; k++) {
+                    charsByUser2[userIds2[k]] = (await this.userHasCharRoute.getCharsByUserObjects(userIds2[k])).map(c => c.a_char_name);
+                }
+
+                reviewsInfo.forEach(info => {
+                    if (info.a_gender != null) {
+                        if (!a_reviews_info.a_gender) {
+                            if (!a_reviews_info.a_gender[info.a_gender]) {
+                                a_reviews_info.a_gender[info.a_gender] = 0;
+                            }
+                            a_reviews_info.a_gender[info.a_gender] += 1;
                         }
-                        a_views_info.a_characteristic[char] += 1;
-                    });
-                }
-            });
+                    }
 
-            // Reviews
+                    if (info.a_age != null) {
+                        if (!a_reviews_info.a_age) {
+                            if (!a_reviews_info.a_age[info.a_age]) {
+                                a_reviews_info.a_age[info.a_age] = 0;
+                            }
+                            a_reviews_info.a_age[info.a_age] += 1;
+                        }
+                    }
 
-            let reviewsInfo;
-            
-            if (a_first_date) {
-                reviewsInfo = await this.server.db
-                    .select(
-                        't_user.a_user_id as a_user_id', 
-                        't_user.a_gender as a_gender',
-                        't_review.a_score as a_score'
-                    )
-                    .select(this.server.db.raw("DATE_PART('year', AGE(NOW(), t_user.a_birthdate)) as a_age"))
-                    .from('t_review')
-                    .join('t_user', 't_review.a_user_id', '=', 't_user.a_user_id')
-                    .where('t_review.a_food_id', '=', foodId)
-                    .where('t_review.a_created_at', '>=', a_first_date)
-                    .where('t_review.a_created_at', '<=', a_last_date);
-            } else {
-                reviewsInfo = await this.server.db
-                    .select(
-                        't_user.a_user_id as a_user_id', 
-                        't_user.a_gender as a_gender',
-                        't_review.a_score as a_score'
-                    )
-                    .select(this.server.db.raw("DATE_PART('year', AGE(NOW(), t_user.a_birthdate)) as a_age"))
-                    .from('t_review')
-                    .join('t_user', 't_review.a_user_id', '=', 't_user.a_user_id')
-                    .where('t_review.a_food_id', '=', foodId)
-                    .where('t_review.a_created_at', '<=', a_last_date);
+                    if (Array.isArray(charsByUser2[info.a_user_id])) {
+                        charsByUser2[info.a_user_id].forEach(char => {
+                            if (!a_reviews_info.a_characteristic[char]) {
+                                a_reviews_info.a_characteristic[char] = {
+                                    a_score: 0,
+                                    a_amount: 0
+                                };
+                            }
+                            a_reviews_info.a_characteristic[char].a_score += 1;
+                            a_reviews_info.a_characteristic[char].a_amount += 1;
+                        });
+                    }
+                });
+
+                Object.entries(a_reviews_info.a_gender).forEach(([key, value]) => {
+                    a_reviews_info.a_gender[key].a_score /= value.a_amount;
+                });
+
+                Object.entries(a_reviews_info.a_age).forEach(([key, value]) => {
+                    a_reviews_info.a_age[key].a_score /= value.a_amount;
+                });
+
+                Object.entries(a_reviews_info.a_characteristic).forEach(([key, value]) => {
+                    a_reviews_info.a_characteristic[key].a_score /= value.a_amount;
+                });
+
+                a_users_info = {a_views_info, a_reviews_info};
+                
+                return res.status(200).json(message.fetch('food user statistics', a_users_info))
             }
-
-            let a_reviews_info = {
-                a_gender: {},
-                a_age: {},
-                a_characteristic: {}
-            };
-
-            const charsByUser2 = {};
-
-            const userIds2 = reviewsInfo.map(i => i.a_user_id);
-            for (let k = 0; k < userIds2.length; k++) {
-                charsByUser2[userIds2[k]] = (await this.userHasCharRoute.getCharsByUserObjects(userIds2[k])).map(c => c.a_char_name);
+            else {
+                return res.status(404).json(message.notFound('food statistics', foodId));
             }
-
-            reviewsInfo.forEach(info => {
-                if (info.a_gender != null) {
-                    if (!a_reviews_info.a_gender) {
-                        if (!a_reviews_info.a_gender[info.a_gender]) {
-                            a_reviews_info.a_gender[info.a_gender] = 0;
-                        }
-                        a_reviews_info.a_gender[info.a_gender] += 1;
-                    }
-                }
-
-                if (info.a_age != null) {
-                    if (!a_reviews_info.a_age) {
-                        if (!a_reviews_info.a_age[info.a_age]) {
-                            a_reviews_info.a_age[info.a_age] = 0;
-                        }
-                        a_reviews_info.a_age[info.a_age] += 1;
-                    }
-                }
-
-                if (Array.isArray(charsByUser2[info.a_user_id])) {
-                    charsByUser2[info.a_user_id].forEach(char => {
-                        if (!a_reviews_info.a_characteristic[char]) {
-                            a_reviews_info.a_characteristic[char] = {
-                                a_score: 0,
-                                a_amount: 0
-                            };
-                        }
-                        a_reviews_info.a_characteristic[char].a_score += 1;
-                        a_reviews_info.a_characteristic[char].a_amount += 1;
-                    });
-                }
-            });
-
-            Object.entries(a_reviews_info.a_gender).forEach(([key, value]) => {
-                a_reviews_info.a_gender[key].a_score /= value.a_amount;
-            });
-
-            Object.entries(a_reviews_info.a_age).forEach(([key, value]) => {
-                a_reviews_info.a_age[key].a_score /= value.a_amount;
-            });
-
-            Object.entries(a_reviews_info.a_characteristic).forEach(([key, value]) => {
-                a_reviews_info.a_characteristic[key].a_score /= value.a_amount;
-            });
-
-            a_users_info = {a_views_info, a_reviews_info};
-            
-            return res.status(200).json(message.fetch('food user statistics', a_users_info))
 
         } catch (error) {
             console.log(error);
