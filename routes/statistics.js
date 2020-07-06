@@ -74,7 +74,7 @@ module.exports = class SearchRoute {
 
         if (food && food.length > 0) {
             food = food[0];
-            const restId = food.a_rest_id; 
+            const restId = food.a_rest_id;
             return this.getViewsByDay('t_food_view', 'a_food_id', foodId, restId, req, res);
         }
         else {
