@@ -149,6 +149,3 @@ CREATE TABLE t_restaurant_view (
   FOREIGN KEY(a_user_id) REFERENCES t_user(a_user_id) ON DELETE CASCADE,
   FOREIGN KEY(a_rest_id) REFERENCES t_restaurant(a_rest_id) ON DELETE CASCADE
 );
-
-
-

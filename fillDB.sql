@@ -35,37 +35,36 @@ insert into t_ingredient values(DEFAULT, 'arroz');
 select * from t_ingredient;
 
 
-insert into t_restaurant_chain values(DEFAULT, 'McDonalnds', 3.5, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Frestaurant_chains%2FMcDonalds.jpg?alt=media&token=3585a783-4def-4f26-8523-ec892468fab5');
-insert into t_restaurant_chain values(DEFAULT, 'Kansas', 4.5, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Frestaurant_chains%2FKansas.png?alt=media&token=e7f29ba5-b6c5-4be1-8628-c85678125795');
+insert into t_restaurant_chain values(DEFAULT, 'McDonalnds', 2, 3, 4, 3, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Frestaurant_chains%2FMcDonalds.jpg?alt=media&token=3585a783-4def-4f26-8523-ec892468fab5');
+insert into t_restaurant_chain values(DEFAULT, 'Kansas', 5, 5, 3.5, 4.5, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Frestaurant_chains%2FKansas.png?alt=media&token=e7f29ba5-b6c5-4be1-8628-c85678125795');
 select * from t_restaurant_chain;
 
 
-insert into t_restaurant values(DEFAULT, 'McDonalds del obelisco', 1.2, 'BSAS', 'CABA', '1234', 'el obelisco 69', 1, 0, DEFAULT);
-insert into t_restaurant values(DEFAULT, 'McDonalds del libertador', 1.2, 'BSAS', 'CABA', '5678', 'libertador 420', 1, 0, DEFAULT);
-insert into t_restaurant values(DEFAULT, 'Kansas de libertador', 1.2, 'BSAS', 'CABA', '1313', 'libertador 1221', 2, 0, DEFAULT);
-insert into t_restaurant values(DEFAULT, 'Kansas de pilar', 1.2, 'BSAS', 'AMBA', '1323', 'pilar 1221', 2, 0, DEFAULT);
-insert into t_restaurant values(DEFAULT, 'sushi pop', 3, 'BSAS', 'AMBA', '5677', 'calle falsa 1234', null, 0, DEFAULT);
-insert into t_restaurant values(DEFAULT, 'tacos locos', 4, 'BSAS', 'CABA', '1323', 'pilar 1221', null, 0, DEFAULT);
-insert into t_restaurant values(DEFAULT, 'morelia', 2, 'BSAS', 'CABA', '5378', 'asdf 1221', null, 0, DEFAULT);
-insert into t_restaurant values(DEFAULT, 'Crustacio Cascarudo', 2, 'Fondo De Bikini', '-', '1234', 'psherman calle wallaby 42', null, 0, DEFAULT);
+insert into t_restaurant values(DEFAULT, 'McDonalds del obelisco', 2, 3, 4, 3, 'BSAS', 'CABA', '1234', 'el obelisco 69', 1, 0, DEFAULT);
+insert into t_restaurant values(DEFAULT, 'McDonalds del libertador', 5, 5, 3.5, 4.5, 'BSAS', 'CABA', '5678', 'libertador 420', 1, 0, DEFAULT);
+insert into t_restaurant values(DEFAULT, 'Kansas de libertador', 2, 3, 4, 3, 'BSAS', 'CABA', '1313', 'libertador 1221', 2, 0, DEFAULT);
+insert into t_restaurant values(DEFAULT, 'Kansas de pilar', 4, 5, 5, 4.66, 'BSAS', 'AMBA', '1323', 'pilar 1221', 2, 0, DEFAULT);
+insert into t_restaurant values(DEFAULT, 'sushi pop', 2, 2, 2, 2, 'BSAS', 'AMBA', '5677', 'calle falsa 1234', null, 0, DEFAULT);
+insert into t_restaurant values(DEFAULT, 'tacos locos', 2, 2, 2, 2, 'BSAS', 'CABA', '1323', 'pilar 1221', null, 0, DEFAULT);
+insert into t_restaurant values(DEFAULT, 'morelia', 4, 5, 5, 4.66, 'BSAS', 'CABA', '5378', 'asdf 1221', null, 0, DEFAULT);
+insert into t_restaurant values(DEFAULT, 'Crustacio Cascarudo', 2, 2, 2, 2, 'Fondo De Bikini', '-', '1234', 'psherman calle wallaby 42', null, 0, DEFAULT);
 select * from t_restaurant;
 
 
-insert into t_food values(DEFAULT, 'BigMac', 'Tremenda Glucemia', 3, 2, 1, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FBigMac.jpg?alt=media&token=91942492-25c1-47b8-ae13-840a0d51c779');
-insert into t_food values(DEFAULT, 'Burrito de Fideos', 'Mex mex go!', 5, 5, 6, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FBurritoDeFideos.jpg?alt=media&token=e1f1d51c-345c-4ad8-b2d2-a1473da64854');
-insert into t_food values(DEFAULT, 'Kangreburger', 'La mejor debajo del mar. Formula SECRETA!', 5, 2, 8, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FCangreBurger.jpg?alt=media&token=6ac4357e-7e06-418b-81d4-b00568b82a6d');
-insert into t_food values(DEFAULT, 'Crispy Burger', 'Gabi ya la comio! Y vos?', 2, 2, 2, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FCrispyBurger.jpg?alt=media&token=0733845d-8f24-4dbd-a305-6e3f6bd23522');
-insert into t_food values(DEFAULT, 'Ensalada De Kansas', 'Cuando se acaban los pancitos, RIP.', 3, 4, 3, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FEnsalada1.jpg?alt=media&token=03fab50a-7eef-48b6-b594-00997cb73eff');
-insert into t_food values(DEFAULT, 'Ensalada Blen', 'Aglomerado de hojas verdes acompañado de variedad de pimientos exoticos del himalaya.', 4, 4, 8, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FEnsaladaBlen.jpg?alt=media&token=ef664121-4240-4548-8316-469be60c4965');
-insert into t_food values(DEFAULT, 'Guiso de Lentejas', '15p', 5, 1, 6, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FGuisoDeLentejas.jpg?alt=media&token=9c673f75-29ac-49c1-b4dd-d0c683ec2b0f');
-insert into t_food values(DEFAULT, 'Guiso de Papa', '30p', 2, 1, 4, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FGuisoDePapa.jpg?alt=media&token=c77632df-0293-4a6c-bfec-697412071ca8');
-insert into t_food values(DEFAULT, 'Hawaian Stake', 'Trump approves.', 3, 7, 3, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FHawaianStake.jpg?alt=media&token=53510f3a-5283-4737-aee3-3b6c3a536d1b');
-insert into t_food values(DEFAULT, 'Kansas Ribs', 'Calentitas calentitas.', 3, 7, 3, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FKansasRibs.jpg?alt=media&token=bcc0f048-3287-4fe0-ac9b-2e186057f792');
-insert into t_food values(DEFAULT, 'Nigiris de Camaron', 'Debaaajo del maaaar, debajo del mar..', 3, 6, 5, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FNigirisDeCamaron.jpg?alt=media&token=14c458f4-18b1-4371-88d4-dcb68ac20256');
-insert into t_food values(DEFAULT, 'NYC Phila', null, 4, 6, 5, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FSushi1.jpg?alt=media&token=1836f52c-6ad4-48c7-8c44-9a99ae73102b');
-insert into t_food values(DEFAULT, 'Triple Taco', 'El que se comió la abuela Coco antes de quedarla.', 5, 5, 6, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FTripleTaco.jpg?alt=media&token=aedb2c3e-73c2-49c5-8ec7-1b4e1e2f0e21');
+insert into t_food values(DEFAULT, 'BigMac', 'Tremenda Glucemia', 3, 2, 1, 2, 2, 1, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FBigMac.jpg?alt=media&token=91942492-25c1-47b8-ae13-840a0d51c779');
+insert into t_food values(DEFAULT, 'Burrito de Fideos', 'Mex mex go!', 5, 5, 5, 5, 5, 6, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FBurritoDeFideos.jpg?alt=media&token=e1f1d51c-345c-4ad8-b2d2-a1473da64854');
+insert into t_food values(DEFAULT, 'Kangreburger', 'La mejor debajo del mar. Formula SECRETA!', 5, 2, 2, 3, 2, 8, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FCangreBurger.jpg?alt=media&token=6ac4357e-7e06-418b-81d4-b00568b82a6d');
+insert into t_food values(DEFAULT, 'Crispy Burger', 'Gabi ya la comio! Y vos?', 2, 2, 2, 2, 2, 2, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FCrispyBurger.jpg?alt=media&token=0733845d-8f24-4dbd-a305-6e3f6bd23522');
+insert into t_food values(DEFAULT, 'Ensalada De Kansas', 'Cuando se acaban los pancitos, RIP.', 3, 4, 3, 3.33, 4, 3, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FEnsalada1.jpg?alt=media&token=03fab50a-7eef-48b6-b594-00997cb73eff');
+insert into t_food values(DEFAULT, 'Ensalada Blen', 'Aglomerado de hojas verdes acompañado de variedad de pimientos exoticos del himalaya.', 4, 4, 4, 4, 4, 8, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FEnsaladaBlen.jpg?alt=media&token=ef664121-4240-4548-8316-469be60c4965');
+insert into t_food values(DEFAULT, 'Guiso de Lentejas', '15p', 5, 1, 5, 3.66, 1, 6, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FGuisoDeLentejas.jpg?alt=media&token=9c673f75-29ac-49c1-b4dd-d0c683ec2b0f');
+insert into t_food values(DEFAULT, 'Guiso de Papa', '30p', 2, 1, 4, 2.33, 1, 4, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FGuisoDePapa.jpg?alt=media&token=c77632df-0293-4a6c-bfec-697412071ca8');
+insert into t_food values(DEFAULT, 'Hawaian Stake', 'Trump approves.', 3, 5, 3, 3.66, 7, 3, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FHawaianStake.jpg?alt=media&token=53510f3a-5283-4737-aee3-3b6c3a536d1b');
+insert into t_food values(DEFAULT, 'Kansas Ribs', 'Calentitas calentitas.', 3, 5, 3, 3.66, 7, 3, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FKansasRibs.jpg?alt=media&token=bcc0f048-3287-4fe0-ac9b-2e186057f792');
+insert into t_food values(DEFAULT, 'Nigiris de Camaron', 'Debaaajo del maaaar, debajo del mar..', 3, 5, 3, 3.66, 6, 5, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FNigirisDeCamaron.jpg?alt=media&token=14c458f4-18b1-4371-88d4-dcb68ac20256');
+insert into t_food values(DEFAULT, 'NYC Phila', null, 4, 6, 5, 5, 6, 5, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FSushi1.jpg?alt=media&token=1836f52c-6ad4-48c7-8c44-9a99ae73102b');
+insert into t_food values(DEFAULT, 'Triple Taco', 'El que se comió la abuela Coco antes de quedarla.',  5, 5, 2, 4, 5, 6, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Ffoods%2FTripleTaco.jpg?alt=media&token=aedb2c3e-73c2-49c5-8ec7-1b4e1e2f0e21');
 select * from t_food;
-
 
 INSERT INTO t_user VALUES(DEFAULT, 'user1', null, null, 'user1@email.com', '$2b$10$COPBRrctMKsyIF5KCBdzI.1GZAMmC9dVB0Zz1HH/F6PMzplwDOTWO', DEFAULT, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser1%40email_com.jpg?alt=media&token=de6b3327-6e3a-4c04-aa22-9a3d4daaad80', true);
 INSERT INTO t_user VALUES(DEFAULT, 'user2', null, null, 'user2@email.com', '$2b$10$ygrUw.dcGcj/oaU89A.LeePR20krhdz./FYcY56gL5tnxQVTPe6cW', DEFAULT, 'https://firebasestorage.googleapis.com/v0/b/foodwayz-e9a26.appspot.com/o/images%2Fusers%2Fuser2%40email_com.jpg?alt=media&token=f7ccadfb-b145-4510-bfda-dcbc2fab74fd', true);
@@ -178,5 +177,3 @@ select * from t_owns;
 INSERT INTO t_user_has_characteristic VALUES(2, 1);
 INSERT INTO t_user_has_characteristic VALUES(2, 4);
 select * from t_user_has_characteristic;
-
-
