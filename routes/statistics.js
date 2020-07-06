@@ -87,9 +87,9 @@ module.exports = class SearchRoute {
             a_user_id
         } = req.user;
         
-        const {
-            a_first_time,
-            a_last_time
+        let {
+            a_first_date,
+            a_last_date = null
         } = req.body;
 
         try {
@@ -105,6 +105,11 @@ module.exports = class SearchRoute {
 
             console.log("Hello world");
             // Do Stuff
+            a_first_date = '2020-07-06 13:18:02.1315-03';
+            if (a_last_date == null || a_last_date === "") {
+                a_last_date = new Date().toISOString();
+                console.log(a_last_date);
+            }
             const info = await this.server.db(table_name).where(prop_name, '=', prop_value).where('a_time', '>=', a_first_date).where('a_time', '<=', a_last_date);
             console.log(info);
 
