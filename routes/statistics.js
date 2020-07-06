@@ -20,18 +20,6 @@ module.exports = class StatisticRoute {
     }
 
     async getBestWorstFood(req, res) {
-        /*
-        {
-            this.foodRoute.getFoodsObjects({a_food_id: []});
-            "a_best": {
-                "a_presentation_score": [],
-                "a_food_price_quality": [] 
-            },
-            "a_worst": {
-                "a_presentation_score": []
-            }
-        }
-        */
 
         const { restId } = req.params;
         const { a_user_id } = req.user;
