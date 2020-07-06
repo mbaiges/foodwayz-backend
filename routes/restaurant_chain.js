@@ -169,14 +169,33 @@ module.exports = class RestaurantChainRoute {
 
     async updateChainScore(chainId) {
         try {
-            const rests = (await this.server.db('t_restaurant').select('a_score').where({a_rest_chain_id: chainId})).map(r => r.a_score);
+            let quality = 0, presentation = 0, price = 0;
+            const rests = await this.server.db('t_restaurant').select('a_food_quality_score', 'a_presentation_score', 'a_price_quality_score').where({a_rest_chain_id: chainId});
             if(rests.length != 0) {
-                let sum = 0;
-                rests.forEach(v => sum += Number.parseFloat(v));
-                await this.server.db('t_restaurant_chain').update({a_score: sum/rests.length}).where({a_rest_chain_id: chainId});
+                rests.forEach(r => {
+                    quality += parseFloat(r.a_food_quality_score);
+                    presentation += parseFloat(r.a_presentation_score);
+                    price += parseFloat(r.a_price_quality_score);
+                });
+
+                quality = quality/rests.length;
+                presentation = presentation/rests.length;
+                price = price/rests.length;
+
+                await this.server.db('t_restaurant_chain').update({
+                    a_food_quality_score: quality,
+                    a_presentation_score: presentation,
+                    a_price_quality_score: price,
+                    a_score: (quality + presentation + price)/3
+                }).where({a_rest_chain_id: chainId});
             }
             else {
-                await this.server.db('t_restaurant_chain').update({a_score: 0}).where({a_rest_chain_id: chainId});
+                await this.server.db('t_restaurant_chain').update({
+                    a_food_quality_score: 0,
+                    a_presentation_score: 0,
+                    a_price_quality_score: 0,
+                    a_score: 0
+                }).where({a_rest_chain_id: chainId});
             }
         } catch (error) {
             console.log(error.message);

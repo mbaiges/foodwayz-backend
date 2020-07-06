@@ -388,13 +388,34 @@ module.exports = class FoodRoute {
         }
 
         try {
-            const revs = (await this.server.db('t_review').select('a_score').where({a_food_id: foodId})).map(r => r.a_score);
+            let quality = 0, presentation = 0, price = 0;
+            const revs = await this.server.db('t_review').select('a_food_quality_score', 'a_presentation_score', 'a_price_quality_score').where({a_food_id: foodId});
+
+
             if(revs.length != 0) {
-                let sum = 0;
-                revs.forEach(v => sum += Number.parseFloat(v));
-                await this.server.db('t_food').update({a_score: sum/revs.length}).where({a_food_id: foodId});
+                revs.forEach(r => {
+                    quality += parseFloat(r.a_food_quality_score);
+                    presentation += parseFloat(r.a_presentation_score);
+                    price += parseFloat(r.a_price_quality_score);
+                });
+
+                quality = quality/revs.length;
+                presentation = presentation/revs.length;
+                price = price/revs.length;
+
+                await this.server.db('t_food').update({
+                    a_food_quality_score: quality,
+                    a_presentation_score: presentation,
+                    a_price_quality_score: price,
+                    a_score: (quality + presentation + price)/3
+                }).where({a_food_id: foodId});
             } else {
-                await this.server.db('t_food').update({a_score: 0}).where({a_food_id: foodId});
+                await this.server.db('t_food').update({
+                    a_food_quality_score: 0,
+                    a_presentation_score: 0,
+                    a_price_quality_score: 0,
+                    a_score: 0
+                }).where({a_food_id: foodId});
             }
             const restId = (await this.server.db('t_food').select('a_rest_id').where({a_food_id: foodId}))[0].a_rest_id;
             this.restRoute.updateRestScore(restId);
