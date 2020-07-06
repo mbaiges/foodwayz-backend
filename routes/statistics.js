@@ -16,7 +16,7 @@ module.exports = class StatisticRoute {
         app.post('/statistics/restaurant/:restId/views_by_hour', this.getRestaurantViewsByHour.bind(this));
         app.post('/statistics/food/:foodId/views_by_day', this.getFoodViewsByDay.bind(this));
         app.post('/statistics/food/:foodId/views_by_hour', this.getFoodViewsByHour.bind(this));
-        app.post('/statistics/user')
+        app.post('/statistics/food/:foodId/user', this.getFoodUserStatistics.bind(this));
     }
 
     async getBestWorstFood(req, res) {
@@ -157,6 +157,10 @@ module.exports = class StatisticRoute {
 
     async getRestaurantViewsByDay(req, res) {
         const {
+            a_user_id
+        } = req.user;
+
+        const {
             restId
         } = req.params;
 
@@ -167,7 +171,7 @@ module.exports = class StatisticRoute {
             return res.status(401).json(message.unauth('restaurant statistics', 'not an owner'));
         }
 
-        const isAllowed = await this.checkPremiumLevel(a_rest_id, premiumLevels.getFoodViewsByDay);
+        const isAllowed = await this.checkPremiumLevel(a_rest_id, premiumLevels.getRestaurantViewsByDay);
         if (!isAllowed) {
             return res.status(401).json(message.unauth('restaurant statistics', 'not enough premium level'));
         }
@@ -176,6 +180,10 @@ module.exports = class StatisticRoute {
     }
 
     async getFoodViewsByDay(req, res) {
+        const {
+            a_user_id
+        } = req.user;
+        
         const {
             foodId
         } = req.params;
@@ -198,7 +206,7 @@ module.exports = class StatisticRoute {
             }
 
 
-            return this.getViewsByDay('t_food_view', 'a_food_id', foodId, restId, req, res);
+            return this.getViewsByDay('t_food_view', 'a_food_id', foodId, req, res);
         }
         else {
             return res.status(404).json(message.notFound('food statistics', foodId));
@@ -207,10 +215,6 @@ module.exports = class StatisticRoute {
     }
 
     async getViewsByDay(table_name, prop_name, prop_value, req, res) {
-        const {
-            a_user_id
-        } = req.user;
-        
         let {
             a_first_date,
             a_last_date = null
@@ -225,6 +229,10 @@ module.exports = class StatisticRoute {
             let info = await this.server.db(table_name).where(prop_name, '=', prop_value).where('a_time', '>=', a_first_date).where('a_time', '<=', a_last_date);
 
             let viewsByUser = this.getSpacedViewsByUser(info);
+
+            Object.entries(viewsByUser).forEach(e => {
+                viewsByUser[e[0]] = e[1].map(l => l.a_time);
+            });
 
             // mapea las vistas de usuarios de la forma {"1":[vista1, vista2]} a un array de tipo [a_time1, a_time2..]
 
@@ -319,6 +327,10 @@ module.exports = class StatisticRoute {
 
             let viewsByUser = this.getSpacedViewsByUser(info);
 
+            Object.entries(viewsByUser).forEach(e => {
+                viewsByUser[e[0]] = e[1].map(l => l.a_time);
+            });
+
             // mapea las vistas de usuarios de la forma {"1":[vista1, vista2]} a un array de tipo [a_time1, a_time2..]
 
             const allViews = Object.values(viewsByUser)
@@ -342,6 +354,57 @@ module.exports = class StatisticRoute {
         
     }
 
+    async getFoodUserStatistics(req, res) {
+        const {
+            foodId
+        } = req.params;
+
+        let {
+            a_first_date = null,
+            a_last_date = null
+        } = req.body;
+
+        if (a_last_date == null || a_last_date === "") {
+            a_last_date = new Date().toISOString();
+            console.log(a_last_date);
+        }
+
+        try {
+
+            let a_users_info = {};
+
+            // Views
+
+            let viewsInfo;
+            
+            if (a_first_date) {
+                viewsInfo = await this.server.db('t_food_view').where({a_food_id: foodId}).where('a_time', '>=', a_first_date).where('a_time', '<=', a_last_date);
+            } else {
+                viewsInfo = await this.server.db('t_food_view').where({a_food_id: foodId}).where('a_time', '<=', a_last_date);
+            }
+
+            let a_views_info = {};
+
+            if (!Array.isArray(viewsInfo)) {
+                viewsInfo = [];
+            }
+
+            console.log(viewsInfo);
+            
+            
+            let a_reviews_info = {};
+            
+
+            a_users_info = {a_views_info, a_reviews_info};
+            
+            return res.status(200).json(message.fetch('food user statistics', a_users_info))
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({message: error.message});
+        }
+    }
+
     getSpacedViewsByUser(info) {
         let viewsByUser = {};
         if (Array.isArray(info) && info.length > 0) {
@@ -356,11 +419,11 @@ module.exports = class StatisticRoute {
                     }
 
                     if (viewsByUser[user].length === 0) {
-                        viewsByUser[user].push(time);
+                        viewsByUser[user].push(info[j]);
                     }
                     else {
                         if ( (time - (viewsByUser[user])[viewsByUser[user].length - 1]) > 10 * 60 * 1000) {
-                            viewsByUser[user].push(time);
+                            viewsByUser[user].push(info[j]);
                         }
                     }
                 }
