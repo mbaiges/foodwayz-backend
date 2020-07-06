@@ -64,7 +64,7 @@ module.exports = class SearchRoute {
         this.getViewsByDay('t_restaurant_view', 'a_rest_id', restId, req, res);
     }
 
-    async getViewsByDay(req, res) {
+    async getViewsByDay(table_name, prop_name, prop_value, req, res) {
         const {
             a_user_id
         } = req.user;
@@ -86,6 +86,10 @@ module.exports = class SearchRoute {
             }
 
             console.log("Hello world");
+            // Do Stuff
+            const info = await this.server.db(table_name).where(prop_name, '=', prop_value);
+            console.log(info);
+
         } catch (error) {
             console.log(error);
         }
