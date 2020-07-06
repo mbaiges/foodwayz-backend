@@ -270,7 +270,7 @@ module.exports = class StatisticRoute {
             return res.status(401).json(message.unauth('restaurant statistics', 'not an owner'));
         }
 
-        const isAllowed = await this.checkPremiumLevel(a_rest_id, premiumLevels.getViewsByHour);
+        const isAllowed = await this.checkPremiumLevel(a_rest_id, premiumLevels.getRestaurantViewsByHour);
         if (!isAllowed) {
             return res.status(401).json(message.unauth('restaurant statistics', 'not enough premium level'));
         }
@@ -298,7 +298,7 @@ module.exports = class StatisticRoute {
                 return res.status(401).json(message.unauth('food statistics', 'not an owner'));
             }
 
-            const isAllowed = await this.checkPremiumLevel(a_rest_id, premiumLevels.getViewsByHour);
+            const isAllowed = await this.checkPremiumLevel(a_rest_id, premiumLevels.getFoodViewsByHour);
             if (!isAllowed) {
                 return res.status(401).json(message.unauth('food statistics', 'not enough premium level'));
             }
