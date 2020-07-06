@@ -478,13 +478,33 @@ module.exports = class RestaurantRoute {
         }
 
         try {
-            const foods = (await this.server.db('t_food').select('a_score').where({a_rest_id: restId})).map(r => r.a_score);
+            let quality = 0, presentation = 0, price = 0;
+            const foods = await this.server.db('t_food').select('a_food_quality_score', 'a_presentation_score', 'a_price_quality_score').where({a_rest_id: restId});
+
             if(foods.length != 0) {
-                let sum = 0;
-                foods.forEach(v => sum += Number.parseFloat(v));
-                await this.server.db('t_restaurant').update({a_score: sum/foods.length}).where({a_rest_id: restId});
+                foods.forEach(f => {
+                    quality += parseFloat(f.a_food_quality_score);
+                    presentation += parseFloat(f.a_presentation_score);
+                    price += parseFloat(f.a_price_quality_score);
+                })
+
+                quality = quality/foods.length;
+                presentation = presentation/foods.length;
+                price = price/foods.length;
+
+                await this.server.db('t_restaurant').update({
+                    a_food_quality_score: quality,
+                    a_presentation_score: presentation,
+                    a_price_quality_score: price,
+                    a_score: (quality + presentation + price)/3
+                }).where({a_rest_id: restId});
             } else {
-                await this.server.db('t_restaurant').update({a_score: 0}).where({a_rest_id: restId});
+                await this.server.db('t_restaurant').update({
+                    a_food_quality_score: 0,
+                    a_presentation_score: 0,
+                    a_price_quality_score: 0,
+                    a_score: 0
+                }).where({a_rest_id: restId});
             }
             const chainId = (await this.server.db('t_restaurant').select('a_rest_chain_id').where({a_rest_id: restId}))[0].a_rest_chain_id;
             if(chainId != null && chainId != undefined) {
