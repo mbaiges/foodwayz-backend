@@ -7,6 +7,7 @@ module.exports = class SearchRoute {
 
     initialize(app) {
         app.post('/statistics/restaurant/:restId/views_by_day', this.getRestaurantViewsByDay.bind(this));
+        app.post('/statistics/food/:foodId/views_by_day', this.getFoodViewsByDay.bind(this));
     }
 
     async getRestaurantViewsStatistics(req, res) {
@@ -74,7 +75,7 @@ module.exports = class SearchRoute {
         if (food && food.length > 0) {
             food = food[0];
             const restId = food.a_rest_id; 
-            return this.getViewsByDay('t_restaurant_view', 'a_rest_id', restId, restId, req, res);
+            return this.getViewsByDay('t_food_view', 'a_food_id', foodId, restId, req, res);
         }
         else {
             return res.status(404).json(message.notFound('food statistics', foodId));
@@ -112,7 +113,7 @@ module.exports = class SearchRoute {
             const info = await this.server.db(table_name).where(prop_name, '=', prop_value).where('a_time', '>=', a_first_date).where('a_time', '<=', a_last_date);
             console.log(info);
 
-            return res.status(200).json({result: info, message: "todo piolis"});
+            return res.status(200).json(message.fetch('views', info));
 
         } catch (error) {
             console.log(error);
