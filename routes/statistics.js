@@ -105,7 +105,6 @@ module.exports = class SearchRoute {
 
             console.log("Hello world");
             // Do Stuff
-            a_first_date = '2020-07-06 13:18:02.1315-03';
             if (a_last_date == null || a_last_date === "") {
                 a_last_date = new Date().toISOString();
                 console.log(a_last_date);
