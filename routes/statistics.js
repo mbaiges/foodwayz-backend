@@ -1,13 +1,48 @@
 const message = require('../interface').message;
+const premiumLevels = {
+    getRestaurantViewsByDay: 2,
+    getFoodViewsByDay: 2,
+}
 
-module.exports = class SearchRoute {
+module.exports = class StatisticRoute {
     constructor(server) {
         this.server = server;
     }
 
     initialize(app) {
+        app.post('/statistics/restaurant/:restId/best_worst_food', this.getBestWorstFood.bind(this));
         app.post('/statistics/restaurant/:restId/views_by_day', this.getRestaurantViewsByDay.bind(this));
+        app.post('/statistics/restaurant/:restId/views_by_hour', this.getRestaurantViewsByHour.bind(this));
         app.post('/statistics/food/:foodId/views_by_day', this.getFoodViewsByDay.bind(this));
+        app.post('/statistics/food/:foodId/views_by_hour', this.getFoodViewsByHour.bind(this));
+        app.post('/statistics/user')
+    }
+
+    async getBestWorstFood(req, res) {
+        /*
+        {
+            this.foodRoute.getFoodsObjects({a_food_id: []});
+            "a_best": {
+                "a_presentation_score": [],
+                "a_food_price_quality": [] 
+            },
+            "a_worst": {
+                "a_presentation_score": []
+            }
+        }
+        */
+
+        const { restId } = req.params;
+        const { a_user_id } = req.user;
+        const { limit } = req.body;
+
+        if(!(await this.checkOwnership(a_user_id, restId)))
+            return res.status(401).json(message.unauth('restaurant statistics', 'not an owner'));
+
+        if(!(await this.checkPremiumLevel(restId, 2)))
+            return res.status(401).json(message.unauth('restaurant statistics', 'not enough premium level'));
+
+        const a_food_quality_score_best = this.server.db('t_food').select('a_food_id')
     }
 
     async getRestaurantViewsStatistics(req, res) {
@@ -62,7 +97,19 @@ module.exports = class SearchRoute {
             restId
         } = req.params;
 
-        return this.getViewsByDay('t_restaurant_view', 'a_rest_id', restId, restId, req, res);
+        const a_rest_id = restId;
+
+        const owns = await this.checkOwnership(a_user_id, a_rest_id);
+        if (!owns) {
+            return res.status(401).json(message.unauth('restaurant statistics', 'not an owner'));
+        }
+
+        const isAllowed = await this.checkPremiumLevel(a_rest_id, premiumLevels.getFoodViewsByDay);
+        if (!isAllowed) {
+            return res.status(401).json(message.unauth('restaurant statistics', 'not enough premium level'));
+        }
+
+        return this.getViewsByDay('t_restaurant_view', 'a_rest_id', restId, req, res);
     }
 
     async getFoodViewsByDay(req, res) {
@@ -73,8 +120,21 @@ module.exports = class SearchRoute {
         let food = await this.server.db('t_food').where({a_food_id: foodId});
 
         if (food && food.length > 0) {
+            
             food = food[0];
-            const restId = food.a_rest_id;
+            const a_rest_id = food.a_rest_id;
+
+            const owns = await this.checkOwnership(a_user_id, a_rest_id);
+            if (!owns) {
+                return res.status(401).json(message.unauth('food statistics', 'not an owner'));
+            }
+
+            const isAllowed = await this.checkPremiumLevel(a_rest_id, premiumLevels.getFoodViewsByDay);
+            if (!isAllowed) {
+                return res.status(401).json(message.unauth('food statistics', 'not enough premium level'));
+            }
+
+
             return this.getViewsByDay('t_food_view', 'a_food_id', foodId, restId, req, res);
         }
         else {
@@ -83,7 +143,7 @@ module.exports = class SearchRoute {
 
     }
 
-    async getViewsByDay(table_name, prop_name, prop_value, a_rest_id, req, res) {
+    async getViewsByDay(table_name, prop_name, prop_value, req, res) {
         const {
             a_user_id
         } = req.user;
@@ -94,17 +154,6 @@ module.exports = class SearchRoute {
         } = req.body;
 
         try {
-            const owns = await this.checkOwnership(a_user_id, a_rest_id);
-            if (!owns) {
-                return res.status(401).json(message.unauth('restaurant statistics', 'not an owner'));
-            }
-
-            const isAllowed = await this.checkPremiumLevel(a_rest_id, 2);
-            if (!isAllowed) {
-                return res.status(401).json(message.unauth('restaurant statistics', 'not enough premium level'));
-            }
-
-            console.log("Hello world");
             // Do Stuff
             if (a_last_date == null || a_last_date === "") {
                 a_last_date = new Date().toISOString();
@@ -120,8 +169,6 @@ module.exports = class SearchRoute {
                 .reduce((acum, curr) => acum = [...acum, ...curr], [])
                 .sort();
 
-            console.log(allViews);
-
             let viewsByDay = {};
 
             allViews.forEach(curr => {
@@ -136,6 +183,94 @@ module.exports = class SearchRoute {
             viewsByDay = Object.entries(viewsByDay).map(entry => Object.assign({a_time: entry[0], a_amount: entry[1]}));
 
             return res.status(200).json(message.fetch('views', viewsByDay));
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({message: error.message});
+        }
+        
+    }
+
+    async getRestaurantViewsByHour(req, res) {
+        const {
+            restId
+        } = req.params;
+
+        return this.getViewsByHour('t_restaurant_view', 'a_rest_id', restId, restId, req, res);
+    }
+
+    async getFoodViewsByHour(req, res) {
+        const {
+            foodId
+        } = req.params;
+
+        let food = await this.server.db('t_food').where({a_food_id: foodId});
+
+        if (food && food.length > 0) {
+            food = food[0];
+            const restId = food.a_rest_id;
+            return this.getViewsByHour('t_food_view', 'a_food_id', foodId, restId, req, res);
+        }
+        else {
+            return res.status(404).json(message.notFound('food statistics', foodId));
+        }
+
+    }
+
+    async getViewsByHour(table_name, prop_name, prop_value, a_rest_id, req, res) {
+        const {
+            a_user_id
+        } = req.user;
+        
+        let {
+            a_date
+        } = req.body;
+
+        let a_first_date, a_last_date;
+
+        if (!a_date || a_date === "") {
+            a_date = new Date().toISOString();
+        }
+
+        a_first_date = new Date(a_date);
+        a_first_date.setHours(0,0,0,0);
+        a_last_date = new Date(a_date);
+        a_last_date.setHours(23,59,59,999);
+
+        console.log(a_first_date, a_last_date);
+
+        try {
+            const owns = await this.checkOwnership(a_user_id, a_rest_id);
+            if (!owns) {
+                return res.status(401).json(message.unauth('restaurant statistics', 'not an owner'));
+            }
+
+            const isAllowed = await this.checkPremiumLevel(a_rest_id, 2);
+            if (!isAllowed) {
+                return res.status(401).json(message.unauth('restaurant statistics', 'not enough premium level'));
+            }
+
+            // Do Stuff
+
+            let info = await this.server.db(table_name).where(prop_name, '=', prop_value).where('a_time', '>=', a_first_date).where('a_time', '<=', a_last_date);
+
+            let viewsByUser = this.getSpacedViewsByUser(info);
+
+            // mapea las vistas de usuarios de la forma {"1":[vista1, vista2]} a un array de tipo [a_time1, a_time2..]
+
+            const allViews = Object.values(viewsByUser)
+                .reduce((acum, curr) => acum = [...acum, ...curr], [])
+                .sort();
+
+            let viewsByHour = new Array(24).fill(0);
+
+            console.log(viewsByHour);
+
+            allViews.forEach(curr => {
+                viewsByHour[curr.getHours()] += 1;
+            });
+
+            return res.status(200).json(message.fetch('views', viewsByHour));
 
         } catch (error) {
             console.log(error);
