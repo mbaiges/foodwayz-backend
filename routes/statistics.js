@@ -3,6 +3,7 @@ const premiumLevels = {
     getBestWorstFood: 2,
     getRestaurantViewsByDay: 2,
     getFoodViewsByDay: 2,
+    getViewsByHour: 2
 }
 const MINUTES_SPACED_VIEW = 10;
 
@@ -27,14 +28,14 @@ module.exports = class StatisticRoute {
         const { limit } = req.body;
 
         try {
+            if(!Number.isInteger(limit))
+                return res.status(400).json(message.badRequest('restaurant statistics', 'limit', 'not an integer'));
+
             if(!(await this.checkOwnership(a_user_id, restId)))
             return res.status(401).json(message.unauth('restaurant statistics', 'not an owner'));
 
             if(!(await this.checkPremiumLevel(restId, premiumLevels.getBestWorstFood)))
                 return res.status(401).json(message.unauth('restaurant statistics', 'not enough premium level'));
-
-            if(!Number.isInteger(limit))
-                return res.status(400).json(message.badRequest('restaurant statistics', 'limit', 'not an integer'));
 
             if (!this.foodRoute) {
                 const FoodRoute = require('./food');
@@ -74,7 +75,6 @@ module.exports = class StatisticRoute {
             a_price_quality_score_worst = this.foodRoute.getFoodsObjects({filters: {a_food_id: a_price_quality_score_worst}}).then(resp => a_price_quality_score_worst = resp);
 
             await Promise.all([a_food_quality_score_best, a_presentation_score_best, a_price_quality_score_best, a_food_quality_score_worst, a_presentation_score_worst, a_price_quality_score_worst]);
-            console.log(a_price_quality_score_worst);
             
             const result = {
                 "a_best": {
@@ -305,7 +305,7 @@ module.exports = class StatisticRoute {
                 return res.status(401).json(message.unauth('restaurant statistics', 'not an owner'));
             }
 
-            const isAllowed = await this.checkPremiumLevel(a_rest_id, 2);
+            const isAllowed = await this.checkPremiumLevel(a_rest_id, premiumLevels.getViewsByHour);
             if (!isAllowed) {
                 return res.status(401).json(message.unauth('restaurant statistics', 'not enough premium level'));
             }
