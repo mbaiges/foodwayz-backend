@@ -6,7 +6,7 @@ module.exports = class SearchRoute {
     }
 
     initialize(app) {
-        app.post('/statistics/restaurant/:restId', this.getRestaurantViewsByDay.bind(this));
+        app.get('/statistics/restaurant/:restId/views_by_day', this.getRestaurantViewsByDay.bind(this));
     }
 
     async getRestaurantViewsStatistics(req, res) {
@@ -31,7 +31,7 @@ module.exports = class SearchRoute {
     async checkOwnership(a_user_id, a_rest_id) {
         try {
             const owns = await this.server.db('t_owns').where({a_user_id, a_rest_id});
-            if (owns && owns.length > 1) {
+            if (owns && owns.length > 0) {
                 return true;
             }
             return false;
@@ -46,7 +46,7 @@ module.exports = class SearchRoute {
             let rest = await this.server.db('t_restaurant').where({a_rest_id});
             if (rest && rest.length > 0) {
                 rest = rest[0];
-                return rest.a_premium_level != null && rest.a_premium_level != undefined && !isNan(rest.a_premium_level) && rest.a_premium_level >= minimumLevel;
+                return rest.a_premium_level != null && rest.a_premium_level != undefined && !isNaN(rest.a_premium_level) && rest.a_premium_level >= minimumLevel;
             }
             return false;
         }
@@ -57,17 +57,17 @@ module.exports = class SearchRoute {
     }
 
     async getRestaurantViewsByDay(req, res) {
-        
+        const {
+            restId
+        } = req.params;
+
+        this.getViewsByDay('t_restaurant_view', 'a_rest_id', restId, req, res);
     }
 
     async getViewsByDay(req, res) {
         const {
             a_user_id
         } = req.user;
-
-        const {
-            restId
-        } = req.params;
         
         const {
             a_first_date,
@@ -80,7 +80,7 @@ module.exports = class SearchRoute {
                 return res.status(401).json(message.unauth('restaurant statistics', 'not an owner'));
             }
 
-            const isAllowed = await this.checkOwnershipLevel(restId, 2);
+            const isAllowed = await this.checkPremiumLevel(restId, 0);
             if (!isAllowed) {
                 return res.status(401).json(message.unauth('restaurant statistics', 'not enough premium level'));
             }
