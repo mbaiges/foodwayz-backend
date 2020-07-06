@@ -6,7 +6,7 @@ module.exports = class SearchRoute {
     }
 
     initialize(app) {
-        app.get('/statistics/restaurant/:restId/views_by_day', this.getRestaurantViewsByDay.bind(this));
+        app.post('/statistics/restaurant/:restId/views_by_day', this.getRestaurantViewsByDay.bind(this));
     }
 
     async getRestaurantViewsStatistics(req, res) {
@@ -88,8 +88,8 @@ module.exports = class SearchRoute {
         } = req.user;
         
         const {
-            a_first_date,
-            a_last_date
+            a_first_time,
+            a_last_time
         } = req.body;
 
         try {
@@ -105,7 +105,7 @@ module.exports = class SearchRoute {
 
             console.log("Hello world");
             // Do Stuff
-            const info = await this.server.db(table_name).where(prop_name, '=', prop_value);
+            const info = await this.server.db(table_name).where(prop_name, '=', prop_value).where('a_time', '>=', a_first_date).where('a_time', '<=', a_last_date);
             console.log(info);
 
             return res.status(200).json({result: info, message: "todo piolis"});
