@@ -298,6 +298,11 @@ module.exports = class FoodRoute {
                     }
 
                     views_info = this.statisticsRoute.getSpacedViewsByUser(views_info);
+
+                    Object.entries(viewsByUser).forEach(e => {
+                        viewsByUser[e[0]] = e[1].map(l => l.a_time);
+                    });
+
                     views_info.total = Object.values(views_info).reduce((a, b) => a += b.length, 0);
 
                     foods[i].a_views_info = views_info;
