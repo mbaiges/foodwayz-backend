@@ -61,10 +61,28 @@ module.exports = class SearchRoute {
             restId
         } = req.params;
 
-        this.getViewsByDay('t_restaurant_view', 'a_rest_id', restId, req, res);
+        return this.getViewsByDay('t_restaurant_view', 'a_rest_id', restId, restId, req, res);
     }
 
-    async getViewsByDay(table_name, prop_name, prop_value, req, res) {
+    async getFoodViewsByDay(req, res) {
+        const {
+            foodId
+        } = req.params;
+
+        let food = await this.server.db('t_food').where({a_food_id: foodId});
+
+        if (food && food.length > 0) {
+            food = food[0];
+            const restId = food.a_rest_id; 
+            return this.getViewsByDay('t_restaurant_view', 'a_rest_id', restId, restId, req, res);
+        }
+        else {
+            return res.status(404).json(message.notFound('food statistics', foodId));
+        }
+
+    }
+
+    async getViewsByDay(table_name, prop_name, prop_value, a_rest_id, req, res) {
         const {
             a_user_id
         } = req.user;
@@ -75,12 +93,12 @@ module.exports = class SearchRoute {
         } = req.body;
 
         try {
-            const owns = await this.checkOwnership(a_user_id, restId);
+            const owns = await this.checkOwnership(a_user_id, a_rest_id);
             if (!owns) {
                 return res.status(401).json(message.unauth('restaurant statistics', 'not an owner'));
             }
 
-            const isAllowed = await this.checkPremiumLevel(restId, 0);
+            const isAllowed = await this.checkPremiumLevel(a_rest_id, 2);
             if (!isAllowed) {
                 return res.status(401).json(message.unauth('restaurant statistics', 'not enough premium level'));
             }
@@ -90,8 +108,11 @@ module.exports = class SearchRoute {
             const info = await this.server.db(table_name).where(prop_name, '=', prop_value);
             console.log(info);
 
+            return res.status(200).json({result: info, message: "todo piolis"});
+
         } catch (error) {
             console.log(error);
+            return res.status(500).json({message: error.message});
         }
         
     }
