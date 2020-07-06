@@ -3,7 +3,6 @@ const message = require('../interface').message;
 module.exports = class UserCharacteristicRoute {
     constructor(server) {
         this.server = server;
-
     }
 
     async initialize(app) {
@@ -78,11 +77,6 @@ module.exports = class UserCharacteristicRoute {
     }
 
     async getCharsByUser(req, res) {
-        if (!this.charRoute) {
-            const CharacteristicRoute = require('./characteristic');
-            this.charRoute = new CharacteristicRoute(this.server);
-        }
-        
         const { userId } = req.params;
 
         try {
@@ -96,6 +90,11 @@ module.exports = class UserCharacteristicRoute {
     }
 
     async getCharsByUserObjects(userId) {
+        if (!this.charRoute) {
+            const CharacteristicRoute = require('./characteristic');
+            this.charRoute = new CharacteristicRoute(this.server);
+        }
+
         let chars_ids = await this.server.db('t_user_has_characteristic').select("a_char_id").where({a_user_id: userId});
         if (chars_ids && !Array.isArray(chars_ids))
             chars_ids = [chars_ids];
