@@ -43,7 +43,7 @@ insert into t_restaurant_chain values(DEFAULT, 'Kansas', 5, 5, 3.5, 4.5, 'https:
 insert into t_restaurant values(DEFAULT, 'McDonalds del obelisco', 2, 3, 4, 3, 'BSAS', 'CABA', '1234', 'el obelisco 69', 1, 0, DEFAULT);
 insert into t_restaurant values(DEFAULT, 'McDonalds del libertador', 5, 5, 3.5, 4.5, 'BSAS', 'CABA', '5678', 'libertador 420', 1, 0, DEFAULT);
 insert into t_restaurant values(DEFAULT, 'Kansas de libertador', 2, 3, 4, 3, 'BSAS', 'CABA', '1313', 'libertador 1221', 2, 0, DEFAULT);
-insert into t_restaurant values(DEFAULT, 'Kansas de pilar', 4, 5, 5, 4.66, 'BSAS', 'AMBA', '1323', 'pilar 1221', 2, 0, DEFAULT);
+insert into t_restaurant values(DEFAULT, 'Kansas de pilar', 4, 5, 5, 4.66, 'BSAS', 'AMBA', '1323', 'pilar 1221', 2, 2, DEFAULT);
 insert into t_restaurant values(DEFAULT, 'sushi pop', 2, 2, 2, 2, 'BSAS', 'AMBA', '5677', 'calle falsa 1234', null, 0, DEFAULT);
 insert into t_restaurant values(DEFAULT, 'tacos locos', 2, 2, 2, 2, 'BSAS', 'CABA', '1323', 'pilar 1221', null, 0, DEFAULT);
 insert into t_restaurant values(DEFAULT, 'morelia', 4, 5, 5, 4.66, 'BSAS', 'CABA', '5378', 'asdf 1221', null, 0, DEFAULT);
