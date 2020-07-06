@@ -433,7 +433,7 @@ module.exports = class AuthRoutes {
     const mailOptions = {
         from : "Dychromatic <noreply@vysly.com>",
         to : user.a_email,
-        subject : "Email Confirmation",
+        subject : "Password Reset",
         html : `<div>
                   <h1 style="text-align: center;">
                     <strong>Have you forgotten your password?</strong>
