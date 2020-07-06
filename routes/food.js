@@ -291,37 +291,14 @@ module.exports = class FoodRoute {
 
                     views_info = await this.server.db('t_food_view').where({a_food_id: foods[i].a_food_id});
 
-                    if (views_info && views_info.length > 0) {
-                        let viewsByUser = {};
-                        let user, time;
-
-                        for (let j = 0; j < views_info.length; j++) {
-                            user = views_info[j].a_user_id;
-                            time = views_info[j].a_time;
-
-                            console.log(time.getMinutes());
-                            
-                            if (!viewsByUser[user]) {
-                                viewsByUser[user] = [];
-                            }
-
-                            if (viewsByUser[user].length === 0) {
-                                viewsByUser[user].push(time);
-                            }
-                            else {
-                                if ( (time - (viewsByUser[user])[viewsByUser[user].length - 1]) > 10 * 60 * 1000) {
-                                    viewsByUser[user].push(time);
-                                }
-                            }
-                        }
-
-                        views_info = {};
-                        views_info.total = Object.values(viewsByUser).reduce((a, b) => a += b.length, 0);
+                    
+                    if (!this.statisticsRoute) {
+                        const StatisticsRoute = require('./statistics');
+                        this.statisticsRoute = new StatisticsRoute(this.server);
                     }
-                    else {
-                        views_info = {};
-                        views_info.total = 0;
-                    }
+
+                    views_info = this.statisticsRoute.getSpacedViewsByUser(views_info);
+                    views_info.total = Object.values(views_info).reduce((a, b) => a += b.length, 0);
 
                     foods[i].a_views_info = views_info;
                 }
