@@ -291,7 +291,7 @@ module.exports = class FoodRoute {
 
                     views_info = await this.server.db('t_food_view').where({a_food_id: foods[i].a_food_id});
 
-                    if (views_info && views_info.length > 1) {
+                    if (views_info && views_info.length > 0) {
                         let viewsByUser = {};
                         let user, time;
 

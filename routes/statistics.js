@@ -110,16 +110,65 @@ module.exports = class SearchRoute {
                 a_last_date = new Date().toISOString();
                 console.log(a_last_date);
             }
-            const info = await this.server.db(table_name).where(prop_name, '=', prop_value).where('a_time', '>=', a_first_date).where('a_time', '<=', a_last_date);
-            console.log(info);
+            let info = await this.server.db(table_name).where(prop_name, '=', prop_value).where('a_time', '>=', a_first_date).where('a_time', '<=', a_last_date);
 
-            return res.status(200).json(message.fetch('views', info));
+            let viewsByUser = this.getSpacedViewsByUser(info);
+
+            // mapea las vistas de usuarios de la forma {"1":[vista1, vista2]} a un array de tipo [a_time1, a_time2..]
+
+            const allViews = Object.values(viewsByUser)
+                .reduce((acum, curr) => acum = [...acum, ...curr], [])
+                .sort();
+
+            console.log(allViews);
+
+            let viewsByDay = {};
+
+            allViews.forEach(curr => {
+                let midnightedDay = curr;
+                midnightedDay.setHours(0,0,0,0)
+                if (!viewsByDay[midnightedDay]) {
+                    viewsByDay[midnightedDay] = 0;
+                }
+                viewsByDay[midnightedDay] += 1;
+            });
+
+            viewsByDay = Object.entries(viewsByDay).map(entry => Object.assign({a_time: entry[0], a_amount: entry[1]}));
+
+            return res.status(200).json(message.fetch('views', viewsByDay));
 
         } catch (error) {
             console.log(error);
             return res.status(500).json({message: error.message});
         }
         
+    }
+
+    getSpacedViewsByUser(info) {
+        let viewsByUser = {};
+        if (Array.isArray(info) && info.length > 0) {
+                let user, time;
+
+                for (let j = 0; j < info.length; j++) {
+                    user = info[j].a_user_id;
+                    time = info[j].a_time;
+                    
+                    if (!viewsByUser[user]) {
+                        viewsByUser[user] = [];
+                    }
+
+                    if (viewsByUser[user].length === 0) {
+                        viewsByUser[user].push(time);
+                    }
+                    else {
+                        if ( (time - (viewsByUser[user])[viewsByUser[user].length - 1]) > 10 * 60 * 1000) {
+                            viewsByUser[user].push(time);
+                        }
+                    }
+                }
+            }
+
+        return viewsByUser;
     }
 
 }
