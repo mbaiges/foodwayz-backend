@@ -808,6 +808,10 @@ module.exports = class StatisticRoute {
     getSpacedViewsByUser(info) {
         let viewsByUser = {};
         if (Array.isArray(info) && info.length > 0) {
+
+                // Comment this when it all works.
+                info.sort((a, b) => a.a_date - b.a_date);
+
                 let user, time;
 
                 for (let j = 0; j < info.length; j++) {
