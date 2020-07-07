@@ -8,8 +8,7 @@
     "node": "12.x"
   },
   "scripts": {
-    "start": "node index.js",
-    "start:dev": "nodemon index.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
@@ -27,7 +26,5 @@
     "swagger-jsdoc": "^4.0.0",
     "swagger-ui-express": "^4.1.4"
   },
-  "devDependencies": {
-    "nodemon": "^2.0.3"
-  }
+  "devDependencies": {}
 }

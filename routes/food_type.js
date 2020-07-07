@@ -1,5 +1,4 @@
 const message = require('../interface').message;
-const { restart } = require('nodemon');
 
 module.exports = class FoodTypeRoute {
     constructor(server) {
