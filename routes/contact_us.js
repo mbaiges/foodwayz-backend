@@ -134,7 +134,7 @@ module.exports = class AuthRoutes {
     mailOptions = {
       from : "Dychromatic <noreply@vysly.com>",
       to : a_email,
-      subject : `Contact Us`,
+      subject : `Type Request`,
       html : `<div>
                 <h1 style="text-align: center; margin-bottom=16px;">
                   The following is a copy of what our team will be receiving. Thanks for contacting us! We're happy to improve our services in order to get a better customer experience.
@@ -208,7 +208,7 @@ module.exports = class AuthRoutes {
     mailOptions = {
       from : "Dychromatic <noreply@vysly.com>",
       to : a_email,
-      subject : `Contact Us`,
+      subject : `Ingredient Request`,
       html : `<div>
                 <h1 style="text-align: center; margin-bottom=16px;">
                   The following is a copy of what our team will be receiving. Thanks for contacting us! We're happy to improve our services in order to get a better customer experience.
@@ -282,7 +282,7 @@ module.exports = class AuthRoutes {
     mailOptions = {
       from : "Dychromatic <noreply@vysly.com>",
       to : a_email,
-      subject : `Contact Us`,
+      subject : `Characteristic Request`,
       html : `<div>
                 <h1 style="text-align: center; margin-bottom=16px;">
                   The following is a copy of what our team will be receiving. Thanks for contacting us! We're happy to improve our services in order to get a better customer experience.

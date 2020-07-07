@@ -278,7 +278,7 @@ module.exports = class RestaurantRoute {
         const { id } = req.params;
 
         try {
-            const foods = await this.foodRoute.getFoodsObjects({ filters: {a_rest_id: id} });
+            const foods = await this.foodRoute.getFoodsObjects({ filters: {a_rest_id: id}, detailed: true });
             res.status(200).json(message.fetch(`foods by restaurant id ${id}`, foods));
         } catch (error) {
             console.log(error);
