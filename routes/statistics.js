@@ -448,6 +448,8 @@ module.exports = class StatisticRoute {
                 charsByUser1[userIds1[k]] = (await this.userHasCharRoute.getCharsByUserObjects(userIds1[k])).map(c => c.a_char_name);
             }
 
+            console.log(viewsByUser);
+
             Object.values(viewsByUser).reduce((acum, curr) => [...acum, ...curr], []).forEach(info => {
                 if (info.a_gender != null) {
                     if (!a_views_info.a_gender) {
