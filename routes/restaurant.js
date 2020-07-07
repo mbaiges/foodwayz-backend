@@ -104,7 +104,7 @@ module.exports = class RestaurantRoute {
             console.error('Failed to add restaurant:');
             console.error(error);
             return res.status(500).json({
-                message: 'Failed to add restaurant'
+                message: error.message
             });
         }
     }
