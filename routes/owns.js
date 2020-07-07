@@ -13,7 +13,7 @@ module.exports = class OwnsRoute {
             .post(this.linkRest.bind(this))
             .delete(this.unLinkRest.bind(this));
 
-        app.route('/owner/:userId/restaurant/:restId')
+        app.route('/owner/:ownerId/restaurant/:restId')
             .post(this.linkUserToRest.bind(this))
             .delete(this.unLinkUserToRest.bind(this));
         
@@ -54,6 +54,7 @@ module.exports = class OwnsRoute {
             else {
                 const added_link = await this.server.db('t_owns').insert({a_user_id: ownerId, a_rest_id: restId}).returning("*");
                 res.status(200).json(message.post('owns', added_link));
+                this.sendOwnerEmail(ownerId, restId);
             }
         } catch (error) {
             console.log(error);
@@ -146,6 +147,40 @@ module.exports = class OwnsRoute {
         } catch (error) {
             console.log(error);
             res.status(500).json({message: error.message});
+        }
+    }
+
+    async sendOwnerEmail(a_user_id, a_rest_id) {
+        let user = await this.server.db('t_user').where({a_user_id});
+        let rest = await this.server.db('t_restaurant').where({a_rest_id});
+
+        if (user && user.length > 0 && rest && rest.length > 0) {
+            user = user[0];
+            rest = rest[0];
+
+            mailOptions = {
+                from : "Dychromatic <noreply@vysly.com>",
+                to : user.a_email,
+                subject : `New Owner`,
+                html : `<div>
+                          <h1 style="text-align: center; margin-bottom=8px;">
+                            <strong>You are now owner of restaurant called "<span style="color: #fc987e;">${rest.a_name}</span>"</strong>
+                          </h1>
+                          <p>
+                            <strong>
+                              <span style="color: #fc987e;">
+                                <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/pugoficinista.png" alt="Meeting New Members" width="500" height="500" />
+                              </span>
+                            </strong>
+                          </p>
+                       </div>` 
+              }
+          
+              try {
+                await this.server.emailSend(mailOptions);
+              } catch (error) {
+                console.log(error);
+              }
         }
     }
 
