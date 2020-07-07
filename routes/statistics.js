@@ -220,11 +220,17 @@ module.exports = class StatisticRoute {
             }
             let info = await this.server.db(table_name).where(prop_name, '=', prop_value).where('a_time', '>=', a_first_date).where('a_time', '<=', a_last_date);
 
+            console.log(info);
+
             let viewsByUser = this.getSpacedViewsByUser(info);
+
+            console.log(viewsByUser);
 
             Object.entries(viewsByUser).forEach(e => {
                 viewsByUser[e[0]] = e[1].map(l => l.a_time);
             });
+
+            //console.log(viewsByUser);
 
             // mapea las vistas de usuarios de la forma {"1":[vista1, vista2]} a un array de tipo [a_time1, a_time2..]
 
@@ -828,7 +834,7 @@ module.exports = class StatisticRoute {
                         viewsByUser[user].push(info[j]);
                     }
                     else {
-                        if ( (time - (viewsByUser[user])[viewsByUser[user].length - 1]) > MINUTES_SPACED_VIEW * 60 * 1000) {
+                        if ( (time - (viewsByUser[user])[viewsByUser[user].length - 1].a_time) > MINUTES_SPACED_VIEW * 60 * 1000) {
                             viewsByUser[user].push(info[j]);
                         }
                     }

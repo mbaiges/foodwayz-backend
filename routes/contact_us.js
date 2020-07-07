@@ -31,6 +31,13 @@ module.exports = class AuthRoutes {
                 <h1 style="text-align: center; margin-bottom=8px;">
                   <strong>Reason: <span style="color: #fc987e;">${reason}</span></strong>
                 </h1>
+                <p>
+                  <strong>
+                    <span style="color: #fc987e;">
+                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/pugoficinista.png" alt="Meeting New Members" width="500" height="500" />
+                    </span>
+                  </strong>
+                </p>
                 <h1 style="text-align: center;">
                   <strong>Body of the message:</strong>
                 </h1>
@@ -58,6 +65,13 @@ module.exports = class AuthRoutes {
                 <h1 style="text-align: center; margin-bottom=8px;">
                   <strong>Reason: <span style="color: #fc987e;">${reason}</span></strong>
                 </h1>
+                <p>
+                  <strong>
+                    <span style="color: #fc987e;">
+                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/pugoficinista.png" alt="Meeting New Members" width="500" height="500" />
+                    </span>
+                  </strong>
+                </p>
                 <h1 style="text-align: center;">
                   <strong>Body of the message:</strong>
                 </h1>
@@ -97,6 +111,13 @@ module.exports = class AuthRoutes {
                 <h1 style="text-align: center; margin-bottom=8px;">
                   <strong><span style="color: #fc987e;">Type Request</span></strong>
                 </h1>
+                <p>
+                  <strong>
+                    <span style="color: #fc987e;">
+                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="500" />
+                    </span>
+                  </strong>
+                </p>
                 <h1 style="text-align: center;">
                   <strong>Type Name: ${a_type_name.replace(/[<>]/g,"")}</strong>
                 </h1>
@@ -121,6 +142,13 @@ module.exports = class AuthRoutes {
                 <h1 style="text-align: center; margin-bottom=8px;">
                   <strong><span style="color: #fc987e;">Type Request</span></strong>
                 </h1>
+                <p>
+                  <strong>
+                    <span style="color: #fc987e;">
+                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="500" />
+                    </span>
+                  </strong>
+                </p>
                 <h1 style="text-align: center;">
                   <strong>Type Name: ${a_type_name.replace(/[<>]/g,"")}</strong>
                 </h1>
@@ -157,6 +185,13 @@ module.exports = class AuthRoutes {
                 <h1 style="text-align: center; margin-bottom=8px;">
                   <strong><span style="color: #fc987e;">Ingredient Request</span></strong>
                 </h1>
+                <p>
+                  <strong>
+                    <span style="color: #fc987e;">
+                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="500" />
+                    </span>
+                  </strong>
+                </p>
                 <h1 style="text-align: center;">
                   <strong>Ingredient Name: ${a_ingr_name.replace(/[<>]/g,"")}</strong>
                 </h1>
@@ -181,6 +216,13 @@ module.exports = class AuthRoutes {
                 <h1 style="text-align: center; margin-bottom=8px;">
                   <strong><span style="color: #fc987e;">Ingredient Request</span></strong>
                 </h1>
+                <p>
+                  <strong>
+                    <span style="color: #fc987e;">
+                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="500" />
+                    </span>
+                  </strong>
+                </p>
                 <h1 style="text-align: center;">
                   <strong>Ingredient Name: ${a_ingr_name.replace(/[<>]/g,"")}</strong>
                 </h1>
@@ -217,6 +259,13 @@ module.exports = class AuthRoutes {
                 <h1 style="text-align: center; margin-bottom=8px;">
                   <strong><span style="color: #fc987e;">Characteristic Request</span></strong>
                 </h1>
+                <p>
+                  <strong>
+                    <span style="color: #fc987e;">
+                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="500" />
+                    </span>
+                  </strong>
+                </p>
                 <h1 style="text-align: center;">
                   <strong>Characteristic Name: ${a_char_name.replace(/[<>]/g,"")}</strong>
                 </h1>
@@ -241,6 +290,13 @@ module.exports = class AuthRoutes {
                 <h1 style="text-align: center; margin-bottom=8px;">
                   <strong><span style="color: #fc987e;">Characteristic Request</span></strong>
                 </h1>
+                <p>
+                  <strong>
+                    <span style="color: #fc987e;">
+                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="500" />
+                    </span>
+                  </strong>
+                </p>
                 <h1 style="text-align: center;">
                   <strong>Characteristic Name: ${a_char_name.replace(/[<>]/g,"")}</strong>
                 </h1>
