@@ -441,7 +441,7 @@ module.exports = class AuthRoutes {
                   <p>
                     <strong>
                       <span style="color: #fc987e;">
-                        <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200705/reset-password.png" alt="Meeting New Members" width="340" height="500" />
+                        <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200705/reset-password.png" alt="Resetting Password" width="340" height="500" />
                       </span>
                     </strong>
                   </p>

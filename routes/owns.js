@@ -169,7 +169,7 @@ module.exports = class OwnsRoute {
                           <p>
                             <strong>
                               <span style="color: #fc987e;">
-                                <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/pugoficinista.png" alt="Meeting New Members" width="500" height="500" />
+                                <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/pugcocinero.png" alt="New Owner!" width="500" height="500" />
                               </span>
                             </strong>
                           </p>
