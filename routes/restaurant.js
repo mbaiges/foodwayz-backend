@@ -79,6 +79,9 @@ module.exports = class RestaurantRoute {
             let insert = await this.server.db('t_restaurant')
                 .insert({
                     a_name: a_name,
+                    a_food_quality_score: 0,
+                    a_presentation_score: 0,
+                    a_price_quality_score: 0,
                     a_city: a_city,
                     a_state: a_state,
                     a_postal_code: a_postal_code,
