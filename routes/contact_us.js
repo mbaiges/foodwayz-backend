@@ -114,7 +114,7 @@ module.exports = class AuthRoutes {
                 <p>
                   <strong>
                     <span style="color: #fc987e;">
-                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="500" />
+                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="220" />
                     </span>
                   </strong>
                 </p>
@@ -145,7 +145,7 @@ module.exports = class AuthRoutes {
                 <p>
                   <strong>
                     <span style="color: #fc987e;">
-                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="500" />
+                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="220" />
                     </span>
                   </strong>
                 </p>
@@ -188,7 +188,7 @@ module.exports = class AuthRoutes {
                 <p>
                   <strong>
                     <span style="color: #fc987e;">
-                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="500" />
+                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="220" />
                     </span>
                   </strong>
                 </p>
@@ -219,7 +219,7 @@ module.exports = class AuthRoutes {
                 <p>
                   <strong>
                     <span style="color: #fc987e;">
-                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="500" />
+                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="220" />
                     </span>
                   </strong>
                 </p>
@@ -262,7 +262,7 @@ module.exports = class AuthRoutes {
                 <p>
                   <strong>
                     <span style="color: #fc987e;">
-                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="500" />
+                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="220" />
                     </span>
                   </strong>
                 </p>
@@ -293,7 +293,7 @@ module.exports = class AuthRoutes {
                 <p>
                   <strong>
                     <span style="color: #fc987e;">
-                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="500" />
+                      <img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.techpowerup.org/200707/fotofamiliar.png" alt="Meeting New Members" width="500" height="220" />
                     </span>
                   </strong>
                 </p>
