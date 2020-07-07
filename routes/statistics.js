@@ -220,17 +220,11 @@ module.exports = class StatisticRoute {
             }
             let info = await this.server.db(table_name).where(prop_name, '=', prop_value).where('a_time', '>=', a_first_date).where('a_time', '<=', a_last_date);
 
-            console.log(info);
-
             let viewsByUser = this.getSpacedViewsByUser(info);
-
-            console.log(viewsByUser);
 
             Object.entries(viewsByUser).forEach(e => {
                 viewsByUser[e[0]] = e[1].map(l => l.a_time);
             });
-
-            //console.log(viewsByUser);
 
             // mapea las vistas de usuarios de la forma {"1":[vista1, vista2]} a un array de tipo [a_time1, a_time2..]
 
@@ -337,6 +331,7 @@ module.exports = class StatisticRoute {
             // Do Stuff
 
             let info = await this.server.db(table_name).where(prop_name, '=', prop_value).where('a_time', '>=', a_first_date).where('a_time', '<=', a_last_date);
+
 
             let viewsByUser = this.getSpacedViewsByUser(info);
 
@@ -454,25 +449,19 @@ module.exports = class StatisticRoute {
                 charsByUser1[userIds1[k]] = (await this.userHasCharRoute.getCharsByUserObjects(userIds1[k])).map(c => c.a_char_name);
             }
 
-            console.log(viewsByUser);
-
             Object.values(viewsByUser).reduce((acum, curr) => [...acum, ...curr], []).forEach(info => {
                 if (info.a_gender != null) {
-                    if (!a_views_info.a_gender) {
-                        if (!a_views_info.a_gender[info.a_gender]) {
-                            a_views_info.a_gender[info.a_gender] = 0;
-                        }
-                        a_views_info.a_gender[info.a_gender] += 1;
+                    if (!a_views_info.a_gender[info.a_gender]) {
+                        a_views_info.a_gender[info.a_gender] = 0;
                     }
+                    a_views_info.a_gender[info.a_gender] += 1;
                 }
 
                 if (info.a_age != null) {
-                    if (!a_views_info.a_age) {
-                        if (!a_views_info.a_age[info.a_age]) {
-                            a_views_info.a_age[info.a_age] = 0;
-                        }
-                        a_views_info.a_age[info.a_age] += 1;
+                    if (!a_views_info.a_age[info.a_age]) {
+                        a_views_info.a_age[info.a_age] = 0;
                     }
+                    a_views_info.a_age[info.a_age] += 1;
                 }
 
                 if (Array.isArray(charsByUser1[info.a_user_id])) {
@@ -534,47 +523,63 @@ module.exports = class StatisticRoute {
             reviewsInfo.forEach(info => {
 
                 if (info.a_gender != null) {
-                    if (!a_reviews_info.a_gender) {
-                        if (!a_reviews_info.a_gender[info.a_gender]) {
-                            a_reviews_info.a_gender[info.a_gender] = 0;
-                        }
-                        a_reviews_info.a_gender[info.a_gender] += 1;
+                    if (!a_reviews_info.a_gender[info.a_gender]) {
+                        a_reviews_info.a_gender[info.a_gender] = {};
                     }
+                    if (!a_reviews_info.a_gender[info.a_gender][info.a_user_id]) {
+                        a_reviews_info.a_gender[info.a_gender][info.a_user_id] = {
+                            a_score: 0,
+                            a_amount: 0
+                        }
+                    }
+                    a_reviews_info.a_gender[info.a_gender][info.a_user_id].a_score += parseFloat(info.a_score);
+                    a_reviews_info.a_gender[info.a_gender][info.a_user_id].a_amount += 1;
                 }
 
                 if (info.a_age != null) {
-                    if (!a_reviews_info.a_age) {
-                        if (!a_reviews_info.a_age[info.a_age]) {
-                            a_reviews_info.a_age[info.a_age] = 0;
-                        }
-                        a_reviews_info.a_age[info.a_age] += 1;
+                    if (!a_reviews_info.a_age[info.a_age]) {
+                        a_reviews_info.a_age[info.a_age] = {};
                     }
+                    if (!a_reviews_info.a_age[info.a_age][info.a_user_id]) {
+                        a_reviews_info.a_age[info.a_age][info.a_user_id] = {
+                            a_score: 0,
+                            a_amount: 0
+                        }
+                    }
+                    a_reviews_info.a_age[info.a_age][info.a_user_id].a_score += parseFloat(info.a_score);
+                    a_reviews_info.a_age[info.a_age][info.a_user_id].a_amount += 1;
                 }
 
                 if (Array.isArray(charsByUser2[info.a_user_id])) {
                     charsByUser2[info.a_user_id].forEach(char => {
                         if (!a_reviews_info.a_characteristic[char]) {
-                            a_reviews_info.a_characteristic[char] = {
+                            a_reviews_info.a_characteristic[char] = {};
+                        }
+                        if (!a_reviews_info.a_characteristic[char][info.a_user_id]) {
+                            a_reviews_info.a_characteristic[char][info.a_user_id] = {
                                 a_score: 0,
                                 a_amount: 0
-                            };
+                            }
                         }
-                        a_reviews_info.a_characteristic[char].a_score += 1;
-                        a_reviews_info.a_characteristic[char].a_amount += 1;
+                        a_reviews_info.a_characteristic[char][info.a_user_id].a_score += parseFloat(info.a_score);
+                        a_reviews_info.a_characteristic[char][info.a_user_id].a_amount += 1;
                     });
                 }
             });
 
-            Object.entries(a_reviews_info.a_gender).forEach(([key, value]) => {
-                a_reviews_info.a_gender[key].a_score /= value.a_amount;
-            });
+            Object.entries(a_reviews_info).forEach(([key, type]) => {
+                Object.entries(type).forEach(([typeName, map]) => {
+                    let newObject = {
+                        a_score: 0,
+                        a_amount: 0
+                    };
 
-            Object.entries(a_reviews_info.a_age).forEach(([key, value]) => {
-                a_reviews_info.a_age[key].a_score /= value.a_amount;
-            });
+                    newObject.a_score = Object.values(map).reduce((acum, curr) => acum += parseFloat(curr.a_score / curr.a_amount), 0);
+                    newObject.a_amount = Object.keys(map).length;
+                    newObject.a_score /= newObject.a_amount;
 
-            Object.entries(a_reviews_info.a_characteristic).forEach(([key, value]) => {
-                a_reviews_info.a_characteristic[key].a_score /= value.a_amount;
+                    a_reviews_info[key][typeName] = newObject;
+                });
             });
 
             a_users_info = {a_views_info, a_reviews_info};
@@ -683,21 +688,17 @@ module.exports = class StatisticRoute {
 
                 Object.values(viewsByUser).reduce((acum, curr) => [...acum, ...curr], []).forEach(info => {
                     if (info.a_gender != null) {
-                        if (!a_views_info.a_gender) {
-                            if (!a_views_info.a_gender[info.a_gender]) {
-                                a_views_info.a_gender[info.a_gender] = 0;
-                            }
-                            a_views_info.a_gender[info.a_gender] += 1;
+                        if (!a_views_info.a_gender[info.a_gender]) {
+                            a_views_info.a_gender[info.a_gender] = 0;
                         }
+                        a_views_info.a_gender[info.a_gender] += 1;
                     }
 
                     if (info.a_age != null) {
-                        if (!a_views_info.a_age) {
-                            if (!a_views_info.a_age[info.a_age]) {
-                                a_views_info.a_age[info.a_age] = 0;
-                            }
-                            a_views_info.a_age[info.a_age] += 1;
+                        if (!a_views_info.a_age[info.a_age]) {
+                            a_views_info.a_age[info.a_age] = 0;
                         }
+                        a_views_info.a_age[info.a_age] += 1;
                     }
 
                     if (Array.isArray(charsByUser1[info.a_user_id])) {
@@ -755,48 +756,69 @@ module.exports = class StatisticRoute {
                 }
 
                 reviewsInfo.forEach(info => {
+
                     if (info.a_gender != null) {
-                        if (!a_reviews_info.a_gender) {
-                            if (!a_reviews_info.a_gender[info.a_gender]) {
-                                a_reviews_info.a_gender[info.a_gender] = 0;
-                            }
-                            a_reviews_info.a_gender[info.a_gender] += 1;
+                        if (!a_reviews_info.a_gender[info.a_gender]) {
+                            a_reviews_info.a_gender[info.a_gender] = {};
                         }
+                        if (!a_reviews_info.a_gender[info.a_gender][info.a_user_id]) {
+                            a_reviews_info.a_gender[info.a_gender][info.a_user_id] = {
+                                a_score: 0,
+                                a_amount: 0
+                            }
+                        }
+                        a_reviews_info.a_gender[info.a_gender][info.a_user_id].a_score += parseFloat(info.a_score);
+                        a_reviews_info.a_gender[info.a_gender][info.a_user_id].a_amount += 1;
                     }
-
+    
                     if (info.a_age != null) {
-                        if (!a_reviews_info.a_age) {
-                            if (!a_reviews_info.a_age[info.a_age]) {
-                                a_reviews_info.a_age[info.a_age] = 0;
-                            }
-                            a_reviews_info.a_age[info.a_age] += 1;
+                        if (!a_reviews_info.a_age[info.a_age]) {
+                            a_reviews_info.a_age[info.a_age] = {};
                         }
+                        if (!a_reviews_info.a_age[info.a_age][info.a_user_id]) {
+                            a_reviews_info.a_age[info.a_age][info.a_user_id] = {
+                                a_score: 0,
+                                a_amount: 0
+                            }
+                        }
+                        a_reviews_info.a_age[info.a_age][info.a_user_id].a_score += parseFloat(info.a_score);
+                        a_reviews_info.a_age[info.a_age][info.a_user_id].a_amount += 1;
                     }
-
+    
                     if (Array.isArray(charsByUser2[info.a_user_id])) {
                         charsByUser2[info.a_user_id].forEach(char => {
                             if (!a_reviews_info.a_characteristic[char]) {
-                                a_reviews_info.a_characteristic[char] = {
+                                a_reviews_info.a_characteristic[char] = {};
+                            }
+                            if (!a_reviews_info.a_characteristic[char][info.a_user_id]) {
+                                a_reviews_info.a_characteristic[char][info.a_user_id] = {
                                     a_score: 0,
                                     a_amount: 0
-                                };
+                                }
                             }
-                            a_reviews_info.a_characteristic[char].a_score += 1;
-                            a_reviews_info.a_characteristic[char].a_amount += 1;
+                            a_reviews_info.a_characteristic[char][info.a_user_id].a_score += parseFloat(info.a_score);
+                            a_reviews_info.a_characteristic[char][info.a_user_id].a_amount += 1;
                         });
                     }
+
                 });
 
-                Object.entries(a_reviews_info.a_gender).forEach(([key, value]) => {
-                    a_reviews_info.a_gender[key].a_score /= value.a_amount;
-                });
+                Object.entries(a_reviews_info).forEach(([key, type]) => {
+                    console.log(type);
+                    Object.entries(type).forEach(([typeName, map]) => {
+                        let newObject = {
+                            a_score: 0,
+                            a_amount: 0
+                        };
+    
+                        console.log(typeName, map);
 
-                Object.entries(a_reviews_info.a_age).forEach(([key, value]) => {
-                    a_reviews_info.a_age[key].a_score /= value.a_amount;
-                });
-
-                Object.entries(a_reviews_info.a_characteristic).forEach(([key, value]) => {
-                    a_reviews_info.a_characteristic[key].a_score /= value.a_amount;
+                        newObject.a_score = Object.values(map).reduce((acum, curr) => acum += parseFloat(curr.a_score / curr.a_amount), 0);
+                        newObject.a_amount = Object.keys(map).length;
+                        newObject.a_score /= newObject.a_amount;
+    
+                        a_reviews_info[key][typeName] = newObject;
+                    });
                 });
 
                 a_users_info = {a_views_info, a_reviews_info};
@@ -818,7 +840,7 @@ module.exports = class StatisticRoute {
         if (Array.isArray(info) && info.length > 0) {
 
                 // Comment this when it all works.
-                info.sort((a, b) => a.a_date - b.a_date);
+                info = info.sort((a, b) => a.a_time - b.a_time);
 
                 let user, time;
 

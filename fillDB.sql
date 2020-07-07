@@ -351,6 +351,16 @@ INSERT INTO t_restaurant_view VALUES(5, 3, TO_TIMESTAMP('13/06/2020 08:15:18521'
 INSERT INTO t_restaurant_view VALUES(5, 3, TO_TIMESTAMP('29/06/2020 08:23:20521', 'DD/MM/YYYY HH24:MI:SSMSMS'));
 INSERT INTO t_restaurant_view VALUES(5, 3, TO_TIMESTAMP('01/06/2020 08:15:18521', 'DD/MM/YYYY HH24:MI:SSMSMS'));
 
-INSERT INTO t_user_has_characteristic VALUES(2, 1);
-INSERT INTO t_user_has_characteristic VALUES(2, 4);
+insert into t_user_has_characteristic (a_user_id, a_char_id) values (2, 1);
+insert into t_user_has_characteristic (a_user_id, a_char_id) values (2, 4);
+insert into t_user_has_characteristic (a_user_id, a_char_id) values (3, 1);
+insert into t_user_has_characteristic (a_user_id, a_char_id) values (2, 3);
+insert into t_user_has_characteristic (a_user_id, a_char_id) values (1, 1);
+insert into t_user_has_characteristic (a_user_id, a_char_id) values (1, 2);
+insert into t_user_has_characteristic (a_user_id, a_char_id) values (1, 3);
+insert into t_user_has_characteristic (a_user_id, a_char_id) values (1, 4);
+insert into t_user_has_characteristic (a_user_id, a_char_id) values (4, 2);
+insert into t_user_has_characteristic (a_user_id, a_char_id) values (5, 3);
+insert into t_user_has_characteristic (a_user_id, a_char_id) values (5, 4);
+
 -- select * from t_user_has_characteristic;
