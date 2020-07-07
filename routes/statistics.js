@@ -66,17 +66,17 @@ module.exports = class StatisticRoute {
 
             await Promise.all([a_food_quality_score_best, a_presentation_score_best, a_price_quality_score_best, a_food_quality_score_worst, a_presentation_score_worst, a_price_quality_score_worst]);
 
-            a_food_quality_score_best = this.foodRoute.getFoodsObjects({filters: {a_food_id: a_food_quality_score_best}}).then(resp => a_food_quality_score_best = resp);
+            a_food_quality_score_best = this.foodRoute.getFoodsObjects({filters: {a_food_id: a_food_quality_score_best}, detailed: true}).then(resp => a_food_quality_score_best = resp);
 
-            a_presentation_score_best = this.foodRoute.getFoodsObjects({filters: {a_food_id: a_presentation_score_best}}).then(resp => a_presentation_score_best = resp);
+            a_presentation_score_best = this.foodRoute.getFoodsObjects({filters: {a_food_id: a_presentation_score_best}, detailed: true}).then(resp => a_presentation_score_best = resp);
 
-            a_price_quality_score_best = this.foodRoute.getFoodsObjects({filters: {a_food_id: a_price_quality_score_best}}).then(resp => a_price_quality_score_best = resp);
+            a_price_quality_score_best = this.foodRoute.getFoodsObjects({filters: {a_food_id: a_price_quality_score_best}, detailed: true}).then(resp => a_price_quality_score_best = resp);
             
-            a_food_quality_score_worst = this.foodRoute.getFoodsObjects({filters: {a_food_id: a_food_quality_score_worst}}).then(resp => a_food_quality_score_worst = resp);
+            a_food_quality_score_worst = this.foodRoute.getFoodsObjects({filters: {a_food_id: a_food_quality_score_worst}, detailed: true}).then(resp => a_food_quality_score_worst = resp);
 
-            a_presentation_score_worst = this.foodRoute.getFoodsObjects({filters: {a_food_id: a_presentation_score_worst}}).then(resp => a_presentation_score_worst = resp);
+            a_presentation_score_worst = this.foodRoute.getFoodsObjects({filters: {a_food_id: a_presentation_score_worst}, detailed: true}).then(resp => a_presentation_score_worst = resp);
 
-            a_price_quality_score_worst = this.foodRoute.getFoodsObjects({filters: {a_food_id: a_price_quality_score_worst}}).then(resp => a_price_quality_score_worst = resp);
+            a_price_quality_score_worst = this.foodRoute.getFoodsObjects({filters: {a_food_id: a_price_quality_score_worst}, detailed: true}).then(resp => a_price_quality_score_worst = resp);
 
             await Promise.all([a_food_quality_score_best, a_presentation_score_best, a_price_quality_score_best, a_food_quality_score_worst, a_presentation_score_worst, a_price_quality_score_worst]);
             
