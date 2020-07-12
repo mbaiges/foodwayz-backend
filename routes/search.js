@@ -20,6 +20,9 @@ module.exports = class SearchRoute {
 
         app.route('/search/restaurant')
             .post(this.searchRestaurants.bind(this));
+
+        app.route('/search/restaurant_chain')
+            .post(this.searchRestaurantChains.bind(this));
     }
 
     async searchTypes(req, res) {
@@ -281,6 +284,44 @@ module.exports = class SearchRoute {
             rests = await this.restaurantRoute.getRestaurantsObjects({ filters: {a_rest_id: rests} });
 
             return res.status(200).json({result: rests});
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message: error});
+        }
+    }
+
+    async searchRestaurantChains(req, res) {
+        if (!this.restaurantChainRoute) {
+            const RestaurantChainRoute = require('./restaurant_chain');
+            this.restaurantChainRoute = new RestaurantChainRoute(this.server);
+        }
+
+        const {
+            raw_input
+        } = req.body;
+
+        let rest_chains;
+
+        let input_pg_regex = "%" + raw_input.replace(/ /g,"%") + "%";
+
+        try {
+            rest_chains = await this.server.db.select('a_rest_id').from('t_restaurant_chain')
+            .where('t_restaurant_chain.a_name', 'ilike', input_pg_regex);
+
+            if (!Array.isArray(rest_chains)) {
+                rest_chains = [rest_chains];
+            }
+
+            if (!rest_chains) {
+                rest_chains = [];
+            }
+
+            rest_chains = rest_chains.map(r => r.a_rest_chain_id);
+            rest_chains = rest_chains.filter((value, index) => rest_chains.indexOf(value) === index);
+
+            rest_chains = await this.restaurantChainRoute.getRestaurantsObjects({ filters: {a_rest_chain_id: rest_chains} });
+
+            return res.status(200).json({result: rest_chains});
         } catch (error) {
             console.log(error);
             res.status(500).json({message: error});
