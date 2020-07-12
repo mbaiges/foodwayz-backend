@@ -274,7 +274,7 @@ module.exports = class AuthRoutes {
       if (userVerify && userVerify.length > 0) {
         userVerify = userVerify[0];
         if(new Date(userVerify.a_valid_until) > new Date()){
-          if (userVerify.a_code.toUpperCase() === a_code) {
+          if (userVerify.a_code.toUpperCase() === a_code.toUpperCase()) {
             user.a_is_verified = true;
             await this.server.db('t_user').where({a_user_id: user.a_user_id}).update(user);
             this.server.db('t_user_verify').where({a_user_id: user.a_user_id}).del();
@@ -500,7 +500,7 @@ module.exports = class AuthRoutes {
         if (userVerify && userVerify.length > 0) {
           userVerify = userVerify[0];
           if(new Date(userVerify.a_valid_until) > new Date()){
-            if (userVerify.a_code.toUpperCase() === a_code) {
+            if (userVerify.a_code.toUpperCase() === a_code.toUpperCase()) {
               user.a_password = await bcrypt.hash(a_password_new, 10);
               await this.server.db('t_user').where({a_user_id: user.a_user_id}).update(user);
               this.server.db('t_user_verify').where({a_user_id: user.a_user_id}).del();
