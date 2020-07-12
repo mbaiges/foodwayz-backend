@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const JWT = require("jsonwebtoken");
 const moment = require("moment");
 const crypto = require("crypto");
+const message = require('../interface').message;
 
 module.exports = class AuthRoutes {
   constructor(server) {
@@ -20,19 +21,32 @@ module.exports = class AuthRoutes {
   }
 
   async registerUser(req, res) {
-    const {
+    let {
       a_name,
       a_email,
       a_password
     } = req.body;
 
-    if (!a_name || !a_email || !a_password)
-      return res
-        .status(400)
-        .json({
-          code: "prop-missing",
-          message: "Properties missing"
-        });
+    const params = {
+      a_name: [a_name, typeof(a_name) === 'string'],
+      a_email: [a_email, typeof(a_email) === 'string'],
+      a_password: [a_password, typeof(a_password) === 'string']
+    };
+    let errors = {};
+    Object.entries(params).forEach(prop => {
+        if(!prop[1][1]) {
+            errors[prop[0]] = prop[1][0];
+        }
+    });
+
+    let aux;
+    if((aux = Object.keys(errors)).length != 0) {
+        
+        res.status(400).json(message.badRequest('register', aux, errors));
+        return;
+    }
+
+    a_email = a_email.toLowerCase().replace(/ /g,"");
 
     try {
       const exists = await this.server
@@ -76,10 +90,12 @@ module.exports = class AuthRoutes {
   }
 
   async loginUser(req, res) {
-    const {
+    let {
       a_email,
       a_password
     } = req.body;
+
+    a_email = a_email.toLowerCase().replace(/ /g,"");
 
     try {
       let user = await this.server
@@ -238,10 +254,12 @@ module.exports = class AuthRoutes {
 
   async verifyEmail(req, res) {
 
-    const {
+    let {
       a_email,
       a_code
     } = req.body;
+
+    a_email = a_email.toLowerCase().replace(/ /g,"");
 
     let user = await this.server.db('t_user').where({a_email});
 
@@ -389,9 +407,11 @@ module.exports = class AuthRoutes {
 
   async resetPassword(req, res) {
 
-    const {
+    let {
       a_email
     } = req.body;
+
+    a_email = a_email.toLowerCase().replace(/ /g,"");
 
     let user = await this.server.db('t_user').where({a_email});
 
@@ -462,11 +482,13 @@ module.exports = class AuthRoutes {
 
   async resetPasswordConfirmation(req, res) {
 
-    const {
+    let {
       a_email,
       a_code,
       a_password_new
     } = req.body;
+
+    a_email = a_email.toLowerCase().replace(/ /g,"");
 
     let user = await this.server.db('t_user').where({a_email});
 

@@ -153,6 +153,7 @@ module.exports = class UserRoute {
                 const pass_to_hash = user.a_password;
                 user.a_password = await bcrypt.hash(pass_to_hash, 10);
             }
+            if(user.a_email) delete user.a_email;
             const userData = await this.server.db('t_user').where({a_user_id: id}).update(user);
             if (userData != 0)
                 res.status(200).json(message.put('user', userData));
