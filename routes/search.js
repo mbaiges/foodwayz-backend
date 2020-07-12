@@ -305,7 +305,7 @@ module.exports = class SearchRoute {
         let input_pg_regex = "%" + raw_input.replace(/ /g,"%") + "%";
 
         try {
-            rest_chains = await this.server.db.select('a_rest_id').from('t_restaurant_chain')
+            rest_chains = await this.server.db.select('a_rest_chain_id').from('t_restaurant_chain')
             .where('t_restaurant_chain.a_name', 'ilike', input_pg_regex);
 
             if (!Array.isArray(rest_chains)) {
