@@ -319,7 +319,7 @@ module.exports = class SearchRoute {
             rest_chains = rest_chains.map(r => r.a_rest_chain_id);
             rest_chains = rest_chains.filter((value, index) => rest_chains.indexOf(value) === index);
 
-            rest_chains = await this.restaurantChainRoute.getRestaurantsObjects({ filters: {a_rest_chain_id: rest_chains} });
+            rest_chains = await this.restaurantChainRoute.getRestaurantChainsObjects({ filters: {a_rest_chain_id: rest_chains} });
 
             return res.status(200).json({result: rest_chains});
         } catch (error) {
